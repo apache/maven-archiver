@@ -39,14 +39,19 @@
   </properties>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/shared/trunk/maven-archiver</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/shared/trunk/maven-archiver</developerConnection>
-    <url>http://svn.apache.org/viewvc/maven/shared/trunk/maven-archiver</url>
+    <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-archiver.git</connection>
+    <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-archiver.git</developerConnection>
+    <url>https://github.com/apache/maven-archiver/tree/${project.scm.tag}</url>
+    <tag>HEAD</tag>
   </scm>
   <issueManagement>
     <system>jira</system>
     <url>https://issues.apache.org/jira/browse/MSHARED/component/12326430</url>
   </issueManagement>
+  <ciManagement>
+    <system>Jenkins</system>
+    <url>https://builds.apache.org/job/maven-box/job/maven-archiver/</url>
+  </ciManagement>
   <distributionManagement>
     <site>
       <id>apache.website</id>
