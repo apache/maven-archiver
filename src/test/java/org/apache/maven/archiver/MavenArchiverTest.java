@@ -249,7 +249,8 @@ public class MavenArchiverTest
 
         config.setForced( true );
         archiver.createArchive( session, project, config );
-        assertTrue( jarFile.lastModified() > time );
+        //I'm not sure if it could only be greater than time or if it is sufficient to be greater or equal..
+        assertTrue( jarFile.lastModified() >= time );
     }
 
     @Test
