@@ -182,7 +182,7 @@ public class MavenArchiverTest
             Model model = new Model();
             model.setArtifactId( "dummy" );
 
-            MavenProject project = new MavenProject( model)
+            MavenProject project = new MavenProject( model )
             {
                 public List<String> getRuntimeClasspathElements()
                 {
@@ -234,22 +234,27 @@ public class MavenArchiverTest
         FileUtils.deleteDirectory( "target/maven-archiver" );
         archiver.createArchive( session, project, config );
         assertTrue( jarFile.exists() );
-        jarFile.setLastModified( System.currentTimeMillis() - 60000L );
+        
+        long history = System.currentTimeMillis() - 60000L;
+        System.out.println( "History: " + history );
+        jarFile.setLastModified( history );
         long time = jarFile.lastModified();
+        System.out.println( "Time:" + time );
 
         List<File> files = FileUtils.getFiles( new File( "target/maven-archiver" ), "**/**", null, true );
-        for ( Object file : files )
+        for ( File file : files )
         {
-            File f = (File) file;
-            f.setLastModified( time );
+            assertTrue( file.setLastModified( time ) );
         }
 
         archiver.createArchive( session, project, config );
-        assertEquals( jarFile.lastModified(), time );
+        // Is the assumption correct that the jar file itself
+        // should have the same last modified time as the files itself ?
+        assertEquals( "History " + history + " time:" + time , jarFile.lastModified(), time );
 
         config.setForced( true );
         archiver.createArchive( session, project, config );
-        //I'm not sure if it could only be greater than time or if it is sufficient to be greater or equal..
+        // I'm not sure if it could only be greater than time or if it is sufficient to be greater or equal..
         assertTrue( jarFile.lastModified() >= time );
     }
 
@@ -420,7 +425,7 @@ public class MavenArchiverTest
         config.getManifest().setAddDefaultImplementationEntries( true );
         config.addManifestEntry( "Description", project.getDescription() );
         // config.addManifestEntry( "EntryWithTab", " foo tab " + ( '\u0009' ) + ( '\u0009' ) // + " bar tab" + ( //
-                                                                                              // '\u0009' // ) );
+        // '\u0009' // ) );
         archiver.createArchive( session, project, config );
         assertTrue( jarFile.exists() );
 
@@ -748,7 +753,7 @@ public class MavenArchiverTest
         config.getManifest().setAddClasspath( true );
         config.getManifest().setClasspathPrefix( "lib" );
         config.getManifest().setClasspathLayoutType( ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_CUSTOM );
-        config.getManifest().setCustomClasspathLayout( MavenArchiver.SIMPLE_LAYOUT);
+        config.getManifest().setCustomClasspathLayout( MavenArchiver.SIMPLE_LAYOUT );
 
         archiver.createArchive( session, project, config );
         assertTrue( jarFile.exists() );
@@ -787,7 +792,7 @@ public class MavenArchiverTest
         config.getManifest().setAddClasspath( true );
         config.getManifest().setClasspathPrefix( "lib" );
         config.getManifest().setClasspathLayoutType( ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_CUSTOM );
-        config.getManifest().setCustomClasspathLayout( MavenArchiver.SIMPLE_LAYOUT_NONUNIQUE);
+        config.getManifest().setCustomClasspathLayout( MavenArchiver.SIMPLE_LAYOUT_NONUNIQUE );
 
         archiver.createArchive( session, project, config );
         assertTrue( jarFile.exists() );
@@ -1338,7 +1343,7 @@ public class MavenArchiverTest
         URL resource = Thread.currentThread().getContextClassLoader().getResource( file );
         if ( resource == null )
         {
-            fail("Cannot retrieve java.net.URL for file: " + file + " on the current test classpath." );
+            fail( "Cannot retrieve java.net.URL for file: " + file + " on the current test classpath." );
         }
 
         URI uri = new File( resource.getPath() ).toURI().normalize();
