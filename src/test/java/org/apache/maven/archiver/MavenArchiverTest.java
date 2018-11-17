@@ -83,6 +83,30 @@ public class MavenArchiverTest
     }
 
     @Test
+    public void testInvalidModuleNames()
+    {
+        assertFalse( MavenArchiver.isValidModuleName( "" ) );
+        assertFalse( MavenArchiver.isValidModuleName( "." ) );
+        assertFalse( MavenArchiver.isValidModuleName( "dash-is-invalid" ) );
+        assertFalse( MavenArchiver.isValidModuleName( "plus+is+invalid" ) );
+        assertFalse( MavenArchiver.isValidModuleName( "colon:is:invalid" ) );
+        assertFalse( MavenArchiver.isValidModuleName( "new.class" ) );
+        assertFalse( MavenArchiver.isValidModuleName( "123.at.start.is.invalid" ) );
+        assertFalse( MavenArchiver.isValidModuleName( "digit.at.123start.is.invalid" ) );
+    }
+
+    @Test
+    public void testValidModuleNames()
+    {
+        assertTrue( MavenArchiver.isValidModuleName( "a" ) );
+        assertTrue( MavenArchiver.isValidModuleName( "a.b" ) );
+        assertTrue( MavenArchiver.isValidModuleName( "a_b" ) );
+        assertTrue( MavenArchiver.isValidModuleName( "trailing0.digits123.are456.ok789" ) );
+        assertTrue( MavenArchiver.isValidModuleName( "UTF8.chars.are.okay.äëïöüẍ" ) );
+        assertTrue( MavenArchiver.isValidModuleName( "ℤ€ℕ" ) );
+    }
+
+    @Test
     public void testGetManifestExtensionList()
         throws Exception
     {
@@ -500,6 +524,7 @@ public class MavenArchiverTest
         Map<String, String> manifestEntries = new HashMap<String, String>();
         manifestEntries.put( "foo", "bar" );
         manifestEntries.put( "first-name", "olivier" );
+        manifestEntries.put( "Automatic-Module-Name", "org.apache.maven.archiver" );
         manifestEntries.put( "keyWithEmptyValue", null );
         config.setManifestEntries( manifestEntries );
 
@@ -532,6 +557,7 @@ public class MavenArchiverTest
 
         assertEquals( "bar", manifest.get( new Attributes.Name( "foo" ) ) );
         assertEquals( "olivier", manifest.get( new Attributes.Name( "first-name" ) ) );
+        assertEquals( "org.apache.maven.archiver", manifest.getValue( "Automatic-Module-Name" ) );
 
         assertEquals( System.getProperty( "java.version" ), manifest.get( new Attributes.Name( "Build-Jdk" ) ) );
         assertEquals( System.getProperty( "user.name" ), manifest.get( new Attributes.Name( "Built-By" ) ) );
@@ -542,6 +568,33 @@ public class MavenArchiverTest
         manifest = jarFileManifest.getAttributes( "UserSection" );
 
         assertEquals( "value", manifest.get( new Attributes.Name( "key" ) ) );
+    }
+
+    @Test
+    public void testManifestWithInvalidAutomaticModuleNameThrowsOnCreateArchive()
+            throws Exception
+    {
+        File jarFile = new File( "target/test/dummy.jar" );
+        JarArchiver jarArchiver = getCleanJarArchiver( jarFile );
+
+        MavenArchiver archiver = getMavenArchiver( jarArchiver );
+
+        MavenSession session = getDummySession();
+        MavenProject project = getDummyProject();
+        MavenArchiveConfiguration config = new MavenArchiveConfiguration();
+
+        Map<String, String> manifestEntries = new HashMap<String, String>();
+        manifestEntries.put( "Automatic-Module-Name", "123.in-valid.new.name" );
+        config.setManifestEntries( manifestEntries );
+
+        try
+        {
+            archiver.createArchive( session, project, config );
+        }
+        catch ( ManifestException e )
+        {
+            assertEquals( "Invalid automatic module name: '123.in-valid.new.name'", e.getMessage() );
+        }
     }
 
     @Test
