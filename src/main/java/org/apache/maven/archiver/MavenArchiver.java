@@ -38,6 +38,7 @@ import org.codehaus.plexus.interpolation.StringSearchInterpolator;
 import org.codehaus.plexus.interpolation.ValueSource;
 import org.apache.maven.shared.utils.StringUtils;
 
+import javax.lang.model.SourceVersion;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -89,6 +90,11 @@ public class MavenArchiver
         artifactExpressionPrefixes.add( "artifact." );
 
         ARTIFACT_EXPRESSION_PREFIXES = artifactExpressionPrefixes;
+    }
+
+    static boolean isValidModuleName( String name )
+    {
+        return SourceVersion.isName( name );
     }
 
     private JarArchiver archiver;
@@ -643,6 +649,15 @@ public class MavenArchiver
             // TODO Should issue a warning here, but how do we get a logger?
             // TODO getLog().warn(
             // "Forced build is disabled, but disabling the forced mode isn't supported by the archiver." );
+        }
+
+        String automaticModuleName = manifest.getMainSection().getAttributeValue( "Automatic-Module-Name" );
+        if ( automaticModuleName != null )
+        {
+            if ( !isValidModuleName( automaticModuleName ) )
+            {
+                throw new ManifestException( "Invalid automatic module name: '" + automaticModuleName + "'" );
+            }
         }
 
         // create archive
