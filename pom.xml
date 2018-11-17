@@ -28,7 +28,7 @@
 
   <groupId>org.apache.maven</groupId>
   <artifactId>maven-archiver</artifactId>
-  <version>3.2.1-SNAPSHOT</version>
+  <version>3.3.0</version>
 
   <name>Apache Maven Archiver</name>
   <description>Provides utility methods for creating JARs and other archive files from a Maven project.</description>
@@ -42,7 +42,7 @@
     <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-archiver.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-archiver.git</developerConnection>
     <url>https://github.com/apache/maven-archiver/tree/${project.scm.tag}</url>
-    <tag>HEAD</tag>
+    <tag>maven-archiver-3.3.0</tag>
   </scm>
   <issueManagement>
     <system>jira</system>
