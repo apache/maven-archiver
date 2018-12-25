@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.jar.Attributes;
 
 /**
  * @author <a href="evenisse@apache.org">Emmanuel Venisse</a>
@@ -127,7 +128,7 @@ public class MavenArchiver
                 String key = entry.getKey();
                 String value = entry.getValue();
                 Manifest.Attribute attr = manifest.getMainSection().getAttribute( key );
-                if ( key.equals( "ClassPath" ) && attr != null )
+                if ( key.equals( Attributes.Name.CLASS_PATH.toString() ) && attr != null )
                 {
                     // Merge the user-supplied Class-Path value with the programmatically
                     // created Class-Path. Note that the user-supplied value goes first
