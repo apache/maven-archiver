@@ -260,7 +260,7 @@ public class MavenArchiverTest
         FileUtils.deleteDirectory( "target/maven-archiver" );
         archiver.createArchive( session, project, config );
         assertTrue( jarFile.exists() );
-        
+
         long history = System.currentTimeMillis() - 60000L;
         System.out.println( "history: " + history );
         jarFile.setLastModified( history );
@@ -276,7 +276,7 @@ public class MavenArchiverTest
         archiver.createArchive( session, project, config );
         // Is the assumption correct that the jar file itself
         // should have the same last modified time as the files itself ?
-   
+
         // Based on some experiments with a result like this:
         // History 1532810292406 time:1532810292000 expected:<1532810352000> but was:<1532810292000>
         // It looks like a JDK Bug: https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8177809
@@ -497,9 +497,7 @@ public class MavenArchiverTest
 
         assertEquals( "archiver test", manifest.get( Attributes.Name.IMPLEMENTATION_TITLE ) );
         assertEquals( "0.1.1", manifest.get( Attributes.Name.IMPLEMENTATION_VERSION ) );
-        assertEquals( "org.apache.dummy", manifest.get( Attributes.Name.IMPLEMENTATION_VENDOR_ID ) );
         assertEquals( "Apache", manifest.get( Attributes.Name.IMPLEMENTATION_VENDOR ) );
-        assertEquals( "http://maven.apache.org", manifest.get( Attributes.Name.IMPLEMENTATION_URL ) );
 
         assertEquals( System.getProperty( "java.version" ), manifest.get( new Attributes.Name( "Build-Jdk" ) ) );
         assertEquals( System.getProperty( "user.name" ), manifest.get( new Attributes.Name( "Built-By" ) ) );
@@ -549,9 +547,7 @@ public class MavenArchiverTest
 
         assertEquals( "archiver test", manifest.get( Attributes.Name.IMPLEMENTATION_TITLE ) );
         assertEquals( "0.1.1", manifest.get( Attributes.Name.IMPLEMENTATION_VERSION ) );
-        assertEquals( "org.apache.dummy", manifest.get( Attributes.Name.IMPLEMENTATION_VENDOR_ID ) );
         assertEquals( "Apache", manifest.get( Attributes.Name.IMPLEMENTATION_VENDOR ) );
-        assertEquals( "http://maven.apache.org", manifest.get( Attributes.Name.IMPLEMENTATION_URL ) );
 
         assertEquals( "org.apache.maven.Foo", manifest.get( Attributes.Name.MAIN_CLASS ) );
 
