@@ -507,7 +507,6 @@ public class MavenArchiver
     private void addCustomEntries( Manifest m, Map<String, String> entries, ManifestConfiguration config )
         throws ManifestException
     {
-        addManifestAttribute( m, entries, "Built-By", System.getProperty( "user.name" ) );
         addManifestAttribute( m, entries, "Build-Jdk", System.getProperty( "java.version" ) );
 
         /*

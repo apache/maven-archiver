@@ -28,17 +28,17 @@ Set Up The Classpath
 * {Contents}
 
   * {{{Add}Add A Class-Path Entry To The Manifest}}
-  
+
   * {{{Make}Make The Jar Executable}}
-  
+
   * {{{Prefix}Altering The Classpath: Defining a Classpath Directory Prefix}}
-  
+
   * {{{Repository}Altering The Classpath: Using a Maven Repository-Style Classpath}}
-  
+
   * {{{Custom}Altering The Classpath: Using a Custom Classpath Format}}
-  
+
   * {{{Snapshot}Handling Snapshot Versions}}
-  
+
   []
 
 * {Add} A Class-Path Entry To The Manifest
@@ -90,7 +90,6 @@ Set Up The Classpath
 +-----+
 Manifest-Version: 1.0
 Created-By: Apache Maven ${maven.version}
-Built-By: ${user.name}
 Build-Jdk: ${java.version}
 Class-Path: plexus-utils-1.1.jar commons-lang-2.1.jar
 +-----+
@@ -149,7 +148,6 @@ Class-Path: plexus-utils-1.1.jar commons-lang-2.1.jar
 +-----+
 Manifest-Version: 1.0
 Created-By: Apache Maven ${maven.version}
-Built-By: ${user.name}
 Build-Jdk: ${java.version}
 Main-Class: fully.qualified.MainClass
 Class-Path: plexus-utils-1.1.jar commons-lang-2.1.jar
@@ -213,7 +211,7 @@ Class-Path: lib/plexus-utils-1.1.jar lib/commons-lang-2.1.jar
 
   Occasionally, you may want to include a Maven repository-style directory structure in your
   archive. If you wish to reference the dependency archives within those directories in your
-  manifest classpath, try using the <<<\<classpathLayoutType\>>>> element with a value of 
+  manifest classpath, try using the <<<\<classpathLayoutType\>>>> element with a value of
   <<<'repository'>>>, like this:
 
 +-----+
@@ -230,7 +228,7 @@ Class-Path: lib/plexus-utils-1.1.jar lib/commons-lang-2.1.jar
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
               <classpathLayoutType>repository</classpathLayoutType>
-              
+
               <!-- NOTE: Deprecated in version 2.4. Use 'classpathLayoutType' instead.
               <classpathMavenRepositoryLayout>true</classpathMavenRepositoryLayout>
               -->
@@ -258,7 +256,7 @@ Class-Path: lib/plexus-utils-1.1.jar lib/commons-lang-2.1.jar
 +-----+
 
   <<Note:>> In version 2.3, this feature was available by setting the <<<\<classpathMavenRepositoryLayout\>>>>
-  element to the value <<<true>>>. This configuration option has been *deprecated* in version 2.4, 
+  element to the value <<<true>>>. This configuration option has been *deprecated* in version 2.4,
   in favor of the more general <<<\<classpathLayoutType\>>>> element, where a value of <<<'repository'>>>
   will render the same behavior.
 
@@ -276,7 +274,7 @@ Class-Path: lib/org/codehaus/plexus/plexus-utils/1.1/plexus-utils-1.1.jar lib/co
 
   At times, you may have dependency archives in a custom format within your own archive, one that doesn't
   conform to any of the above classpath layouts. If you wish to define a custom layout for dependency archives
-  within your archive's manifest classpath, try using the <<<\<classpathLayoutType\>>>> element with a value of 
+  within your archive's manifest classpath, try using the <<<\<classpathLayoutType\>>>> element with a value of
   <<<'custom'>>>, along with the <<<\<customClasspathLayout\>>>> element, like this:
 
 +-----+
@@ -315,35 +313,35 @@ Class-Path: lib/org/codehaus/plexus/plexus-utils/1.1/plexus-utils-1.1.jar lib/co
 </project>
 +-----+
 
-  This classpath layout is a little more involved than the previous examples. 
+  This classpath layout is a little more involved than the previous examples.
   To understand how the value of the <<<\<customClasspathLayout\>>>> configuration
-  is interpreted, it's useful to understand the rules applied when resolving 
+  is interpreted, it's useful to understand the rules applied when resolving
   expressions within the value:
-  
+
   [[1]] If present, trim off the prefix 'artifact.' from the expression.
-  
-  [[2]] Attempt to resolve the expression as a reference to the Artifact using 
-        reflection (eg. <<<'artifactId'>>> becomes a reference to the method 
+
+  [[2]] Attempt to resolve the expression as a reference to the Artifact using
+        reflection (eg. <<<'artifactId'>>> becomes a reference to the method
         <<<'getArtifactId()'>>>).
-  
-  [[3]] Attempt to resolve the expression as a reference to the ArtifactHandler of 
+
+  [[3]] Attempt to resolve the expression as a reference to the ArtifactHandler of
         the current Artifact, again using reflection (eg. <<<'extension'>>> becomes a reference
         to the method <<<'getExtension()'>>>).
-        
-  [[4]] Attempt to resolve the expression as a key in the special-case Properties instance, 
+
+  [[4]] Attempt to resolve the expression as a key in the special-case Properties instance,
         which contains the following mappings:
-        
-        * <<<'dashClassifier'>>>: If the Artifact has a classifier, this will be 
-                                  <<<'-${artifact.classifier}'>>>, otherwise this 
+
+        * <<<'dashClassifier'>>>: If the Artifact has a classifier, this will be
+                                  <<<'-${artifact.classifier}'>>>, otherwise this
                                   is an empty string.
-        
+
         * <<<'dashClassifier?'>>>: This is a synonym of <<<'dashClassifier'>>>.
-        
-        * <<<'groupIdPath'>>>: This is the equivalent of <<<'${artifact.groupId}'>>>, 
+
+        * <<<'groupIdPath'>>>: This is the equivalent of <<<'${artifact.groupId}'>>>,
                                with all <<<'.'>>> characters replaced by <<<'/'>>>.
-                               
+
         []
-        
+
   []
 
  The manifest classpath produced using the above configuration would look like this:
@@ -359,18 +357,18 @@ Class-Path: WEB-INF/lib/org/codehaus/plexus/plexus-utils-1.1.jar WEB-INF/lib/com
 
   <(Since 2.4)>
 
-  Depending on how you construct your archive, you may have the ability to specify whether 
+  Depending on how you construct your archive, you may have the ability to specify whether
   snapshot dependency archives are included with the version suffix <<<'-SNAPSHOT'>>>, or
   whether the unique timestamp and build-number for that archive is used. For instance,
   the {{{/plugins/maven-assembly-plugin}Assembly Plugin}} allows
-  you to make this decision in the <<<\<outputFileNameMapping\>>>> element of its 
+  you to make this decision in the <<<\<outputFileNameMapping\>>>> element of its
   <<<\<dependencySet>>>> descriptor section.
-  
+
 ** Forcing the use of -SNAPSHOT versions when using the simple (default) or repository classpath layout
 
   To force the use of <<<'-SNAPSHOT'>>> version naming, simply disable the <<<\<useUniqueVersions\>>>>
   configuration element, like this:
-  
+
 +-----+
 <useUniqueVersions>false</useUniqueVersions>
 +-----+
@@ -379,13 +377,13 @@ Class-Path: WEB-INF/lib/org/codehaus/plexus/plexus-utils-1.1.jar WEB-INF/lib/com
 
   To force the use of <<<'-SNAPSHOT'>>> version naming, simply replace <<<'${artifact.version}'>>>
   with <<<'${artifact.baseVersion}'>>> in the custom layout example above, so it looks like this:
-  
+
 +-----+
 <customClasspathLayout>WEB-INF/lib/${artifact.groupIdPath}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</customClasspathLayout>
 +-----+
 
   The full example configuration would look like this:
-  
+
 +-----+
 <project>
   ...

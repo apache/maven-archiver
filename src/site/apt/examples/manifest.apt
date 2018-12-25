@@ -33,9 +33,11 @@ Manifest
 +-----+
 Manifest-Version: 1.0
 Created-By: Apache Maven ${maven.version}
-Built-By: ${user.name}
 Build-Jdk: ${java.version}
 +-----+
+
+<<Note:>> The <<<Build-Jdk>>> does not take toolchains configuration into account. It is the same
+JDK version as running the Maven instance.
 
 * Adding Implementation And Specification Details
 
@@ -79,7 +81,6 @@ Build-Jdk: ${java.version}
 +-----+
 Manifest-Version: 1.0
 Created-By: Apache Maven ${maven.version}
-Built-By: ${user.name}
 Build-Jdk: ${java.version}
 Specification-Title: ${project.name}
 Specification-Version: ${project.artifact.selectedVersion.majorVersion}.${project.artifact.selectedVersion.minorVersion}
