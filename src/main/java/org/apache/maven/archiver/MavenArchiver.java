@@ -248,6 +248,11 @@ public class MavenArchiver
 
         addCustomEntries( m, entries, config );
 
+        if ( config.isAddBuildEnvironmentEntries() )
+        {
+            handleBuildEnvironmentEntries( session, m, entries );
+        }
+
         if ( config.isAddClasspath() )
         {
             StringBuilder classpath = new StringBuilder();
@@ -670,6 +675,17 @@ public class MavenArchiver
             }
         }
         addManifestAttribute( m, entries, "Created-By", createdBy );
+    }
+
+    private void handleBuildEnvironmentEntries( MavenSession session, Manifest m, Map<String, String> entries )
+        throws ManifestException
+    {
+        addManifestAttribute( m, entries, "Build-Tool",
+            session != null ? session.getSystemProperties().getProperty( "maven.build.version" ) : "Apache Maven" );
+        addManifestAttribute( m, entries, "Build-Jdk", String.format( "%s (%s)", System.getProperty( "java.version" ),
+            System.getProperty( "java.vendor" ) ) );
+        addManifestAttribute( m, entries, "Build-Os", String.format( "%s (%s; %s)", System.getProperty( "os.name" ),
+            System.getProperty( "os.version" ), System.getProperty( "os.arch" ) ) );
     }
 
     private Artifact findArtifactWithFile( Set<Artifact> artifacts, File file )

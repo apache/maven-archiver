@@ -57,6 +57,13 @@ public class ManifestConfiguration
     private String classpathPrefix = "";
 
     /**
+     * Add build environment information about Maven, JDK, and OS.
+     *
+     * @since 3.4.0
+     */
+    private boolean addBuildEnvironmentEntries;
+
+    /**
      * Add default implementation entries if this is an extension specification.
      *
      * @since 2.1
@@ -101,6 +108,14 @@ public class ManifestConfiguration
     }
 
     /**
+     * @return {@link #addBuildEnvironmentEntries}
+     */
+    public boolean isAddBuildEnvironmentEntries()
+    {
+        return addBuildEnvironmentEntries;
+    }
+
+    /**
      * @return {@link #addDefaultImplementationEntries}
      */
     public boolean isAddDefaultImplementationEntries()
@@ -130,6 +145,14 @@ public class ManifestConfiguration
     public void setAddClasspath( boolean addClasspath )
     {
         this.addClasspath = addClasspath;
+    }
+
+    /**
+     * @param addBuildEnvironmentEntries add build environment information true/false.
+     */
+    public void setAddBuildEnvironmentEntries( boolean addBuildEnvironmentEntries )
+    {
+        this.addBuildEnvironmentEntries = addBuildEnvironmentEntries;
     }
 
     /**
@@ -250,7 +273,7 @@ public class ManifestConfiguration
      * </ol>
      * <br>
      * <b>NOTE:</b> If you specify a layout type of 'custom' you MUST set this layout expression.
-     * You can take a look at 
+     * You can take a look at
      * <ol>
      * <li>{@link MavenArchiver#SIMPLE_LAYOUT}</li>
      * <li>{@link MavenArchiver#SIMPLE_LAYOUT_NONUNIQUE}</li>

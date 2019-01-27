@@ -43,6 +43,7 @@
     &lt;addClasspath/&gt;
     &lt;addDefaultImplementationEntries/&gt;
     &lt;addDefaultSpecificationEntries/&gt;
+    &lt;addBuildEnvironmentEntries/&gt;
     &lt;addExtensions/&gt;
     &lt;classpathLayoutType/&gt;
     &lt;classpathPrefix/&gt;
@@ -197,8 +198,7 @@
               <source>
 Implementation-Title: \${project.name}
 Implementation-Version: \${project.version}
-Implementation-Vendor: \${project.organization.name}
-              </source>
+Implementation-Vendor: \${project.organization.name}</source>
               The default value is <code>false</code>.
             </td>
             <td>boolean</td>
@@ -211,12 +211,24 @@ Implementation-Vendor: \${project.organization.name}
               <source>
 Specification-Title: \${project.name}
 Specification-Version: \${project.artifact.selectedVersion.majorVersion}.\${project.artifact.selectedVersion.minorVersion}
-Specification-Vendor: \${project.organization.name}
-              </source>
+Specification-Vendor: \${project.organization.name}</source>
               The default value is <code>false</code>.
             </td>
             <td>boolean</td>
             <td>2.1</td>
+          </tr>
+          <tr>
+            <td>addBuildEnvironmentEntries</td>
+            <td>
+              If the manifest will contain these entries:
+              <source>
+Build-Tool: ${maven.build.version}
+Build-Jdk: ${java.version} (${java.vendor})
+Build-Os:  ${os.name} (${os.version}; (${os.arch})</source>
+              The default value is <code>false</code>.
+            </td>
+            <td>boolean</td>
+            <td>3.4.0</td>
           </tr>
           <tr>
             <td>addExtensions</td>

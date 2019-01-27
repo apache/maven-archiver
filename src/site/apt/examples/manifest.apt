@@ -36,8 +36,8 @@ Created-By: Apache Maven ${maven.version}
 Build-Jdk: ${java.version}
 +-----+
 
-<<Note:>> The <<<Build-Jdk>>> does not take toolchains configuration into account. It is the same
-JDK version as running the Maven instance.
+ <<Note:>> The <<<Build-Jdk>>> does not take toolchains configuration into account. It is the same
+ JDK version as running the Maven instance.
 
 * Adding Implementation And Specification Details
 
