@@ -508,7 +508,7 @@ public class MavenArchiver
     private void addCustomEntries( Manifest m, Map<String, String> entries, ManifestConfiguration config )
         throws ManifestException
     {
-        addManifestAttribute( m, entries, "Build-Jdk", System.getProperty( "java.specification.version" ) );
+        addManifestAttribute( m, entries, "Build-Jdk-Spec", System.getProperty( "java.specification.version" ) );
 
         /*
          * TODO: rethink this, it wasn't working Artifact projectArtifact = project.getArtifact(); if (
