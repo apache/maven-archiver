@@ -500,7 +500,7 @@ public class MavenArchiverTest
         assertEquals( "Apache", manifest.get( Attributes.Name.IMPLEMENTATION_VENDOR ) );
 
         assertEquals( System.getProperty( "java.specification.version" ),
-                      manifest.get( new Attributes.Name( "Build-Jdk" ) ) );
+                      manifest.get( new Attributes.Name( "Build-Jdk-Spec" ) ) );
     }
 
     @Test
@@ -556,7 +556,7 @@ public class MavenArchiverTest
         assertEquals( "org.apache.maven.archiver", manifest.getValue( "Automatic-Module-Name" ) );
 
         assertEquals( System.getProperty( "java.specification.version" ),
-                      manifest.get( new Attributes.Name( "Build-Jdk" ) ) );
+                      manifest.get( new Attributes.Name( "Build-Jdk-Spec" ) ) );
 
         assertTrue( StringUtils.isEmpty( manifest.getValue( new Attributes.Name( "keyWithEmptyValue" ) ) ) );
         assertTrue( manifest.containsKey( new Attributes.Name( "keyWithEmptyValue" ) ) );
