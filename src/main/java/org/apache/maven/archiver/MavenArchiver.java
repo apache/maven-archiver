@@ -36,6 +36,7 @@ import org.codehaus.plexus.interpolation.PrefixedPropertiesValueSource;
 import org.codehaus.plexus.interpolation.RecursionInterceptor;
 import org.codehaus.plexus.interpolation.StringSearchInterpolator;
 import org.codehaus.plexus.interpolation.ValueSource;
+import org.apache.maven.shared.utils.PropertyUtils;
 import org.apache.maven.shared.utils.StringUtils;
 
 import javax.lang.model.SourceVersion;
@@ -610,6 +611,8 @@ public class MavenArchiver
         // Create the manifest
         // ----------------------------------------------------------------------
 
+        archiver.setMinimalDefaultManifest( true );
+
         File manifestFile = archiveConfiguration.getManifestFile();
 
         if ( manifestFile != null )
@@ -665,14 +668,11 @@ public class MavenArchiver
     private void addCreatedByEntry( MavenSession session, Manifest m, Map<String, String> entries )
         throws ManifestException
     {
-        String createdBy = "Apache Maven";
-        if ( session != null ) // can be null due to API backwards compatibility
+        String createdBy = "Maven Archiver";
+        String archiverVersion = getArchiverVersion();
+        if ( archiverVersion != null )
         {
-            String mavenVersion = session.getSystemProperties().getProperty( "maven.version" );
-            if ( mavenVersion != null )
-            {
-                createdBy += " " + mavenVersion;
-            }
+            createdBy += " " + archiverVersion;
         }
         addManifestAttribute( m, entries, "Created-By", createdBy );
     }
@@ -703,4 +703,13 @@ public class MavenArchiver
         }
         return null;
     }
+
+    private static String getArchiverVersion()
+    {
+        final Properties properties = PropertyUtils.loadOptionalProperties( MavenArchiver.class.getResourceAsStream(
+            "/META-INF/maven/org.apache.maven/maven-archiver/pom.properties" ) );
+
+        return properties.getProperty( "version" );
+    }
+
 }

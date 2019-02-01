@@ -489,7 +489,8 @@ public class MavenArchiverTest
         assertTrue( jarFile.exists() );
         Attributes manifest = getJarFileManifest( jarFile ).getMainAttributes();
 
-        assertEquals( "Apache Maven", manifest.get( new Attributes.Name( "Created-By" ) ) ); // no version number
+        // no version number
+        assertEquals( "Maven Archiver", manifest.get( new Attributes.Name( "Created-By" ) ) );
 
         assertEquals( "archiver test", manifest.get( Attributes.Name.SPECIFICATION_TITLE ) );
         assertEquals( "0.1", manifest.get( Attributes.Name.SPECIFICATION_VERSION ) );
@@ -540,7 +541,8 @@ public class MavenArchiverTest
         final Manifest jarFileManifest = getJarFileManifest( jarFile );
         Attributes manifest = jarFileManifest.getMainAttributes();
 
-        assertEquals( "Apache Maven 3.0.4", manifest.get( new Attributes.Name( "Created-By" ) ) );
+        // no version number
+        assertEquals( "Maven Archiver", manifest.get( new Attributes.Name( "Created-By" ) ) );
 
         assertEquals( session.getSystemProperties().get( "maven.build.version" ),
             manifest.get( new Attributes.Name( "Build-Tool" ) ) );
@@ -600,30 +602,6 @@ public class MavenArchiverTest
         {
             assertEquals( "Invalid automatic module name: '123.in-valid.new.name'", e.getMessage() );
         }
-    }
-
-    @Test
-    public void testCreatedByManifestEntryWithoutMavenVersion()
-        throws Exception
-    {
-        File jarFile = new File( "target/test/dummy.jar" );
-        JarArchiver jarArchiver = getCleanJarArchiver( jarFile );
-
-        MavenArchiver archiver = getMavenArchiver( jarArchiver );
-
-        MavenSession session = getDummySessionWithoutMavenVersion();
-        MavenProject project = getDummyProject();
-
-        MavenArchiveConfiguration config = new MavenArchiveConfiguration();
-        config.setForced( true );
-
-        archiver.createArchive( session, project, config );
-        assertTrue( jarFile.exists() );
-
-        final Manifest manifest = getJarFileManifest( jarFile );
-        Map<Object, Object> entries = manifest.getMainAttributes();
-
-        assertEquals( "Apache Maven", entries.get( new Attributes.Name( "Created-By" ) ) );
     }
 
     /*
