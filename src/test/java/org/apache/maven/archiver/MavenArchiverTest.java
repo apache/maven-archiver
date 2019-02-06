@@ -505,6 +505,33 @@ public class MavenArchiverTest
     }
 
     @Test
+    public void testMinimalManifestEntries()
+        throws Exception
+    {
+        File jarFile = new File( "target/test/dummy.jar" );
+        JarArchiver jarArchiver = getCleanJarArchiver( jarFile );
+
+        MavenArchiver archiver = getMavenArchiver( jarArchiver );
+
+        MavenSession session = getDummySession();
+        MavenProject project = getDummyProject();
+        MavenArchiveConfiguration config = new MavenArchiveConfiguration();
+        config.setForced( true );
+        config.getManifest().setAddDefaultEntries( false );
+
+        archiver.createArchive( session, project, config );
+        assertTrue( jarFile.exists() );
+
+        final Manifest jarFileManifest = getJarFileManifest( jarFile );
+        Attributes manifest = jarFileManifest.getMainAttributes();
+
+        assertEquals( 1, manifest.size() );
+        assertEquals( new Attributes.Name( "Manifest-Version" ), manifest.keySet().iterator().next() );
+        assertEquals( "1.0", manifest.getValue( "Manifest-Version" ) );
+    }
+
+
+    @Test
     public void testManifestEntries()
         throws Exception
     {

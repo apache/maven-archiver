@@ -58,6 +58,8 @@ import java.util.jar.Attributes;
 public class MavenArchiver
 {
 
+    private static final String CREATED_BY = "Maven Archiver";
+
     /**
      * The simply layout.
      */
@@ -243,11 +245,13 @@ public class MavenArchiver
     {
         // TODO: Should we replace "map" with a copy? Note, that we modify it!
 
-        // Added basic entries
         Manifest m = new Manifest();
-        addCreatedByEntry( session, m, entries );
 
-        addCustomEntries( m, entries, config );
+        if ( config.isAddDefaultEntries() )
+        {
+            handleDefaultEntries( m, entries );
+        }
+
 
         if ( config.isAddBuildEnvironmentEntries() )
         {
@@ -393,6 +397,8 @@ public class MavenArchiver
             handleExtensions( project, entries, m );
         }
 
+        addCustomEntries( m, entries, config );
+
         return m;
     }
 
@@ -514,8 +520,6 @@ public class MavenArchiver
     private void addCustomEntries( Manifest m, Map<String, String> entries, ManifestConfiguration config )
         throws ManifestException
     {
-        addManifestAttribute( m, entries, "Build-Jdk-Spec", System.getProperty( "java.specification.version" ) );
-
         /*
          * TODO: rethink this, it wasn't working Artifact projectArtifact = project.getArtifact(); if (
          * projectArtifact.isSnapshot() ) { Manifest.Attribute buildNumberAttr = new Manifest.Attribute( "Build-Number",
@@ -665,16 +669,17 @@ public class MavenArchiver
         archiver.createArchive();
     }
 
-    private void addCreatedByEntry( MavenSession session, Manifest m, Map<String, String> entries )
+    private void handleDefaultEntries( Manifest m, Map<String, String> entries )
         throws ManifestException
     {
-        String createdBy = "Maven Archiver";
-        String archiverVersion = getArchiverVersion();
-        if ( archiverVersion != null )
-        {
-            createdBy += " " + archiverVersion;
-        }
-        addManifestAttribute( m, entries, "Created-By", createdBy );
+         String createdBy = CREATED_BY;
+         String archiverVersion = getArchiverVersion();
+         if ( archiverVersion != null )
+         {
+             createdBy += " " + archiverVersion;
+         }
+         addManifestAttribute( m, entries, "Created-By", createdBy );
+         addManifestAttribute( m, entries, "Build-Jdk-Spec", System.getProperty( "java.specification.version" ) );
     }
 
     private void handleBuildEnvironmentEntries( MavenSession session, Manifest m, Map<String, String> entries )

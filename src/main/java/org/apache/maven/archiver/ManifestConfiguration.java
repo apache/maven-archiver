@@ -57,6 +57,14 @@ public class ManifestConfiguration
     private String classpathPrefix = "";
 
     /**
+     * Add default, reproducible entries {@code Created-By} and {@code Build-Jdk-Spec}.
+     *
+     * @since 3.4.0
+     */
+    private boolean addDefaultEntries = true;
+
+
+    /**
      * Add build environment information about Maven, JDK, and OS.
      *
      * @since 3.4.0
@@ -108,6 +116,14 @@ public class ManifestConfiguration
     }
 
     /**
+     * @return {@link #addDefaultEntries}
+     */
+    public boolean isAddDefaultEntries()
+    {
+        return addDefaultEntries;
+    }
+
+    /**
      * @return {@link #addBuildEnvironmentEntries}
      */
     public boolean isAddBuildEnvironmentEntries()
@@ -145,6 +161,14 @@ public class ManifestConfiguration
     public void setAddClasspath( boolean addClasspath )
     {
         this.addClasspath = addClasspath;
+    }
+
+    /**
+     * @param addDefaultEntries add default entries true/false.
+     */
+    public void setAddDefaultEntries( boolean addDefaultEntries )
+    {
+        this.addDefaultEntries = addDefaultEntries;
     }
 
     /**
