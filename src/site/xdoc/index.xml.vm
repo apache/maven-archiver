@@ -41,6 +41,7 @@
   &lt;index/&gt;
   &lt;<a href="#class_manifest">manifest</a>&gt;
     &lt;addClasspath/&gt;
+    &lt;addDefaultEntries/&gt;
     &lt;addDefaultImplementationEntries/&gt;
     &lt;addDefaultSpecificationEntries/&gt;
     &lt;addBuildEnvironmentEntries/&gt;
@@ -190,6 +191,18 @@
             </td>
             <td>boolean</td>
             <td></td>
+          </tr>
+          <tr>
+            <td>addDefaultEntries</td>
+            <td>
+              If the manifest will contain these entries:
+              <source>
+Created-By: Maven Archiver ${maven-archiver.version}
+Build-Jdk-Spec: ${java.specification.version}</source>
+              The default value is <code>true</code>.
+            </td>
+            <td>boolean</td>
+            <td>3.4.0</td>
           </tr>
           <tr>
             <td>addDefaultImplementationEntries</td>
