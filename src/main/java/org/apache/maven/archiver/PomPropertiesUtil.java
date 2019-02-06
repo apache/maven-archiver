@@ -36,13 +36,9 @@ import org.codehaus.plexus.archiver.Archiver;
 
 /**
  * This class is responsible for creating the pom.properties file.
- *
- * @version $Id$
  */
 public class PomPropertiesUtil
 {
-    private static final String CREATED_BY_MAVEN = "Created by Apache Maven";
-
     private Properties loadPropertiesFile( File file )
         throws IOException
     {
@@ -90,22 +86,11 @@ public class PomPropertiesUtil
         PrintWriter pw = new PrintWriter( outputFile, "ISO-8859-1" );
         try
         {
-            String createdBy = CREATED_BY_MAVEN;
-            if ( session != null ) // can be null due to API backwards compatibility
-            {
-                String mavenVersion = session.getSystemProperties().getProperty( "maven.version" );
-                if ( mavenVersion != null )
-                {
-                    createdBy += " " + mavenVersion;
-                }
-            }
-
             StringWriter sw = new StringWriter();
             properties.store( sw, null );
 
             BufferedReader r = new BufferedReader( new StringReader( sw.toString() ) );
 
-            pw.println( "#" + createdBy );
             String line;
             while ( ( line = r.readLine() ) != null )
             {
