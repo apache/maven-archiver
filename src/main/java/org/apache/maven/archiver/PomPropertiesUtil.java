@@ -27,6 +27,9 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.execution.MavenSession;
@@ -35,7 +38,8 @@ import org.apache.maven.shared.utils.io.IOUtil;
 import org.codehaus.plexus.archiver.Archiver;
 
 /**
- * This class is responsible for creating the pom.properties file.
+ * This class is responsible for creating the <code>pom.properties</code> file
+ * in <code>META-INF/maven/${groupId}/${artifactId}</code>.
  */
 public class PomPropertiesUtil
 {
@@ -91,12 +95,13 @@ public class PomPropertiesUtil
 
             BufferedReader r = new BufferedReader( new StringReader( sw.toString() ) );
 
+            List<String> lines = new ArrayList<String>();
             String line;
             while ( ( line = r.readLine() ) != null )
             {
                 if ( !line.startsWith( "#" ) )
                 {
-                    pw.println( line );
+                    lines.add( line );
                 }
             }
 
@@ -104,6 +109,13 @@ public class PomPropertiesUtil
             r = null;
             sw.close();
             sw = null;
+
+            Collections.sort( lines );
+            for ( String l : lines )
+            {
+                pw.println( l );
+            }
+
             pw.close();
             pw = null;
         }
