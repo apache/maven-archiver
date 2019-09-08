@@ -107,6 +107,7 @@ public class MavenArchiver
 
     private String createdBy;
 
+    private boolean buildJdkSpecDefaultEntry = true;
     /**
      * @param session The Maven Session.
      * @param project The Maven Project.
@@ -680,7 +681,10 @@ public class MavenArchiver
              createdBy = createdBy( CREATED_BY, "org.apache.maven", "maven-archiver" );
          }
          addManifestAttribute( m, entries, "Created-By", createdBy );
-         addManifestAttribute( m, entries, "Build-Jdk-Spec", System.getProperty( "java.specification.version" ) );
+         if ( buildJdkSpecDefaultEntry )
+         {
+             addManifestAttribute( m, entries, "Build-Jdk-Spec", System.getProperty( "java.specification.version" ) );
+         }
     }
 
     private void handleBuildEnvironmentEntries( MavenSession session, Manifest m, Map<String, String> entries )
@@ -724,7 +728,7 @@ public class MavenArchiver
      * @param description description of the plugin, like "Maven Source Plugin"
      * @param groupId groupId where to get version in pom.properties
      * @param artifactId artifactId where to get version in pom.properties
-     * @since 3.5.0
+     * @since 3.4.1
      */
     public void setCreatedBy( String description, String groupId, String artifactId )
     {
@@ -740,6 +744,18 @@ public class MavenArchiver
             createdBy += " " + version;
         }
         return createdBy;
+    }
+
+    /**
+     * Add "Build-Jdk-Spec" entry as part of default manifest entries (true by default).
+     * For plugins whose output is not impacted by JDK release (like maven-source-plugin), adding
+     * Jdk spec adds unnecessary requirement on JDK version used at build to get reproducible result. 
+     *
+     * @since 3.4.1
+     */
+    public void setBuildJdkSpecDefaultEntry( boolean buildJdkSpecDefaultEntry )
+    {
+        this.buildJdkSpecDefaultEntry = buildJdkSpecDefaultEntry;
     }
 
 }
