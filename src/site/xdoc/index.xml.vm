@@ -116,7 +116,7 @@
               and rebuild the archive, only if the latter timestamp precedes the
               former timestamps. Checking for timestamps will typically offer a
               performance gain (in particular, if the following steps in a build
-              can be suppressed, if an archive isn't recrated) on the cost that
+              can be suppressed, if an archive isn't recreated) on the cost that
               you get inaccurate results from time to time. In particular, removal
               of source files won't be detected.
               <p>
