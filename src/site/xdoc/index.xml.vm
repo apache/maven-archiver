@@ -39,6 +39,9 @@
   &lt;compress/&gt;
   &lt;forced/&gt;
   &lt;index/&gt;
+  &lt;pomPropertiesFile/&gt;
+
+  &lt;manifestFile/&gt;
   &lt;<a href="#class_manifest">manifest</a>&gt;
     &lt;addClasspath/&gt;
     &lt;addDefaultEntries/&gt;
@@ -56,7 +59,6 @@
   &lt;manifestEntries&gt;
     &lt;key&gt;value&lt;/key&gt;
   &lt;/manifestEntries&gt;
-  &lt;manifestFile/&gt;
   &lt;manifestSections&gt;
     &lt;<a href="#class_manifestSection">manifestSection</a>&gt;
       &lt;name/&gt;
@@ -65,7 +67,6 @@
       &lt;/manifestEntries&gt;
     &lt;manifestSection/&gt;
   &lt;/manifestSections&gt;
-  &lt;pomPropertiesFile/&gt;
 &lt;/archive&gt;
       </source>
 
@@ -138,6 +139,22 @@
             <td></td>
           </tr>
           <tr>
+            <td>pomPropertiesFile</td>
+            <td>
+              Use this to override the auto created
+              <a href="#pom-properties-content">pom.properties</a> file
+              (only if <code>addMavenDescriptor</code> is set to <code>true</code>)
+            </td>
+            <td>File</td>
+            <td>2.3</td>
+          </tr>
+          <tr>
+            <td>manifestFile</td>
+            <td>With this you can supply your own manifest file.</td>
+            <td>File</td>
+            <td></td>
+          </tr>
+          <tr>
             <td><a href="#class_manifest">manifest</a></td>
             <td></td>
             <td></td>
@@ -150,28 +167,24 @@
             <td></td>
           </tr>
           <tr>
-            <td>manifestFile</td>
-            <td>With this you can supply your own manifest file.</td>
-            <td>File</td>
-            <td></td>
-          </tr>
-          <tr>
             <td><a href="#class_manifestSection">manifestSections</a></td>
             <td></td>
             <td></td>
             <td></td>
           </tr>
-          <tr>
-            <td>pomPropertiesFile</td>
-            <td>
-              Use this to override the auto created
-              <a href="#pom-properties-content">pom.properties</a> file
-              (only if <code>addMavenDescriptor</code> is set to <code>true</code>)
-            </td>
-            <td>File</td>
-            <td>2.3</td>
-          </tr>
         </table>
+      </subsection>
+
+      <a name="pom-properties-content"/>
+      <subsection name="pom.properties content">
+        <p>
+          The auto created <code>pom.properties</code> file will contain the
+          following content:
+        </p>
+        <source>
+version=\${project.version}
+groupId=\${project.groupId}
+artifactId=\${project.artifactId}</source>
       </subsection>
 
       <a name="class_manifest"/>
@@ -343,19 +356,6 @@ Build-Os:  ${os.name} (${os.version}; (${os.arch})</source>
             <td></td>
           </tr>
         </table>
-      </subsection>
-
-      <a name="pom-properties-content"/>
-      <subsection name="pom.properties content">
-        <p>
-          The auto created <code>pom.properties</code> file will contain the
-          following content:
-        </p>
-        <source>
-version=\${project.version}
-groupId=\${project.groupId}
-artifactId=\${project.artifactId}
-        </source>
       </subsection>
     </section>
   </body>
