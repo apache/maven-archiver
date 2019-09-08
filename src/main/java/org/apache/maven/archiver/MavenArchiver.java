@@ -105,6 +105,8 @@ public class MavenArchiver
 
     private File archiveFile;
 
+    private String createdBy;
+
     /**
      * @param session The Maven Session.
      * @param project The Maven Project.
@@ -672,11 +674,10 @@ public class MavenArchiver
     private void handleDefaultEntries( Manifest m, Map<String, String> entries )
         throws ManifestException
     {
-         String createdBy = CREATED_BY;
-         String archiverVersion = getArchiverVersion();
-         if ( archiverVersion != null )
+         String createdBy = this.createdBy;
+         if ( createdBy == null )
          {
-             createdBy += " " + archiverVersion;
+             createdBy = createdBy( CREATED_BY, "org.apache.maven", "maven-archiver" );
          }
          addManifestAttribute( m, entries, "Created-By", createdBy );
          addManifestAttribute( m, entries, "Build-Jdk-Spec", System.getProperty( "java.specification.version" ) );
@@ -709,12 +710,36 @@ public class MavenArchiver
         return null;
     }
 
-    private static String getArchiverVersion()
+    private static String getCreatedByVersion( String groupId, String artifactId )
     {
         final Properties properties = PropertyUtils.loadOptionalProperties( MavenArchiver.class.getResourceAsStream(
-            "/META-INF/maven/org.apache.maven/maven-archiver/pom.properties" ) );
+            "/META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties" ) );
 
         return properties.getProperty( "version" );
+    }
+
+    /**
+     * Define a value for "Created By" entry.
+     * 
+     * @param description description of the plugin, like "Maven Source Plugin"
+     * @param groupId groupId where to get version in pom.properties
+     * @param artifactId artifactId where to get version in pom.properties
+     * @since 3.5.0
+     */
+    public void setCreatedBy( String description, String groupId, String artifactId )
+    {
+        createdBy = createdBy( description, groupId, artifactId );
+    }
+
+    private String createdBy( String description, String groupId, String artifactId )
+    {
+        String createdBy = description;
+        String version = getCreatedByVersion( groupId, artifactId );
+        if ( version != null )
+        {
+            createdBy += " " + version;
+        }
+        return createdBy;
     }
 
 }
