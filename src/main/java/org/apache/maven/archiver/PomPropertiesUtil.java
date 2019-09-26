@@ -20,13 +20,16 @@ package org.apache.maven.archiver;
  */
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -87,7 +90,10 @@ public class PomPropertiesUtil
         {
             return;
         }
-        PrintWriter pw = new PrintWriter( outputFile, "ISO-8859-1" );
+
+        Writer output = new BufferedWriter( new OutputStreamWriter(
+            new FileOutputStream( outputFile ), "ISO-8859-1" ) );
+
         try
         {
             StringWriter sw = new StringWriter();
@@ -113,15 +119,16 @@ public class PomPropertiesUtil
             Collections.sort( lines );
             for ( String l : lines )
             {
-                pw.println( l );
+                output.write( l );
+                output.write( "\n" );
             }
 
-            pw.close();
-            pw = null;
+            output.close();
+            output = null;
         }
         finally
         {
-            IOUtil.close( pw );
+            IOUtil.close( output );
         }
     }
 
