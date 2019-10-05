@@ -42,8 +42,12 @@ import org.apache.maven.shared.utils.StringUtils;
 import javax.lang.model.SourceVersion;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -724,11 +728,11 @@ public class MavenArchiver
 
     /**
      * Define a value for "Created By" entry.
-     * 
+     *
      * @param description description of the plugin, like "Maven Source Plugin"
      * @param groupId groupId where to get version in pom.properties
      * @param artifactId artifactId where to get version in pom.properties
-     * @since 3.4.1
+     * @since 3.5.0
      */
     public void setCreatedBy( String description, String groupId, String artifactId )
     {
@@ -749,13 +753,67 @@ public class MavenArchiver
     /**
      * Add "Build-Jdk-Spec" entry as part of default manifest entries (true by default).
      * For plugins whose output is not impacted by JDK release (like maven-source-plugin), adding
-     * Jdk spec adds unnecessary requirement on JDK version used at build to get reproducible result. 
+     * Jdk spec adds unnecessary requirement on JDK version used at build to get reproducible result.
      *
-     * @since 3.4.1
+     * @since 3.5.0
      */
     public void setBuildJdkSpecDefaultEntry( boolean buildJdkSpecDefaultEntry )
     {
         this.buildJdkSpecDefaultEntry = buildJdkSpecDefaultEntry;
     }
 
+    /**
+     * Parse output timestamp configured for Reproducible Builds' archive entries, either formatted as ISO 8601
+     * <code>yyyy-MM-dd'T'HH:mm:ssXXX</code> or as an int representing seconds since the epoch (like
+     * <a href="https://reproducible-builds.org/docs/source-date-epoch/">SOURCE_DATE_EPOCH</a>.
+     *
+     * @param outputTimestamp the value of <code>${project.build.outputTimestamp}</code> (may be <code>null</code>)
+     * @return the parsed timestamp, may be <code>null</code> if <code>null</code> input or input contains only 1
+     *         character
+     * @since 3.5.0
+     */
+    public Date parseOutputTimestamp( String outputTimestamp )
+    {
+        if ( StringUtils.isNumeric( outputTimestamp ) && StringUtils.isNotEmpty( outputTimestamp ) )
+        {
+            return new Date( Long.parseLong( outputTimestamp ) * 1000 );
+        }
+
+        if ( outputTimestamp == null || outputTimestamp.length() < 2 )
+        {
+            // no timestamp configured (1 character configuration is useful to override a full value during pom
+            // inheritance)
+            return null;
+        }
+
+        DateFormat df = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ssXXX" );
+        try
+        {
+            return df.parse( outputTimestamp );
+        }
+        catch ( ParseException pe )
+        {
+            throw new IllegalArgumentException( "Invalid project.build.outputTimestamp value '" + outputTimestamp + "'",
+                                                pe );
+        }
+    }
+
+    /**
+     * Configure Reproducible Builds archive creation if a timestamp is provided.
+     *
+     * @param outputTimestamp the value of <code>${project.build.outputTimestamp}</code> (may be <code>null</code>)
+     * @return the parsed timestamp
+     * @since 3.5.0
+     * @see #parseOutputTimestamp
+     * @see Archiver#configureReproducible
+     */
+    public Date configureReproducible( String outputTimestamp )
+    {
+        Date outputDate = parseOutputTimestamp( outputTimestamp );
+        if ( outputDate != null )
+        {
+            getArchiver().configureReproducible( outputDate );
+        }
+        return outputDate;
+    }
 }

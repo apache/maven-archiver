@@ -1503,4 +1503,63 @@ public class MavenArchiverTest
         }
 
     }
+
+    @Test
+    public void testParseOutputTimestamp()
+    {
+        MavenArchiver archiver = new MavenArchiver();
+
+        assertNull( archiver.parseOutputTimestamp( null ) );
+        assertNull( archiver.parseOutputTimestamp( "" ) );
+        assertNull( archiver.parseOutputTimestamp( "." ) );
+        assertNull( archiver.parseOutputTimestamp( " " ) );
+        assertNull( archiver.parseOutputTimestamp( "_" ) );
+
+        assertEquals( 1570300662000L, archiver.parseOutputTimestamp( "1570300662" ).getTime() );
+
+        assertEquals( 1570300662000L, archiver.parseOutputTimestamp( "2019-10-05T18:37:42Z" ).getTime() );
+        assertEquals( 1570300662000L, archiver.parseOutputTimestamp( "2019-10-05T20:37:42+02:00" ).getTime() );
+        assertEquals( 1570300662000L, archiver.parseOutputTimestamp( "2019-10-05T16:37:42-02:00" ).getTime() );
+
+        // These must result in IAE because we expect extended ISO format only (ie with - separator for date and
+        // : separator for timezone), hence the XXX SimpleDateFormat for tz offset
+        // X SimpleDateFormat accepts timezone without separator while date has separator, which is a mix between
+        // basic (no separators, both for date and timezone) and extended (separator for both)
+        try
+        {
+            archiver.parseOutputTimestamp( "2019-10-05T20:37:42+0200" );
+            fail();
+        }
+        catch ( IllegalArgumentException e )
+        {
+        }
+        try
+        {
+            archiver.parseOutputTimestamp( "2019-10-05T20:37:42-0200" );
+            fail();
+        }
+        catch ( IllegalArgumentException e )
+        {
+        }
+
+        // These unfortunately fail although the input is valid according to ISO 8601
+        // SDF does not allow strict telescoping parsing w/o permitting invalid input as depicted above.
+        // One has to use the new Java Time API for this.
+        try
+        {
+            archiver.parseOutputTimestamp( "2019-10-05T20:37:42+02" );
+            fail();
+        }
+        catch ( IllegalArgumentException e )
+        {
+        }
+        try
+        {
+            archiver.parseOutputTimestamp( "2019-10-05T20:37:42-02" );
+            fail();
+        }
+        catch ( IllegalArgumentException e )
+        {
+        }
+    }
 }
