@@ -182,9 +182,9 @@
           following content:
         </p>
         <source>
-version=\${project.version}
+artifactId=\${project.artifactId}
 groupId=\${project.groupId}
-artifactId=\${project.artifactId}</source>
+version=\${project.version}</source>
       </subsection>
 
       <a name="class_manifest"/>
@@ -212,6 +212,8 @@ artifactId=\${project.artifactId}</source>
               <source>
 Created-By: Maven Archiver ${maven-archiver.version}
 Build-Jdk-Spec: ${java.specification.version}</source>
+              Since 3.5.0, the default value of <code>Created-By</code> entry can be overridden using
+              <a href="./apidocs/org/apache/maven/archiver/MavenArchiver.html">MavenArchiver.setCreatedBy(...)</a> API.<br />
               The default value is <code>true</code>.
             </td>
             <td>boolean</td>
