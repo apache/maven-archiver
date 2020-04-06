@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.apache.maven.shared</groupId>
     <artifactId>maven-shared-components</artifactId>
-    <version>33</version>
+    <version>34</version>
     <relativePath>../../pom/maven/maven-shared-components/pom.xml</relativePath>
   </parent>
 
@@ -36,6 +36,7 @@
   <properties>
     <mavenVersion>3.0</mavenVersion>
     <javaVersion>7</javaVersion>
+    <project.build.outputTimestamp>2020-04-04T09:03:59Z</project.build.outputTimestamp>
   </properties>
 
   <scm>
