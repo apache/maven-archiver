@@ -1507,19 +1507,18 @@ public class MavenArchiverTest
     @Test
     public void testParseOutputTimestamp()
     {
-        MavenArchiver archiver = new MavenArchiver();
 
-        assertNull( archiver.parseOutputTimestamp( null ) );
-        assertNull( archiver.parseOutputTimestamp( "" ) );
-        assertNull( archiver.parseOutputTimestamp( "." ) );
-        assertNull( archiver.parseOutputTimestamp( " " ) );
-        assertNull( archiver.parseOutputTimestamp( "_" ) );
+        assertNull( MavenArchiver.parseOutputTimestamp( null ) );
+        assertNull( MavenArchiver.parseOutputTimestamp( "" ) );
+        assertNull( MavenArchiver.parseOutputTimestamp( "." ) );
+        assertNull( MavenArchiver.parseOutputTimestamp( " " ) );
+        assertNull( MavenArchiver.parseOutputTimestamp( "_" ) );
 
-        assertEquals( 1570300662000L, archiver.parseOutputTimestamp( "1570300662" ).getTime() );
+        assertEquals( 1570300662000L, MavenArchiver.parseOutputTimestamp( "1570300662" ).getTime() );
 
-        assertEquals( 1570300662000L, archiver.parseOutputTimestamp( "2019-10-05T18:37:42Z" ).getTime() );
-        assertEquals( 1570300662000L, archiver.parseOutputTimestamp( "2019-10-05T20:37:42+02:00" ).getTime() );
-        assertEquals( 1570300662000L, archiver.parseOutputTimestamp( "2019-10-05T16:37:42-02:00" ).getTime() );
+        assertEquals( 1570300662000L, MavenArchiver.parseOutputTimestamp( "2019-10-05T18:37:42Z" ).getTime() );
+        assertEquals( 1570300662000L, MavenArchiver.parseOutputTimestamp( "2019-10-05T20:37:42+02:00" ).getTime() );
+        assertEquals( 1570300662000L, MavenArchiver.parseOutputTimestamp( "2019-10-05T16:37:42-02:00" ).getTime() );
 
         // These must result in IAE because we expect extended ISO format only (ie with - separator for date and
         // : separator for timezone), hence the XXX SimpleDateFormat for tz offset
@@ -1527,7 +1526,7 @@ public class MavenArchiverTest
         // basic (no separators, both for date and timezone) and extended (separator for both)
         try
         {
-            archiver.parseOutputTimestamp( "2019-10-05T20:37:42+0200" );
+            MavenArchiver.parseOutputTimestamp( "2019-10-05T20:37:42+0200" );
             fail();
         }
         catch ( IllegalArgumentException e )
@@ -1535,7 +1534,7 @@ public class MavenArchiverTest
         }
         try
         {
-            archiver.parseOutputTimestamp( "2019-10-05T20:37:42-0200" );
+            MavenArchiver.parseOutputTimestamp( "2019-10-05T20:37:42-0200" );
             fail();
         }
         catch ( IllegalArgumentException e )
@@ -1547,7 +1546,7 @@ public class MavenArchiverTest
         // One has to use the new Java Time API for this.
         try
         {
-            archiver.parseOutputTimestamp( "2019-10-05T20:37:42+02" );
+            MavenArchiver.parseOutputTimestamp( "2019-10-05T20:37:42+02" );
             fail();
         }
         catch ( IllegalArgumentException e )
@@ -1555,7 +1554,7 @@ public class MavenArchiverTest
         }
         try
         {
-            archiver.parseOutputTimestamp( "2019-10-05T20:37:42-02" );
+            MavenArchiver.parseOutputTimestamp( "2019-10-05T20:37:42-02" );
             fail();
         }
         catch ( IllegalArgumentException e )

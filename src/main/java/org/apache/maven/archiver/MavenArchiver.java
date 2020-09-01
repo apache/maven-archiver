@@ -112,13 +112,14 @@ public class MavenArchiver
     private String createdBy;
 
     private boolean buildJdkSpecDefaultEntry = true;
+    
     /**
-     * @param session The Maven Session.
-     * @param project The Maven Project.
-     * @param config The MavenArchiveConfiguration
-     * @return The {@link Manifest}
-     * @throws ManifestException In case of a failure.
-     * @throws DependencyResolutionRequiredException Resolution failure.
+     * @param session the Maven Session
+     * @param project the Maven Project
+     * @param config the MavenArchiveConfiguration
+     * @return the {@link Manifest}
+     * @throws ManifestException in case of a failure
+     * @throws DependencyResolutionRequiredException resolution failure
      */
     public Manifest getManifest( MavenSession session, MavenProject project, MavenArchiveConfiguration config )
         throws ManifestException, DependencyResolutionRequiredException
@@ -181,7 +182,7 @@ public class MavenArchiver
     }
 
     /**
-     * Return a pre-configured manifest
+     * Return a pre-configured manifest.
      *
      * @param project {@link MavenProject}
      * @param config {@link ManifestConfiguration}
@@ -201,8 +202,8 @@ public class MavenArchiver
      * @param project {@link MavenProject}
      * @param config {@link ManifestConfiguration}
      * @return {@link Manifest}
-     * @throws ManifestException The manifest exception.
-     * @throws DependencyResolutionRequiredException The dependency resolution required exception.
+     * @throws ManifestException the manifest exception
+     * @throws DependencyResolutionRequiredException the dependency resolution required exception
      */
     public Manifest getManifest( MavenSession mavenSession, MavenProject project, ManifestConfiguration config )
         throws ManifestException, DependencyResolutionRequiredException
@@ -243,8 +244,8 @@ public class MavenArchiver
      * @param config {@link ManifestConfiguration}
      * @param entries The entries.
      * @return {@link Manifest}
-     * @throws ManifestException The manifest exception.
-     * @throws DependencyResolutionRequiredException The dependency resolution required exception.
+     * @throws ManifestException the manifest exception
+     * @throws DependencyResolutionRequiredException the dependency resolution required exception
      */
     protected Manifest getManifest( MavenSession session, MavenProject project, ManifestConfiguration config,
                                     Map<String, String> entries )
@@ -771,8 +772,9 @@ public class MavenArchiver
      * @return the parsed timestamp, may be <code>null</code> if <code>null</code> input or input contains only 1
      *         character
      * @since 3.5.0
+     * @throws IllegalArgumentException if the outputTimestamp is neither ISO 8601 nor an integer
      */
-    public Date parseOutputTimestamp( String outputTimestamp )
+    public static Date parseOutputTimestamp( String outputTimestamp )
     {
         if ( StringUtils.isNumeric( outputTimestamp ) && StringUtils.isNotEmpty( outputTimestamp ) )
         {
