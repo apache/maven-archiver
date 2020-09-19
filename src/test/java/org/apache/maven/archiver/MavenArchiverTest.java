@@ -38,10 +38,10 @@ import org.apache.maven.shared.utils.io.FileUtils;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
 import org.codehaus.plexus.archiver.jar.ManifestException;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.RepositorySystemSession;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.sonatype.aether.RepositorySystemSession;
-import org.sonatype.aether.util.DefaultRepositorySystemSession;
 
 import java.io.File;
 import java.io.IOException;
