@@ -33,16 +33,13 @@ import org.junit.Test;
 public class MavenArchiveConfigurationTest
 {
 
-    private ManifestConfiguration manifestConfiguration;
-
     private MavenArchiveConfiguration archive;
 
     @Before
     public void before()
     {
-        this.manifestConfiguration = new ManifestConfiguration();
         archive = new MavenArchiveConfiguration();
-        archive.setManifest( manifestConfiguration );
+        archive.setManifest( new ManifestConfiguration() );
         archive.setForced( false );
         archive.setCompress( false );
         archive.setIndex( false );
