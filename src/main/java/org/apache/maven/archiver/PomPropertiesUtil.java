@@ -34,7 +34,6 @@ import java.util.Properties;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.utils.io.IOUtil;
 import org.codehaus.plexus.archiver.Archiver;
 
 /**
@@ -47,18 +46,10 @@ public class PomPropertiesUtil
         throws IOException
     {
         Properties fileProps = new Properties();
-        InputStream istream = null;
-        try
+        try ( InputStream istream = new FileInputStream( file ) )
         {
-            istream = new FileInputStream( file );
             fileProps.load( istream );
-            istream.close();
-            istream = null;
             return fileProps;
-        }
-        finally
-        {
-            IOUtil.close( istream );
         }
     }
 
@@ -87,41 +78,31 @@ public class PomPropertiesUtil
         {
             return;
         }
-        PrintWriter pw = new PrintWriter( outputFile, "ISO-8859-1" );
-        try
+        
+        try ( PrintWriter pw = new PrintWriter( outputFile, "ISO-8859-1" );
+              StringWriter sw = new StringWriter(); )
         {
-            StringWriter sw = new StringWriter();
+            
             properties.store( sw, null );
 
-            BufferedReader r = new BufferedReader( new StringReader( sw.toString() ) );
-
             List<String> lines = new ArrayList<String>();
-            String line;
-            while ( ( line = r.readLine() ) != null )
+            try ( BufferedReader r = new BufferedReader( new StringReader( sw.toString() ) ) )
             {
-                if ( !line.startsWith( "#" ) )
+                String line;
+                while ( ( line = r.readLine() ) != null )
                 {
-                    lines.add( line );
+                    if ( !line.startsWith( "#" ) )
+                    {
+                        lines.add( line );
+                    }
                 }
             }
-
-            r.close();
-            r = null;
-            sw.close();
-            sw = null;
 
             Collections.sort( lines );
             for ( String l : lines )
             {
                 pw.println( l );
             }
-
-            pw.close();
-            pw = null;
-        }
-        finally
-        {
-            IOUtil.close( pw );
         }
     }
 

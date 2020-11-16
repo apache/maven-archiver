@@ -230,7 +230,7 @@ public class MavenArchiver
         }
         else
         {
-            // if the value is empty we have create an entry with an empty string
+            // if the value is empty, create an entry with an empty string
             // to prevent null print in the manifest file
             Manifest.Attribute attr = new Manifest.Attribute( key, "" );
             manifest.addConfiguredAttribute( attr );
