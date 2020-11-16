@@ -244,7 +244,6 @@ public class MavenArchiverTest
     }
 
     @Test
-    @Ignore("Currently not working on Linux JDK 9 which looks like a JDK bug at the moment. See comments in Tests")
     public void testRecreation()
         throws Exception
     {
@@ -264,10 +263,8 @@ public class MavenArchiverTest
         assertThat( jarFile ).exists();
 
         long history = System.currentTimeMillis() - 60000L;
-        System.out.println( "history: " + history );
         jarFile.setLastModified( history );
         long time = jarFile.lastModified();
-        System.out.println( "Time:" + time );
 
         List<File> files = FileUtils.getFiles( new File( "target/maven-archiver" ), "**/**", null, true );
         for ( File file : files )
@@ -276,13 +273,8 @@ public class MavenArchiverTest
         }
 
         archiver.createArchive( session, project, config );
-        // Is the assumption correct that the jar file itself
-        // should have the same last modified time as the files itself ?
-
-        // Based on some experiments with a result like this:
-        // History 1532810292406 time:1532810292000 expected:<1532810352000> but was:<1532810292000>
-        // It looks like a JDK Bug: https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8177809
-        assertThat( time ).as( "History " + history + " time:" + time ).isEqualTo( jarFile.lastModified() );
+        
+        assertThat( history ).as( "History " + history + " time:" + time ).isEqualTo( jarFile.lastModified() );
 
         config.setForced( true );
         archiver.createArchive( session, project, config );
