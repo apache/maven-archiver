@@ -40,7 +40,6 @@ import org.codehaus.plexus.archiver.jar.JarArchiver;
 import org.codehaus.plexus.archiver.jar.ManifestException;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystemSession;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -131,9 +130,7 @@ public class MavenArchiverTest
             }
         };
 
-        Manifest manifest;
-
-        manifest = archiver.getManifest( session, project, config );
+        Manifest manifest = archiver.getManifest( session, project, config );
 
         assertThat( manifest.getMainAttributes() ).isNotNull();
 
@@ -274,7 +271,7 @@ public class MavenArchiverTest
 
         archiver.createArchive( session, project, config );
         
-        assertThat( history ).as( "History " + history + " time:" + time ).isEqualTo( jarFile.lastModified() );
+        assertThat( time ).as( "History " + history + " time:" + time ).isEqualTo( jarFile.lastModified() );
 
         config.setForced( true );
         archiver.createArchive( session, project, config );
