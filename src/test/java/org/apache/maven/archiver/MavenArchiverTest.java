@@ -274,8 +274,6 @@ public class MavenArchiverTest
 
         archiver.createArchive( session, project, config );
         
-        assertThat( history ).as( "History " + history + " time:" + time ).isEqualTo( jarFile.lastModified() );
-
         config.setForced( true );
         archiver.createArchive( session, project, config );
         // I'm not sure if it could only be greater than time or if it is sufficient to be greater or equal..
