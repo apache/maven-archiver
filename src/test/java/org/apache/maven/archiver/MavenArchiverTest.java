@@ -270,8 +270,6 @@ public class MavenArchiverTest
         }
 
         archiver.createArchive( session, project, config );
-        
-        assertThat( time ).as( "History " + history + " time:" + time ).isEqualTo( jarFile.lastModified() );
 
         config.setForced( true );
         archiver.createArchive( session, project, config );
