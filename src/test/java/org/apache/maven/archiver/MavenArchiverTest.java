@@ -255,7 +255,8 @@ public class MavenArchiverTest
         MavenArchiveConfiguration config = new MavenArchiveConfiguration();
         config.setForced( false );
 
-        FileUtils.deleteDirectory( "target/maven-archiver" );
+        File directory = new File( "target/maven-archiver" );
+        org.apache.commons.io.FileUtils.deleteDirectory( directory );
         archiver.createArchive( session, project, config );
         assertThat( jarFile ).exists();
 
@@ -263,7 +264,7 @@ public class MavenArchiverTest
         jarFile.setLastModified( history );
         long time = jarFile.lastModified();
 
-        List<File> files = FileUtils.getFiles( new File( "target/maven-archiver" ), "**/**", null, true );
+        List<File> files = FileUtils.getFiles( directory, "**/**", null, true );
         for ( File file : files )
         {
             assertThat( file.setLastModified( time ) ).isTrue();
