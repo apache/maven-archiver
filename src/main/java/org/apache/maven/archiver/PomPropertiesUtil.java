@@ -65,8 +65,7 @@ public class PomPropertiesUtil
         return fileProps.equals( props );
     }
 
-    private void createPropertiesFile( MavenSession session, Properties properties, File outputFile,
-                                       boolean forceCreation )
+    private void createPropertiesFile( Properties properties, File outputFile, boolean forceCreation )
         throws IOException
     {
         File outputDir = outputFile.getParentFile();
@@ -80,12 +79,12 @@ public class PomPropertiesUtil
         }
         
         try ( PrintWriter pw = new PrintWriter( outputFile, "ISO-8859-1" );
-              StringWriter sw = new StringWriter(); )
+              StringWriter sw = new StringWriter() )
         {
             
             properties.store( sw, null );
 
-            List<String> lines = new ArrayList<String>();
+            List<String> lines = new ArrayList<>();
             try ( BufferedReader r = new BufferedReader( new StringReader( sw.toString() ) ) )
             {
                 String line;
@@ -142,7 +141,7 @@ public class PomPropertiesUtil
 
         p.setProperty( "version", version );
 
-        createPropertiesFile( session, p, pomPropertiesFile, forceCreation );
+        createPropertiesFile( p, pomPropertiesFile, forceCreation );
 
         archiver.addFile( pomPropertiesFile, "META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties" );
     }

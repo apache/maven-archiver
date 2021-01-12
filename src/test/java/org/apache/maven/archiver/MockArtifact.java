@@ -33,8 +33,9 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @todo move to maven-artifact-test
+ * TODO move to maven-artifact-test
  */
+@SuppressWarnings( "deprecation" )
 class MockArtifact
     implements Artifact
 {

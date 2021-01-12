@@ -23,14 +23,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * @version $Id$
  */
 public class ManifestSection
 {
 
     private String name = null;
 
-    private Map<String, String> manifestEntries = new LinkedHashMap<String, String>();
+    private final Map<String, String> manifestEntries = new LinkedHashMap<>();
 
     /**
      * @param key The key of the manifest entry.

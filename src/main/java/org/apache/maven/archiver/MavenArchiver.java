@@ -54,10 +54,13 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.jar.Attributes;
 
+import static org.apache.maven.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_CUSTOM;
+import static org.apache.maven.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_REPOSITORY;
+import static org.apache.maven.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_SIMPLE;
+
 /**
  * @author <a href="evenisse@apache.org">Emmanuel Venisse</a>
  * @author kama
- * @version $Revision$ $Date$
  */
 public class MavenArchiver
 {
@@ -94,7 +97,7 @@ public class MavenArchiver
 
     static
     {
-        List<String> artifactExpressionPrefixes = new ArrayList<String>();
+        List<String> artifactExpressionPrefixes = new ArrayList<>();
         artifactExpressionPrefixes.add( "artifact." );
 
         ARTIFACT_EXPRESSION_PREFIXES = artifactExpressionPrefixes;
@@ -298,7 +301,7 @@ public class MavenArchiver
                     }
                     else
                     {
-                        List<ValueSource> valueSources = new ArrayList<ValueSource>();
+                        List<ValueSource> valueSources = new ArrayList<>();
 
                         handleExtraExpression( artifact, valueSources );
 
@@ -312,48 +315,49 @@ public class MavenArchiver
 
                         try
                         {
-                            if ( ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_SIMPLE.equals( layoutType ) )
+                            switch ( layoutType )
                             {
-                                if ( config.isUseUniqueVersions() )
-                                {
-                                    classpath.append( interpolator.interpolate( SIMPLE_LAYOUT, recursionInterceptor ) );
-                                }
-                                else
-                                {
-                                    classpath.append( interpolator.interpolate( SIMPLE_LAYOUT_NONUNIQUE,
-                                                                                recursionInterceptor ) );
-                                }
-                            }
-                            else if ( ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_REPOSITORY.equals( layoutType ) )
-                            {
-                                // we use layout /$groupId[0]/../${groupId[n]/$artifactId/$version/{fileName}
-                                // here we must find the Artifact in the project Artifacts to create the maven layout
-                                if ( config.isUseUniqueVersions() )
-                                {
-                                    classpath.append( interpolator.interpolate( REPOSITORY_LAYOUT,
-                                                                                recursionInterceptor ) );
-                                }
-                                else
-                                {
-                                    classpath.append( interpolator.interpolate( REPOSITORY_LAYOUT_NONUNIQUE,
-                                                                                recursionInterceptor ) );
-                                }
-                            }
-                            else if ( ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_CUSTOM.equals( layoutType ) )
-                            {
-                                if ( layout == null )
-                                {
-                                    throw new ManifestException( ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_CUSTOM
-                                        + " layout type was declared, but custom layout expression was not"
-                                        + " specified. Check your <archive><manifest><customLayout/> element." );
-                                }
+                                case CLASSPATH_LAYOUT_TYPE_SIMPLE:
+                                    if ( config.isUseUniqueVersions() )
+                                    {
+                                        classpath.append( interpolator.interpolate( SIMPLE_LAYOUT,
+                                                recursionInterceptor ) );
+                                    }
+                                    else
+                                    {
+                                        classpath.append( interpolator.interpolate( SIMPLE_LAYOUT_NONUNIQUE,
+                                                recursionInterceptor ) );
+                                    }
+                                    break;
+                                case CLASSPATH_LAYOUT_TYPE_REPOSITORY:
+                                    // we use layout /$groupId[0]/../${groupId[n]/$artifactId/$version/{fileName}
+                                    // here we must find the Artifact in the project Artifacts
+                                    // to create the maven layout
+                                    if ( config.isUseUniqueVersions() )
+                                    {
+                                        classpath.append( interpolator.interpolate( REPOSITORY_LAYOUT,
+                                                recursionInterceptor ) );
+                                    }
+                                    else
+                                    {
+                                        classpath.append( interpolator.interpolate( REPOSITORY_LAYOUT_NONUNIQUE,
+                                                recursionInterceptor ) );
+                                    }
+                                    break;
+                                case CLASSPATH_LAYOUT_TYPE_CUSTOM:
+                                    if ( layout == null )
+                                    {
+                                        throw new ManifestException( CLASSPATH_LAYOUT_TYPE_CUSTOM
+                                                + " layout type was declared, but custom layout expression was not"
+                                                + " specified. Check your <archive><manifest><customLayout/>"
+                                                + " element." );
+                                    }
 
-                                classpath.append( interpolator.interpolate( layout, recursionInterceptor ) );
-                            }
-                            else
-                            {
-                                throw new ManifestException( "Unknown classpath layout type: '" + layoutType
-                                    + "'. Check your <archive><manifest><layoutType/> element." );
+                                    classpath.append( interpolator.interpolate( layout, recursionInterceptor ) );
+                                    break;
+                                default:
+                                    throw new ManifestException( "Unknown classpath layout type: '" + layoutType
+                                            + "'. Check your <archive><manifest><layoutType/> element." );
                             }
                         }
                         catch ( InterpolationException e )
@@ -445,7 +449,7 @@ public class MavenArchiver
     {
         // TODO: this is only for applets - should we distinguish them as a packaging?
         StringBuilder extensionsList = new StringBuilder();
-        Set<Artifact> artifacts = (Set<Artifact>) project.getArtifacts();
+        Set<Artifact> artifacts = project.getArtifacts();
 
         for ( Artifact artifact : artifacts )
         {
@@ -579,8 +583,7 @@ public class MavenArchiver
     {
         // we have to clone the project instance so we can write out the pom with the deployment version,
         // without impacting the main project instance...
-        MavenProject workingProject = null;
-        workingProject = (MavenProject) project.clone();
+        MavenProject workingProject = project.clone();
 
         boolean forced = archiveConfiguration.isForced();
         if ( archiveConfiguration.isAddMavenDescriptor() )

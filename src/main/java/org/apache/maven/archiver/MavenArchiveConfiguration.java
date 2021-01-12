@@ -29,7 +29,6 @@ import java.util.Map;
  * Capture common archive configuration.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
- * @version $Id$
  */
 // TODO Is this general enough to be in Plexus Archiver?
 public class MavenArchiveConfiguration
@@ -47,9 +46,9 @@ public class MavenArchiveConfiguration
     //TODO: Rename this attribute to manifestConfiguration;
     private ManifestConfiguration manifest;
 
-    private Map<String, String> manifestEntries = new LinkedHashMap<String, String>();
+    private Map<String, String> manifestEntries = new LinkedHashMap<>();
 
-    private List<ManifestSection> manifestSections = new LinkedList<ManifestSection>();
+    private List<ManifestSection> manifestSections = new LinkedList<>();
 
     /**
      * @since 2.2
