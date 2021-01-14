@@ -759,6 +759,7 @@ public class MavenArchiver
      * For plugins whose output is not impacted by JDK release (like maven-source-plugin), adding
      * Jdk spec adds unnecessary requirement on JDK version used at build to get reproducible result.
      *
+     * @param buildJdkSpecDefaultEntry the value for "Build-Jdk-Spec" entry
      * @since 3.5.0
      */
     public void setBuildJdkSpecDefaultEntry( boolean buildJdkSpecDefaultEntry )
@@ -810,7 +811,6 @@ public class MavenArchiver
      * @return the parsed timestamp
      * @since 3.5.0
      * @see #parseOutputTimestamp
-     * @see Archiver#configureReproducible
      */
     public Date configureReproducible( String outputTimestamp )
     {
