@@ -35,7 +35,6 @@ import org.apache.maven.model.Organization;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.utils.StringUtils;
 import org.apache.maven.shared.utils.io.FileUtils;
-import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
 import org.codehaus.plexus.archiver.jar.ManifestException;
 import org.eclipse.aether.DefaultRepositorySystemSession;
@@ -1379,9 +1378,9 @@ public class MavenArchiverTest
     private MavenSession getDummySession()
     {
         Properties systemProperties = new Properties();
-        systemProperties.put( "maven.version", "3.0.4" );
+        systemProperties.put( "maven.version", "3.1.1" );
         systemProperties.put( "maven.build.version",
-            "Apache Maven 3.0.4 (3ad2b6794a8293a8ca6c1590708fb5d3fc795c49; 2012-01-17T08:39:41Z)" );
+            "Apache Maven 3.1.1 (0728685237757ffbf44136acec0402957f723d9a; 2013-09-17 17:22:22+0200)" );
 
         return getDummySession( systemProperties );
     }
@@ -1393,7 +1392,6 @@ public class MavenArchiverTest
 
     private MavenSession getDummySession( Properties systemProperties )
     {
-        PlexusContainer container = null;
         File settings = null;
         List<String> goals = null;
         Date startTime = new Date();
@@ -1408,7 +1406,7 @@ public class MavenArchiverTest
 
         RepositorySystemSession rss = new DefaultRepositorySystemSession();
 
-        return new MavenSession( container, rss, request, result );
+        return new MavenSession( null, rss, request, result );
 
     }
 
