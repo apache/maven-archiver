@@ -1441,8 +1441,14 @@ public class MavenArchiverTest
         assertThat( archiver.parseOutputTimestamp( "." ) ).isNull();
         assertThat( archiver.parseOutputTimestamp( " " ) ).isNull();
         assertThat( archiver.parseOutputTimestamp( "_" ) ).isNull();
+        assertThat( archiver.parseOutputTimestamp( "-" ) ).isNull();
+        assertThat( archiver.parseOutputTimestamp( "/" ) ).isNull();
+        assertThat( archiver.parseOutputTimestamp( "!" ) ).isNull();
+        assertThat( archiver.parseOutputTimestamp( "*" ) ).isNull();
 
         assertThat( archiver.parseOutputTimestamp( "1570300662" ).getTime() ).isEqualTo( 1570300662000L );
+        assertThat( archiver.parseOutputTimestamp( "0" ).getTime() ).isEqualTo( 0L );
+        assertThat( archiver.parseOutputTimestamp( "1" ).getTime() ).isEqualTo( 1000L );
 
         assertThat( archiver.parseOutputTimestamp( "2019-10-05T18:37:42Z" ).getTime() ).isEqualTo( 1570300662000L );
         assertThat( archiver.parseOutputTimestamp( "2019-10-05T20:37:42+02:00" ).getTime() ).isEqualTo(
