@@ -84,18 +84,23 @@
     </dependency>
     <!--
       ! Pulled in as a direct dependency to resolve conflicts.
-      ! We want the most recent commons-io compatible to the target JDK.
+      ! We want the most recent commons-io/commons-compress compatible to the target JDK.
     -->
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>2.6</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <version>1.20</version>
+    </dependency>
 
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-archiver</artifactId>
-      <version>4.2.4</version>
+      <version>4.2.7</version>
     </dependency>
     <!--
       ! plexus-archiver needs this, or else maven-artifact will
