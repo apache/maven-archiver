@@ -22,20 +22,20 @@
   <parent>
     <groupId>org.apache.maven.shared</groupId>
     <artifactId>maven-shared-components</artifactId>
-    <version>34</version>
+    <version>35</version>
     <relativePath />
   </parent>
 
   <groupId>org.apache.maven</groupId>
   <artifactId>maven-archiver</artifactId>
-  <version>3.5.3-SNAPSHOT</version>
+  <version>3.6.0-SNAPSHOT</version>
 
   <name>Apache Maven Archiver</name>
   <description>Provides utility methods for creating JARs and other archive files from a Maven project.</description>
 
   <properties>
     <mavenVersion>3.1.1</mavenVersion>
-    <javaVersion>7</javaVersion>
+    <javaVersion>8</javaVersion>
     <surefire.version>2.22.2</surefire.version>
     <project.build.outputTimestamp>2022-01-02T12:43:14Z</project.build.outputTimestamp>
   </properties>
@@ -62,97 +62,77 @@
   </distributionManagement>
 
   <dependencies>
+    <!--
+      Apache Maven dependencies
+    -->
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-artifact</artifactId>
       <version>${mavenVersion}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-model</artifactId>
       <version>${mavenVersion}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
       <version>${mavenVersion}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-shared-utils</artifactId>
-      <version>3.3.3</version>
+      <version>3.3.4</version>
     </dependency>
     <!--
-      ! Pulled in as a direct dependency to resolve conflicts.
-      ! We want the most recent commons-io/commons-compress compatible to the target JDK.
+      Apache Commons dependencies
     -->
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.6</version>
+      <version>2.11.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
-      <version>1.20</version>
+      <version>1.21</version>
     </dependency>
-
+    <!--
+      Plexus dependencies
+    -->
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-archiver</artifactId>
       <version>4.2.7</version>
     </dependency>
-    <!--
-      ! plexus-archiver needs this, or else maven-artifact will
-      ! pull in a version from the pliocene era
-    -->
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>3.3.0</version>
+      <version>3.4.1</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-interpolation</artifactId>
       <version>1.26</version>
     </dependency>
+    <!--
+      Test dependencies
+    -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.13.1</version>
+      <version>4.13.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>2.9.1</version>
+      <version>3.22.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <build>
-    <pluginManagement>
-      <plugins>
-        <!-- remove with next parent upgrade -->
-        <plugin>
-          <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.1.1</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-enforcer-plugin</artifactId>
-          <version>3.0.0-M3</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.2.0</version>
-          <configuration>
-            <detectLinks>false</detectLinks>
-          </configuration>
-        </plugin>
-        <plugin>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>3.9.1</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
 </project>
