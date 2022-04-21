@@ -19,27 +19,8 @@ package org.apache.maven.archiver;
  * under the License.
  */
 
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
-import org.apache.maven.artifact.versioning.ArtifactVersion;
-import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.archiver.jar.JarArchiver;
-import org.codehaus.plexus.archiver.jar.Manifest;
-import org.codehaus.plexus.archiver.jar.ManifestException;
-import org.codehaus.plexus.interpolation.InterpolationException;
-import org.codehaus.plexus.interpolation.Interpolator;
-import org.codehaus.plexus.interpolation.PrefixAwareRecursionInterceptor;
-import org.codehaus.plexus.interpolation.PrefixedObjectValueSource;
-import org.codehaus.plexus.interpolation.PrefixedPropertiesValueSource;
-import org.codehaus.plexus.interpolation.RecursionInterceptor;
-import org.codehaus.plexus.interpolation.StringSearchInterpolator;
-import org.codehaus.plexus.interpolation.ValueSource;
-import org.apache.maven.shared.utils.PropertyUtils;
-import org.apache.maven.shared.utils.StringUtils;
-
 import javax.lang.model.SourceVersion;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -54,13 +35,36 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.jar.Attributes;
 
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.artifact.versioning.ArtifactVersion;
+import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.shared.utils.PropertyUtils;
+import org.apache.maven.shared.utils.StringUtils;
+import org.codehaus.plexus.archiver.jar.JarArchiver;
+import org.codehaus.plexus.archiver.jar.Manifest;
+import org.codehaus.plexus.archiver.jar.ManifestException;
+import org.codehaus.plexus.interpolation.InterpolationException;
+import org.codehaus.plexus.interpolation.Interpolator;
+import org.codehaus.plexus.interpolation.PrefixAwareRecursionInterceptor;
+import org.codehaus.plexus.interpolation.PrefixedObjectValueSource;
+import org.codehaus.plexus.interpolation.PrefixedPropertiesValueSource;
+import org.codehaus.plexus.interpolation.RecursionInterceptor;
+import org.codehaus.plexus.interpolation.StringSearchInterpolator;
+import org.codehaus.plexus.interpolation.ValueSource;
+
 import static org.apache.maven.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_CUSTOM;
 import static org.apache.maven.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_REPOSITORY;
 import static org.apache.maven.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_SIMPLE;
 
 /**
+ * <p>MavenArchiver class.</p>
+ *
  * @author <a href="evenisse@apache.org">Emmanuel Venisse</a>
  * @author kama
+ * @version $Id: $Id
  */
 public class MavenArchiver
 {
@@ -117,19 +121,21 @@ public class MavenArchiver
     private boolean buildJdkSpecDefaultEntry = true;
     
     /**
+     * <p>getManifest.</p>
+     *
      * @param session the Maven Session
      * @param project the Maven Project
      * @param config the MavenArchiveConfiguration
-     * @return the {@link Manifest}
-     * @throws ManifestException in case of a failure
-     * @throws DependencyResolutionRequiredException resolution failure
+     * @return the {@link org.codehaus.plexus.archiver.jar.Manifest}
+     * @throws org.codehaus.plexus.archiver.jar.ManifestException in case of a failure
+     * @throws org.apache.maven.artifact.DependencyResolutionRequiredException resolution failure
      */
     public Manifest getManifest( MavenSession session, MavenProject project, MavenArchiveConfiguration config )
         throws ManifestException, DependencyResolutionRequiredException
     {
         boolean hasManifestEntries = !config.isManifestEntriesEmpty();
         Map<String, String> entries =
-            hasManifestEntries ? config.getManifestEntries() : Collections.<String, String>emptyMap();
+            hasManifestEntries ? config.getManifestEntries() : Collections.emptyMap();
 
         Manifest manifest = getManifest( session, project, config.getManifest(), entries );
 
@@ -187,31 +193,34 @@ public class MavenArchiver
     /**
      * Return a pre-configured manifest.
      *
-     * @param project {@link MavenProject}
-     * @param config {@link ManifestConfiguration}
-     * @return {@link Manifest}
-     * @throws ManifestException Manifest exception.
-     * @throws DependencyResolutionRequiredException Dependency resolution exception.
+     * @param project {@link org.apache.maven.project.MavenProject}
+     * @param config {@link org.apache.maven.archiver.ManifestConfiguration}
+     * @return {@link org.codehaus.plexus.archiver.jar.Manifest}
+     * @throws org.codehaus.plexus.archiver.jar.ManifestException Manifest exception.
+     * @throws org.apache.maven.artifact.DependencyResolutionRequiredException Dependency resolution exception.
      */
     // TODO Add user attributes list and user groups list
     public Manifest getManifest( MavenProject project, ManifestConfiguration config )
         throws ManifestException, DependencyResolutionRequiredException
     {
-        return getManifest( null, project, config, Collections.<String, String>emptyMap() );
+        return getManifest( null, project, config, Collections.emptyMap() );
     }
 
     /**
-     * @param mavenSession {@link MavenSession}
-     * @param project {@link MavenProject}
-     * @param config {@link ManifestConfiguration}
-     * @return {@link Manifest}
-     * @throws ManifestException the manifest exception
-     * @throws DependencyResolutionRequiredException the dependency resolution required exception
+     * <p>getManifest.</p>
+     *
+     * @param mavenSession {@link org.apache.maven.execution.MavenSession}
+     * @param project      {@link org.apache.maven.project.MavenProject}
+     * @param config       {@link org.apache.maven.archiver.ManifestConfiguration}
+     * @return {@link org.codehaus.plexus.archiver.jar.Manifest}
+     * @throws org.codehaus.plexus.archiver.jar.ManifestException              the manifest exception
+     * @throws org.apache.maven.artifact.DependencyResolutionRequiredException the dependency resolution required
+     *                                                                         exception
      */
     public Manifest getManifest( MavenSession mavenSession, MavenProject project, ManifestConfiguration config )
         throws ManifestException, DependencyResolutionRequiredException
     {
-        return getManifest( mavenSession, project, config, Collections.<String, String>emptyMap() );
+        return getManifest( mavenSession, project, config, Collections.emptyMap() );
     }
 
     private void addManifestAttribute( Manifest manifest, Map<String, String> map, String key, String value )
@@ -242,13 +251,16 @@ public class MavenArchiver
     }
 
     /**
-     * @param session {@link MavenSession}
-     * @param project {@link MavenProject}
-     * @param config {@link ManifestConfiguration}
+     * <p>getManifest.</p>
+     *
+     * @param session {@link org.apache.maven.execution.MavenSession}
+     * @param project {@link org.apache.maven.project.MavenProject}
+     * @param config  {@link org.apache.maven.archiver.ManifestConfiguration}
      * @param entries The entries.
-     * @return {@link Manifest}
-     * @throws ManifestException the manifest exception
-     * @throws DependencyResolutionRequiredException the dependency resolution required exception
+     * @return {@link org.codehaus.plexus.archiver.jar.Manifest}
+     * @throws org.codehaus.plexus.archiver.jar.ManifestException              the manifest exception
+     * @throws org.apache.maven.artifact.DependencyResolutionRequiredException the dependency resolution required
+     *                                                                         exception
      */
     protected Manifest getManifest( MavenSession session, MavenProject project, ManifestConfiguration config,
                                     Map<String, String> entries )
@@ -471,11 +483,10 @@ public class MavenArchiver
             addManifestAttribute( m, entries, "Extension-List", extensionsList.toString() );
         }
 
-        for ( Object artifact1 : artifacts )
+        for ( Artifact artifact : artifacts )
         {
             // TODO: the correct solution here would be to have an extension type, and to read
             // the real extension values either from the artifact's manifest or some part of the POM
-            Artifact artifact = (Artifact) artifact1;
             if ( "jar".equals( artifact.getType() ) )
             {
                 String artifactId = artifact.getArtifactId().replace( '.', '_' );
@@ -487,7 +498,7 @@ public class MavenArchiver
                 if ( artifact.getRepository() != null )
                 {
                     iname = artifactId + "-Implementation-URL";
-                    String url = artifact.getRepository().getUrl() + "/" + artifact.toString();
+                    String url = artifact.getRepository().getUrl() + "/" + artifact;
                     addManifestAttribute( m, entries, iname, url );
                 }
             }
@@ -544,7 +555,9 @@ public class MavenArchiver
     }
 
     /**
-     * @return {@link JarArchiver}
+     * <p>Getter for the field <code>archiver</code>.</p>
+     *
+     * @return {@link org.codehaus.plexus.archiver.jar.JarArchiver}
      */
     public JarArchiver getArchiver()
     {
@@ -552,7 +565,9 @@ public class MavenArchiver
     }
 
     /**
-     * @param archiver {@link JarArchiver}
+     * <p>Setter for the field <code>archiver</code>.</p>
+     *
+     * @param archiver {@link org.codehaus.plexus.archiver.jar.JarArchiver}
      */
     public void setArchiver( JarArchiver archiver )
     {
@@ -560,6 +575,8 @@ public class MavenArchiver
     }
 
     /**
+     * <p>setOutputFile.</p>
+     *
      * @param outputFile Set output file.
      */
     public void setOutputFile( File outputFile )
@@ -568,13 +585,15 @@ public class MavenArchiver
     }
 
     /**
-     * @param session {@link MavenSession}
-     * @param project {@link MavenProject}
-     * @param archiveConfiguration {@link MavenArchiveConfiguration}
+     * <p>createArchive.</p>
+     *
+     * @param session {@link org.apache.maven.execution.MavenSession}
+     * @param project {@link org.apache.maven.project.MavenProject}
+     * @param archiveConfiguration {@link org.apache.maven.archiver.MavenArchiveConfiguration}
      * @throws org.codehaus.plexus.archiver.ArchiverException Archiver Exception.
-     * @throws ManifestException Manifest Exception.
-     * @throws IOException IO Exception.
-     * @throws DependencyResolutionRequiredException Dependency resolution exception.
+     * @throws org.codehaus.plexus.archiver.jar.ManifestException Manifest Exception.
+     * @throws java.io.IOException IO Exception.
+     * @throws org.apache.maven.artifact.DependencyResolutionRequiredException Dependency resolution exception.
      */
     public void createArchive( MavenSession session, MavenProject project,
                                MavenArchiveConfiguration archiveConfiguration )
@@ -776,7 +795,7 @@ public class MavenArchiver
      * @return the parsed timestamp, may be <code>null</code> if <code>null</code> input or input contains only 1
      *         character
      * @since 3.5.0
-     * @throws IllegalArgumentException if the outputTimestamp is neither ISO 8601 nor an integer
+     * @throws java.lang.IllegalArgumentException if the outputTimestamp is neither ISO 8601 nor an integer
      */
     public Date parseOutputTimestamp( String outputTimestamp )
     {

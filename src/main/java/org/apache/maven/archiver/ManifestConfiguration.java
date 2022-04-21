@@ -91,6 +91,8 @@ public class ManifestConfiguration
     private boolean useUniqueVersions = true;
 
     /**
+     * <p>Getter for the field <code>mainClass</code>.</p>
+     *
      * @return mainClass
      */
     public String getMainClass()
@@ -99,6 +101,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>Getter for the field <code>packageName</code>.</p>
+     *
      * @return the package name.
      */
     public String getPackageName()
@@ -107,6 +111,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>isAddClasspath.</p>
+     *
      * @return if addClasspath true or false.
      */
     public boolean isAddClasspath()
@@ -115,6 +121,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>isAddDefaultEntries.</p>
+     *
      * @return {@link #addDefaultEntries}
      */
     public boolean isAddDefaultEntries()
@@ -123,6 +131,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>isAddBuildEnvironmentEntries.</p>
+     *
      * @return {@link #addBuildEnvironmentEntries}
      */
     public boolean isAddBuildEnvironmentEntries()
@@ -131,6 +141,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>isAddDefaultImplementationEntries.</p>
+     *
      * @return {@link #addDefaultImplementationEntries}
      */
     public boolean isAddDefaultImplementationEntries()
@@ -139,6 +151,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>isAddDefaultSpecificationEntries.</p>
+     *
      * @return {@link #addDefaultSpecificationEntries}
      */
     public boolean isAddDefaultSpecificationEntries()
@@ -147,6 +161,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>isAddExtensions.</p>
+     *
      * @return {@link #addExtensions}
      */
     public boolean isAddExtensions()
@@ -155,6 +171,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>Setter for the field <code>addClasspath</code>.</p>
+     *
      * @param addClasspath turn on addClasspath or off.
      */
     public void setAddClasspath( boolean addClasspath )
@@ -163,6 +181,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>Setter for the field <code>addDefaultEntries</code>.</p>
+     *
      * @param addDefaultEntries add default entries true/false.
      */
     public void setAddDefaultEntries( boolean addDefaultEntries )
@@ -171,6 +191,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>Setter for the field <code>addBuildEnvironmentEntries</code>.</p>
+     *
      * @param addBuildEnvironmentEntries add build environment information true/false.
      */
     public void setAddBuildEnvironmentEntries( boolean addBuildEnvironmentEntries )
@@ -179,6 +201,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>Setter for the field <code>addDefaultImplementationEntries</code>.</p>
+     *
      * @param addDefaultImplementationEntries true to add default implementations false otherwise.
      */
     public void setAddDefaultImplementationEntries( boolean addDefaultImplementationEntries )
@@ -187,6 +211,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>Setter for the field <code>addDefaultSpecificationEntries</code>.</p>
+     *
      * @param addDefaultSpecificationEntries add default specifications true/false.
      */
     public void setAddDefaultSpecificationEntries( boolean addDefaultSpecificationEntries )
@@ -195,6 +221,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>Setter for the field <code>addExtensions</code>.</p>
+     *
      * @param addExtensions true to add extensions false otherwise.
      */
     public void setAddExtensions( boolean addExtensions )
@@ -203,6 +231,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>Setter for the field <code>classpathPrefix</code>.</p>
+     *
      * @param classpathPrefix The prefix.
      */
     public void setClasspathPrefix( String classpathPrefix )
@@ -211,6 +241,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>Setter for the field <code>mainClass</code>.</p>
+     *
      * @param mainClass The main class.
      */
     public void setMainClass( String mainClass )
@@ -219,6 +251,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>Setter for the field <code>packageName</code>.</p>
+     *
      * @param packageName The package name.
      */
     public void setPackageName( String packageName )
@@ -227,6 +261,8 @@ public class ManifestConfiguration
     }
 
     /**
+     * <p>Getter for the field <code>classpathPrefix</code>.</p>
+     *
      * @return The classpath prefix.
      */
     public String getClasspathPrefix()
@@ -247,7 +283,8 @@ public class ManifestConfiguration
      * 'repository' (CLASSPATH_LAYOUT_TYPE_REPOSITORY, or the same as a maven classpath layout), and 'custom'
      * (CLASSPATH_LAYOUT_TYPE_CUSTOM). <br>
      * <b>NOTE:</b> If you specify a type of 'custom' you MUST set
-     * {@link ManifestConfiguration#setCustomClasspathLayout(String)}.
+     * {@link org.apache.maven.archiver.ManifestConfiguration#setCustomClasspathLayout(String)}.
+     *
      * @return The classpath layout type.
      */
     public String getClasspathLayoutType()
@@ -259,9 +296,10 @@ public class ManifestConfiguration
      * Set the type of layout to use when formatting classpath entries. Should be one of: 'simple'
      * (CLASSPATH_LAYOUT_TYPE_SIMPLE), 'repository' (CLASSPATH_LAYOUT_TYPE_REPOSITORY, or the same as a maven classpath
      * layout), and 'custom' (CLASSPATH_LAYOUT_TYPE_CUSTOM). The constant names noted here are defined in the
-     * {@link ManifestConfiguration} class. <br>
+     * {@link org.apache.maven.archiver.ManifestConfiguration} class. <br>
      * <b>NOTE:</b> If you specify a type of 'custom' you MUST set
-     * {@link ManifestConfiguration#setCustomClasspathLayout(String)}.
+     * {@link org.apache.maven.archiver.ManifestConfiguration#setCustomClasspathLayout(String)}.
+     *
      * @param classpathLayoutType The classpath layout type.
      */
     public void setClasspathLayoutType( String classpathLayoutType )
@@ -271,7 +309,8 @@ public class ManifestConfiguration
 
     /**
      * Retrieve the layout expression for use when the layout type set in
-     * {@link ManifestConfiguration#setClasspathLayoutType(String)} has the value 'custom'. <b>The default value is
+     * {@link org.apache.maven.archiver.ManifestConfiguration#setClasspathLayoutType(String)} has the value 'custom'.
+     * <b>The default value is
      * null.</b> Expressions will be evaluated against the following ordered list of classpath-related objects:
      * <ol>
      * <li>The current {@code Artifact} instance, if one exists.</li>
@@ -279,6 +318,7 @@ public class ManifestConfiguration
      * </ol>
      * <br>
      * <b>NOTE:</b> If you specify a layout type of 'custom' you MUST set this layout expression.
+     *
      * @return The custom classpath layout.
      */
     public String getCustomClasspathLayout()
@@ -288,7 +328,8 @@ public class ManifestConfiguration
 
     /**
      * Set the layout expression for use when the layout type set in
-     * {@link ManifestConfiguration#setClasspathLayoutType(String)} has the value 'custom'. Expressions will be
+     * {@link org.apache.maven.archiver.ManifestConfiguration#setClasspathLayoutType(String)} has the value 'custom'.
+     * Expressions will be
      * evaluated against the following ordered list of classpath-related objects:
      * <ol>
      * <li>The current {@code Artifact} instance, if one exists.</li>
@@ -298,12 +339,13 @@ public class ManifestConfiguration
      * <b>NOTE:</b> If you specify a layout type of 'custom' you MUST set this layout expression.
      * You can take a look at
      * <ol>
-     * <li>{@link MavenArchiver#SIMPLE_LAYOUT}</li>
-     * <li>{@link MavenArchiver#SIMPLE_LAYOUT_NONUNIQUE}</li>
-     * <li>{@link MavenArchiver#REPOSITORY_LAYOUT}</li>
-     * <li>{@link MavenArchiver#REPOSITORY_LAYOUT_NONUNIQUE}</li>
+     * <li>{@link org.apache.maven.archiver.MavenArchiver#SIMPLE_LAYOUT}</li>
+     * <li>{@link org.apache.maven.archiver.MavenArchiver#SIMPLE_LAYOUT_NONUNIQUE}</li>
+     * <li>{@link org.apache.maven.archiver.MavenArchiver#REPOSITORY_LAYOUT}</li>
+     * <li>{@link org.apache.maven.archiver.MavenArchiver#REPOSITORY_LAYOUT_NONUNIQUE}</li>
      * </ol>
      * how such an expression looks like.
+     *
      * @param customClasspathLayout The custom classpath layout.
      */
     public void setCustomClasspathLayout( String customClasspathLayout )
@@ -331,6 +373,7 @@ public class ManifestConfiguration
      * <br>
      * <b>NOTE:</b> If the snapshot was installed locally, this flag will not have an effect on that artifact's
      * inclusion, since it will have the same version either way (i.e. -SNAPSHOT naming).
+     *
      * @param useUniqueVersions true to use unique versions or not.
      */
     public void setUseUniqueVersions( boolean useUniqueVersions )

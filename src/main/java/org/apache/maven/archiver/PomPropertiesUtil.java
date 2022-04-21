@@ -21,12 +21,12 @@ package org.apache.maven.archiver;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +39,9 @@ import org.codehaus.plexus.archiver.Archiver;
 /**
  * This class is responsible for creating the <code>pom.properties</code> file
  * in <code>META-INF/maven/${groupId}/${artifactId}</code>.
+ *
+ * @author slachiewicz
+ * @version $Id: $Id
  */
 public class PomPropertiesUtil
 {
@@ -46,7 +49,7 @@ public class PomPropertiesUtil
         throws IOException
     {
         Properties fileProps = new Properties();
-        try ( InputStream istream = new FileInputStream( file ) )
+        try ( InputStream istream = Files.newInputStream( file.toPath() ) )
         {
             fileProps.load( istream );
             return fileProps;
@@ -107,14 +110,15 @@ public class PomPropertiesUtil
 
     /**
      * Creates the pom.properties file.
-     * @param session {@link MavenSession}
-     * @param project {@link MavenProject}
-     * @param archiver {@link Archiver}
+     *
+     * @param session {@link org.apache.maven.execution.MavenSession}
+     * @param project {@link org.apache.maven.project.MavenProject}
+     * @param archiver {@link org.codehaus.plexus.archiver.Archiver}
      * @param customPomPropertiesFile optional custom pom properties file
      * @param pomPropertiesFile The pom properties file.
      * @param forceCreation force creation true/false
      * @throws org.codehaus.plexus.archiver.ArchiverException archiver exception.
-     * @throws IOException IO exception.
+     * @throws java.io.IOException IO exception.
      */
     public void createPomProperties( MavenSession session, MavenProject project, Archiver archiver,
                                      File customPomPropertiesFile, File pomPropertiesFile, boolean forceCreation )

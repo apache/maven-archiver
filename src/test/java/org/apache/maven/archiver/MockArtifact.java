@@ -32,11 +32,11 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
-/**
+/*
  * TODO move to maven-artifact-test
  */
 @SuppressWarnings( "deprecation" )
-class MockArtifact
+public class MockArtifact
     implements Artifact
 {
     private String groupId;

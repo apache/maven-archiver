@@ -23,7 +23,6 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.execution.DefaultMavenExecutionRequest;
 import org.apache.maven.execution.DefaultMavenExecutionResult;
 import org.apache.maven.execution.MavenExecutionRequest;
@@ -1221,9 +1220,9 @@ class MavenArchiverTest
         model.setVersion( "0.1.1" );
 
         final MavenProject project = new MavenProject( model );
-        project.setExtensionArtifacts( Collections.<Artifact>emptySet() );
-        project.setRemoteArtifactRepositories( Collections.<ArtifactRepository>emptyList() );
-        project.setPluginArtifactRepositories( Collections.<ArtifactRepository>emptyList() );
+        project.setExtensionArtifacts( Collections.emptySet() );
+        project.setRemoteArtifactRepositories( Collections.emptyList() );
+        project.setPluginArtifactRepositories( Collections.emptyList() );
         return project;
     }
 
@@ -1392,15 +1391,13 @@ class MavenArchiverTest
 
     private MavenSession getDummySession( Properties systemProperties )
     {
-        File settings = null;
-        List<String> goals = null;
         Date startTime = new Date();
 
         MavenExecutionRequest request = new DefaultMavenExecutionRequest();
         request.setSystemProperties( systemProperties );
-        request.setGoals( goals );
+        request.setGoals( null );
         request.setStartTime( startTime );
-        request.setUserSettingsFile( settings );
+        request.setUserSettingsFile( null );
 
         MavenExecutionResult result = new DefaultMavenExecutionResult();
 
