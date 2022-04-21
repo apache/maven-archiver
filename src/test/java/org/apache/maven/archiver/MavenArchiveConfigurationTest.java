@@ -24,18 +24,18 @@ import static org.assertj.core.api.Assertions.entry;
 
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Karl Heinz Marbaise <a href="mailto:khmarbaise@apache.org">khmarbaise@apache.org</a>.
  */
-public class MavenArchiveConfigurationTest
+class MavenArchiveConfigurationTest
 {
 
     private MavenArchiveConfiguration archive;
 
-    @Before
+    @BeforeEach
     public void before()
     {
         archive = new MavenArchiveConfiguration();
@@ -46,7 +46,7 @@ public class MavenArchiveConfigurationTest
     }
 
     @Test
-    public void addingSingleEntryShouldBeReturned()
+    void addingSingleEntryShouldBeReturned()
     {
         archive.addManifestEntry( "key1", "value1" );
         Map<String, String> manifestEntries = archive.getManifestEntries();
@@ -54,7 +54,7 @@ public class MavenArchiveConfigurationTest
     }
 
     @Test
-    public void addingTwoEntriesShouldBeReturnedInInsertOrder()
+    void addingTwoEntriesShouldBeReturnedInInsertOrder()
     {
         archive.addManifestEntry( "key1", "value1" );
         archive.addManifestEntry( "key2", "value2" );
@@ -63,7 +63,7 @@ public class MavenArchiveConfigurationTest
     }
 
     @Test
-    public void addingThreeEntriesShouldBeReturnedInInsertOrder()
+    void addingThreeEntriesShouldBeReturnedInInsertOrder()
     {
         archive.addManifestEntry( "key1", "value1" );
         archive.addManifestEntry( "key2", "value2" );

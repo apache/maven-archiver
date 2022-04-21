@@ -21,15 +21,15 @@ package org.apache.maven.archiver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 
-public class ManifestConfigurationTest
+class ManifestConfigurationTest
 {
 
     private ManifestConfiguration manifestConfiguration;
 
-    @Before
+    @BeforeEach
     public void before()
     {
         this.manifestConfiguration = new ManifestConfiguration();

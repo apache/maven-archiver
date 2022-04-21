@@ -39,7 +39,7 @@ import org.codehaus.plexus.archiver.jar.JarArchiver;
 import org.codehaus.plexus.archiver.jar.ManifestException;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystemSession;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,9 +62,9 @@ import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class MavenArchiverTest
+class MavenArchiverTest
 {
     static class ArtifactComparator
         implements Comparator<Artifact>
@@ -81,7 +81,7 @@ public class MavenArchiverTest
     }
 
     @Test
-    public void testInvalidModuleNames()
+    void testInvalidModuleNames()
     {
         assertThat( MavenArchiver.isValidModuleName( "" ) ).isFalse();
         assertThat( MavenArchiver.isValidModuleName( "." ) ).isFalse();
@@ -94,7 +94,7 @@ public class MavenArchiverTest
     }
 
     @Test
-    public void testValidModuleNames()
+    void testValidModuleNames()
     {
         assertThat( MavenArchiver.isValidModuleName( "a" ) ).isTrue();
         assertThat( MavenArchiver.isValidModuleName( "a.b" ) ).isTrue();
@@ -105,7 +105,7 @@ public class MavenArchiverTest
     }
 
     @Test
-    public void testGetManifestExtensionList()
+    void testGetManifestExtensionList()
         throws Exception
     {
         MavenArchiver archiver = new MavenArchiver();
@@ -189,7 +189,7 @@ public class MavenArchiverTest
     }
 
     @Test
-    public void testMultiClassPath()
+    void testMultiClassPath()
         throws Exception
     {
         final File tempFile = File.createTempFile( "maven-archiver-test-", ".jar" );
@@ -240,7 +240,7 @@ public class MavenArchiverTest
     }
 
     @Test
-    public void testRecreation()
+    void testRecreation()
         throws Exception
     {
         File jarFile = new File( "target/test/dummy.jar" );
@@ -278,7 +278,7 @@ public class MavenArchiverTest
     }
 
     @Test
-    public void testNotGenerateImplementationVersionForMANIFESTMF()
+    void testNotGenerateImplementationVersionForMANIFESTMF()
         throws Exception
     {
         File jarFile = new File( "target/test/dummy.jar" );
@@ -303,7 +303,7 @@ public class MavenArchiverTest
     }
 
     @Test
-    public void testGenerateImplementationVersionForMANIFESTMF()
+    void testGenerateImplementationVersionForMANIFESTMF()
         throws Exception
     {
         File jarFile = new File( "target/test/dummy.jar" );
