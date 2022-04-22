@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.apache.maven.shared</groupId>
     <artifactId>maven-shared-components</artifactId>
-    <version>35</version>
+    <version>36</version>
     <relativePath />
   </parent>
 
@@ -34,7 +34,7 @@
   <description>Provides utility methods for creating JARs and other archive files from a Maven project.</description>
 
   <properties>
-    <mavenVersion>3.1.1</mavenVersion>
+    <mavenVersion>3.2.5</mavenVersion>
     <javaVersion>8</javaVersion>
     <surefire.version>2.22.2</surefire.version>
     <project.build.outputTimestamp>2022-01-02T12:43:14Z</project.build.outputTimestamp>
@@ -67,18 +67,6 @@
     -->
     <dependency>
       <groupId>org.apache.maven</groupId>
-      <artifactId>maven-artifact</artifactId>
-      <version>${mavenVersion}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-model</artifactId>
-      <version>${mavenVersion}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
       <version>${mavenVersion}</version>
       <scope>provided</scope>
@@ -95,11 +83,6 @@
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>2.11.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-compress</artifactId>
-      <version>1.21</version>
     </dependency>
     <!--
       Plexus dependencies
