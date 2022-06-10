@@ -23,6 +23,7 @@ import javax.lang.model.SourceVersion;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,8 +42,6 @@ import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.utils.PropertyUtils;
-import org.apache.maven.shared.utils.StringUtils;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
 import org.codehaus.plexus.archiver.jar.Manifest;
 import org.codehaus.plexus.archiver.jar.ManifestException;
@@ -54,6 +53,7 @@ import org.codehaus.plexus.interpolation.PrefixedPropertiesValueSource;
 import org.codehaus.plexus.interpolation.RecursionInterceptor;
 import org.codehaus.plexus.interpolation.StringSearchInterpolator;
 import org.codehaus.plexus.interpolation.ValueSource;
+import org.codehaus.plexus.util.StringUtils;
 
 import static org.apache.maven.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_CUSTOM;
 import static org.apache.maven.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_REPOSITORY;
@@ -743,10 +743,27 @@ public class MavenArchiver
 
     private static String getCreatedByVersion( String groupId, String artifactId )
     {
-        final Properties properties = PropertyUtils.loadOptionalProperties( MavenArchiver.class.getResourceAsStream(
+        final Properties properties = loadOptionalProperties( MavenArchiver.class.getResourceAsStream(
             "/META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties" ) );
 
         return properties.getProperty( "version" );
+    }
+
+    private static Properties loadOptionalProperties( final InputStream inputStream )
+    {
+        Properties properties = new Properties();
+        if ( inputStream != null )
+        {
+            try ( InputStream in = inputStream )
+            {
+                properties.load( in );
+            }
+            catch ( IllegalArgumentException | IOException ex )
+            {
+                // ignore and return empty properties
+            }
+        }
+        return properties;
     }
 
     /**
