@@ -39,12 +39,21 @@ import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystemSession;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EmptySource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
+import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -61,7 +70,7 @@ import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class MavenArchiverTest
 {
@@ -79,28 +88,21 @@ class MavenArchiverTest
         }
     }
 
-    @Test
-    void testInvalidModuleNames()
+    @ParameterizedTest
+    @EmptySource
+    @ValueSource( strings = { ".", "dash-is-invalid", "plus+is+invalid", "colon:is:invalid", "new.class",
+        "123.at.start.is.invalid", "digit.at.123start.is.invalid" } )
+    void testInvalidModuleNames( String value )
     {
-        assertThat( MavenArchiver.isValidModuleName( "" ) ).isFalse();
-        assertThat( MavenArchiver.isValidModuleName( "." ) ).isFalse();
-        assertThat( MavenArchiver.isValidModuleName( "dash-is-invalid" ) ).isFalse();
-        assertThat( MavenArchiver.isValidModuleName( "plus+is+invalid" ) ).isFalse();
-        assertThat( MavenArchiver.isValidModuleName( "colon:is:invalid" ) ).isFalse();
-        assertThat( MavenArchiver.isValidModuleName( "new.class" ) ).isFalse();
-        assertThat( MavenArchiver.isValidModuleName( "123.at.start.is.invalid" ) ).isFalse();
-        assertThat( MavenArchiver.isValidModuleName( "digit.at.123start.is.invalid" ) ).isFalse();
+        assertThat( MavenArchiver.isValidModuleName( value ) ).isFalse();
     }
 
-    @Test
-    void testValidModuleNames()
+    @ParameterizedTest
+    @ValueSource( strings = { "a", "a.b", "a_b", "trailing0.digits123.are456.ok789", "UTF8.chars.are.okay.äëïöüẍ",
+        "ℤ€ℕ" } )
+    void testValidModuleNames( String value )
     {
-        assertThat( MavenArchiver.isValidModuleName( "a" ) ).isTrue();
-        assertThat( MavenArchiver.isValidModuleName( "a.b" ) ).isTrue();
-        assertThat( MavenArchiver.isValidModuleName( "a_b" ) ).isTrue();
-        assertThat( MavenArchiver.isValidModuleName( "trailing0.digits123.are456.ok789" ) ).isTrue();
-        assertThat( MavenArchiver.isValidModuleName( "UTF8.chars.are.okay.äëïöüẍ" ) ).isTrue();
-        assertThat( MavenArchiver.isValidModuleName( "ℤ€ℕ" ) ).isTrue();
+        assertThat( MavenArchiver.isValidModuleName( value ) ).isTrue();
     }
 
     @Test
@@ -1366,7 +1368,8 @@ class MavenArchiverTest
         URL resource = Thread.currentThread().getContextClassLoader().getResource( file );
         if ( resource == null )
         {
-            fail( "Cannot retrieve java.net.URL for file: " + file + " on the current test classpath." );
+            throw new IllegalStateException( "Cannot retrieve java.net.URL for file: " + file
+                + " on the current test classpath." );
         }
 
         URI uri = new File( resource.getPath() ).toURI().normalize();
@@ -1444,54 +1447,75 @@ class MavenArchiverTest
         assertThat( archiver.parseOutputTimestamp( "*" ) ).isNull();
 
         assertThat( archiver.parseOutputTimestamp( "1570300662" ).getTime() ).isEqualTo( 1570300662000L );
-        assertThat( archiver.parseOutputTimestamp( "0" ).getTime() ).isEqualTo( 0L );
+        assertThat( archiver.parseOutputTimestamp( "0" ).getTime() ).isZero();
         assertThat( archiver.parseOutputTimestamp( "1" ).getTime() ).isEqualTo( 1000L );
 
-        assertThat( archiver.parseOutputTimestamp( "2019-10-05T18:37:42Z" ).getTime() ).isEqualTo( 1570300662000L );
-        assertThat( archiver.parseOutputTimestamp( "2019-10-05T20:37:42+02:00" ).getTime() ).isEqualTo(
-                1570300662000L );
-        assertThat( archiver.parseOutputTimestamp( "2019-10-05T16:37:42-02:00" ).getTime() ).isEqualTo(
-                1570300662000L );
+        assertThat( archiver.parseOutputTimestamp( "2019-10-05T18:37:42Z" ).getTime() )
+            .isEqualTo( 1570300662000L );
+        assertThat( archiver.parseOutputTimestamp( "2019-10-05T20:37:42+02:00" ).getTime() )
+            .isEqualTo( 1570300662000L );
+        assertThat( archiver.parseOutputTimestamp( "2019-10-05T16:37:42-02:00" ).getTime() )
+            .isEqualTo( 1570300662000L );
 
         // These must result in IAE because we expect extended ISO format only (ie with - separator for date and
         // : separator for timezone), hence the XXX SimpleDateFormat for tz offset
         // X SimpleDateFormat accepts timezone without separator while date has separator, which is a mix between
         // basic (no separators, both for date and timezone) and extended (separator for both)
-        try
-        {
-            archiver.parseOutputTimestamp( "2019-10-05T20:37:42+0200" );
-            fail();
-        }
-        catch ( IllegalArgumentException ignored )
-        {
-        }
-        try
-        {
-            archiver.parseOutputTimestamp( "2019-10-05T20:37:42-0200" );
-            fail();
-        }
-        catch ( IllegalArgumentException ignored )
-        {
-        }
+        assertThatExceptionOfType( IllegalArgumentException.class )
+            .isThrownBy( () -> archiver.parseOutputTimestamp( "2019-10-05T20:37:42+0200" ) );
+        assertThatExceptionOfType( IllegalArgumentException.class )
+            .isThrownBy( () -> archiver.parseOutputTimestamp( "2019-10-05T20:37:42-0200" ) );
+    }
 
-        // These unfortunately fail although the input is valid according to ISO 8601
-        // SDF does not allow strict telescoping parsing w/o permitting invalid input as depicted above.
-        // One has to use the new Java Time API for this.
-        try
-        {
-            archiver.parseOutputTimestamp( "2019-10-05T20:37:42+02" );
-            fail();
-        }
-        catch ( IllegalArgumentException ignored )
-        {
-        }
-        try
-        {
-            archiver.parseOutputTimestamp( "2019-10-05T20:37:42-02" );
-            fail();
-        }
-        catch ( IllegalArgumentException ignored )
-        {
-        }
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource( strings = { ".", " ", "_", "-", "T", "/", "!", "!", "*", "ñ" } )
+    public void testEmptyParseOutputTimestampInstant( String value )
+    {
+        // Empty optional if null or 1 char
+        assertThat( MavenArchiver.parseBuildOutputTimestamp( value ) ).isEmpty();
+    }
+
+    @ParameterizedTest
+    @CsvSource( { "0,0", "1,1", "9,9", "1570300662,1570300662", "2147483648,2147483648",
+        "2019-10-05T18:37:42Z,1570300662", "2019-10-05T20:37:42+02:00,1570300662",
+        "2019-10-05T16:37:42-02:00,1570300662", "1988-02-22T15:23:47.76598Z,572541827",
+        "2011-12-03T10:15:30+01:00,1322903730", "1980-01-01T00:00:02Z,315532802", "2099-12-31T23:59:59Z,4102444799" } )
+    public void testParseOutputTimestampInstant( String value, long expected )
+    {
+        assertThat( MavenArchiver.parseBuildOutputTimestamp( value ) )
+            .contains( Instant.ofEpochSecond( expected ) );
+    }
+
+    @ParameterizedTest
+    @ValueSource( strings = { "2019-10-05T20:37:42+0200", "2019-10-05T20:37:42-0200", "2019-10-05T25:00:00Z",
+        "2019-10-05", "XYZ", "Tue, 3 Jun 2008 11:05:30 GMT", "2011-12-03T10:15:30+01:00[Europe/Paris]" } )
+    public void testThrownParseOutputTimestampInstant( String outputTimestamp )
+    {
+        // Invalid parsing
+        assertThatExceptionOfType( IllegalArgumentException.class )
+            .isThrownBy( () -> MavenArchiver.parseBuildOutputTimestamp( outputTimestamp ) )
+            .withCauseInstanceOf( DateTimeParseException.class );
+    }
+
+    @ParameterizedTest
+    @ValueSource( strings = { "1980-01-01T00:00:01Z", "2100-01-01T00:00Z", "2100-02-28T23:59:59Z",
+        "2099-12-31T23:59:59-01:00", "1980-01-01T00:15:35+01:00", "1980-01-01T10:15:35+14:00" } )
+    public void testThrownParseOutputTimestampInvalidRange( String outputTimestamp )
+    {
+        // date is not within the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z
+        assertThatExceptionOfType( IllegalArgumentException.class )
+            .isThrownBy( () -> MavenArchiver.parseBuildOutputTimestamp( outputTimestamp ) )
+            .withMessageContaining("is not within the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z");
+    }
+
+    @ParameterizedTest
+    @CsvSource( { "2011-12-03T10:15:30+01,1322903730", "2019-10-05T20:37:42+02,1570300662",
+        "2011-12-03T10:15:30+06,1322885730", "1988-02-22T20:37:42+06,572539062" } )
+    @EnabledForJreRange( min = JRE.JAVA_9 )
+    public void testShortOffset( String value, long expected )
+    {
+        assertThat( MavenArchiver.parseBuildOutputTimestamp( value ) )
+            .contains( Instant.ofEpochSecond( expected ) );
     }
 }

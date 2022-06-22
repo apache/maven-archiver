@@ -24,14 +24,18 @@ import javax.lang.model.SourceVersion;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.nio.file.attribute.FileTime;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.jar.Attributes;
@@ -96,6 +100,10 @@ public class MavenArchiver
     public static final String REPOSITORY_LAYOUT_NONUNIQUE =
         "${artifact.groupIdPath}/${artifact.artifactId}/" + "${artifact.baseVersion}/${artifact.artifactId}-"
             + "${artifact.baseVersion}${dashClassifier?}.${artifact.extension}";
+
+    private static final Instant DATE_MIN = Instant.parse( "1980-01-01T00:00:02Z" );
+
+    private static final Instant DATE_MAX = Instant.parse( "2099-12-31T23:59:59Z" );
 
     private static final List<String> ARTIFACT_EXPRESSION_PREFIXES;
 
@@ -812,28 +820,80 @@ public class MavenArchiver
      * @return the parsed timestamp, may be <code>null</code> if <code>null</code> input or input contains only 1
      *         character
      * @since 3.5.0
-     * @throws java.lang.IllegalArgumentException if the outputTimestamp is neither ISO 8601 nor an integer
+     * @throws IllegalArgumentException if the outputTimestamp is neither ISO 8601 nor an integer, or it's not within
+     *             the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z
+     * @deprecated Use {@link #parseBuildOutputTimestamp(String)} instead.
      */
+    @Deprecated
     public Date parseOutputTimestamp( String outputTimestamp )
     {
-        if ( StringUtils.isNumeric( outputTimestamp ) && StringUtils.isNotEmpty( outputTimestamp ) )
+        return parseBuildOutputTimestamp( outputTimestamp ).map( Date::from ).orElse( null );
+    }
+
+    /**
+     * Configure Reproducible Builds archive creation if a timestamp is provided.
+     *
+     * @param outputTimestamp the value of {@code ${project.build.outputTimestamp}} (may be {@code null})
+     * @return the parsed timestamp as {@link java.util.Date}
+     * @since 3.5.0
+     * @see #parseOutputTimestamp
+     * @deprecated Use {@link #configureReproducibleBuild(String)} instead.
+     */
+    @Deprecated
+    public Date configureReproducible( String outputTimestamp )
+    {
+        configureReproducibleBuild( outputTimestamp );
+        return parseOutputTimestamp( outputTimestamp );
+    }
+
+    /**
+     * Parse output timestamp configured for Reproducible Builds' archive entries.
+     *
+     * <p>Either as {@link java.time.format.DateTimeFormatter#ISO_OFFSET_DATE_TIME} or as a number representing seconds
+     * since the epoch (like <a href="https://reproducible-builds.org/docs/source-date-epoch/">SOURCE_DATE_EPOCH</a>).
+     *
+     * @param outputTimestamp the value of {@code ${project.build.outputTimestamp}} (may be {@code null})
+     * @return the parsed timestamp as an {@code Optional<Instant>}, {@code empty} if input is {@code null} or input
+     *         contains only 1 character (not a number)
+     * @since 3.6.0
+     * @throws IllegalArgumentException if the outputTimestamp is neither ISO 8601 nor an integer, or it's not within
+     *             the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z
+     */
+    public static Optional<Instant> parseBuildOutputTimestamp( String outputTimestamp )
+    {
+        // Fail-fast on nulls
+        if ( outputTimestamp == null )
         {
-            return new Date( Long.parseLong( outputTimestamp ) * 1000 );
+            return Optional.empty();
         }
 
-        if ( outputTimestamp == null || outputTimestamp.length() < 2 )
+        // Number representing seconds since the epoch
+        if ( StringUtils.isNotEmpty( outputTimestamp ) && StringUtils.isNumeric( outputTimestamp ) )
         {
-            // no timestamp configured (1 character configuration is useful to override a full value during pom
-            // inheritance)
-            return null;
+            return Optional.of( Instant.ofEpochSecond( Long.parseLong( outputTimestamp ) ) );
         }
 
-        DateFormat df = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ssXXX" );
+        // no timestamp configured (1 character configuration is useful to override a full value during pom
+        // inheritance)
+        if ( outputTimestamp.length() < 2 )
+        {
+            return Optional.empty();
+        }
+
         try
         {
-            return df.parse( outputTimestamp );
+            // Parse the date in UTC such as '2011-12-03T10:15:30Z' or with an offset '2019-10-05T20:37:42+06:00'.
+            final Instant date = OffsetDateTime.parse( outputTimestamp )
+                .withOffsetSameInstant( ZoneOffset.UTC ).truncatedTo( ChronoUnit.SECONDS ).toInstant();
+
+            if ( date.isBefore( DATE_MIN ) || date.isAfter( DATE_MAX ) )
+            {
+                throw new IllegalArgumentException( "'" + date + "' is not within the valid range "
+                    + DATE_MIN + " to " + DATE_MAX );
+            }
+            return Optional.of( date );
         }
-        catch ( ParseException pe )
+        catch ( DateTimeParseException pe )
         {
             throw new IllegalArgumentException( "Invalid project.build.outputTimestamp value '" + outputTimestamp + "'",
                                                 pe );
@@ -843,18 +903,14 @@ public class MavenArchiver
     /**
      * Configure Reproducible Builds archive creation if a timestamp is provided.
      *
-     * @param outputTimestamp the value of <code>${project.build.outputTimestamp}</code> (may be <code>null</code>)
-     * @return the parsed timestamp
-     * @since 3.5.0
-     * @see #parseOutputTimestamp
+     * @param outputTimestamp the value of {@code project.build.outputTimestamp} (may be {@code null})
+     * @since 3.6.0
+     * @see #parseBuildOutputTimestamp(String)
      */
-    public Date configureReproducible( String outputTimestamp )
+    public void configureReproducibleBuild( String outputTimestamp )
     {
-        Date outputDate = parseOutputTimestamp( outputTimestamp );
-        if ( outputDate != null )
-        {
-            getArchiver().configureReproducible( outputDate );
-        }
-        return outputDate;
+        parseBuildOutputTimestamp( outputTimestamp )
+            .map( FileTime::from )
+            .ifPresent( modifiedTime -> getArchiver().configureReproducibleBuild( modifiedTime ) );
     }
 }
