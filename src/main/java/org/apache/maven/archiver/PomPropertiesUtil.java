@@ -1,5 +1,3 @@
-package org.apache.maven.archiver;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.archiver;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archiver;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -43,67 +42,52 @@ import org.codehaus.plexus.archiver.Archiver;
  * @author slachiewicz
  * @version $Id: $Id
  */
-public class PomPropertiesUtil
-{
-    private Properties loadPropertiesFile( File file )
-        throws IOException
-    {
+public class PomPropertiesUtil {
+    private Properties loadPropertiesFile(File file) throws IOException {
         Properties fileProps = new Properties();
-        try ( InputStream istream = Files.newInputStream( file.toPath() ) )
-        {
-            fileProps.load( istream );
+        try (InputStream istream = Files.newInputStream(file.toPath())) {
+            fileProps.load(istream);
             return fileProps;
         }
     }
 
-    private boolean sameContents( Properties props, File file )
-        throws IOException
-    {
-        if ( !file.isFile() )
-        {
+    private boolean sameContents(Properties props, File file) throws IOException {
+        if (!file.isFile()) {
             return false;
         }
 
-        Properties fileProps = loadPropertiesFile( file );
-        return fileProps.equals( props );
+        Properties fileProps = loadPropertiesFile(file);
+        return fileProps.equals(props);
     }
 
-    private void createPropertiesFile( Properties properties, File outputFile, boolean forceCreation )
-        throws IOException
-    {
+    private void createPropertiesFile(Properties properties, File outputFile, boolean forceCreation)
+            throws IOException {
         File outputDir = outputFile.getParentFile();
-        if ( outputDir != null && !outputDir.isDirectory() && !outputDir.mkdirs() )
-        {
-            throw new IOException( "Failed to create directory: " + outputDir );
+        if (outputDir != null && !outputDir.isDirectory() && !outputDir.mkdirs()) {
+            throw new IOException("Failed to create directory: " + outputDir);
         }
-        if ( !forceCreation && sameContents( properties, outputFile ) )
-        {
+        if (!forceCreation && sameContents(properties, outputFile)) {
             return;
         }
-        
-        try ( PrintWriter pw = new PrintWriter( outputFile, "ISO-8859-1" );
-              StringWriter sw = new StringWriter() )
-        {
-            
-            properties.store( sw, null );
+
+        try (PrintWriter pw = new PrintWriter(outputFile, "ISO-8859-1");
+                StringWriter sw = new StringWriter()) {
+
+            properties.store(sw, null);
 
             List<String> lines = new ArrayList<>();
-            try ( BufferedReader r = new BufferedReader( new StringReader( sw.toString() ) ) )
-            {
+            try (BufferedReader r = new BufferedReader(new StringReader(sw.toString()))) {
                 String line;
-                while ( ( line = r.readLine() ) != null )
-                {
-                    if ( !line.startsWith( "#" ) )
-                    {
-                        lines.add( line );
+                while ((line = r.readLine()) != null) {
+                    if (!line.startsWith("#")) {
+                        lines.add(line);
                     }
                 }
             }
 
-            Collections.sort( lines );
-            for ( String l : lines )
-            {
-                pw.println( l );
+            Collections.sort(lines);
+            for (String l : lines) {
+                pw.println(l);
             }
         }
     }
@@ -120,33 +104,34 @@ public class PomPropertiesUtil
      * @throws org.codehaus.plexus.archiver.ArchiverException archiver exception.
      * @throws java.io.IOException IO exception.
      */
-    public void createPomProperties( MavenSession session, MavenProject project, Archiver archiver,
-                                     File customPomPropertiesFile, File pomPropertiesFile, boolean forceCreation )
-        throws IOException
-    {
+    public void createPomProperties(
+            MavenSession session,
+            MavenProject project,
+            Archiver archiver,
+            File customPomPropertiesFile,
+            File pomPropertiesFile,
+            boolean forceCreation)
+            throws IOException {
         final String groupId = project.getGroupId();
         final String artifactId = project.getArtifactId();
         final String version = project.getVersion();
 
         Properties p;
 
-        if ( customPomPropertiesFile != null )
-        {
-            p = loadPropertiesFile( customPomPropertiesFile );
-        }
-        else
-        {
+        if (customPomPropertiesFile != null) {
+            p = loadPropertiesFile(customPomPropertiesFile);
+        } else {
             p = new Properties();
         }
 
-        p.setProperty( "groupId", groupId );
+        p.setProperty("groupId", groupId);
 
-        p.setProperty( "artifactId", artifactId );
+        p.setProperty("artifactId", artifactId);
 
-        p.setProperty( "version", version );
+        p.setProperty("version", version);
 
-        createPropertiesFile( p, pomPropertiesFile, forceCreation );
+        createPropertiesFile(p, pomPropertiesFile, forceCreation);
 
-        archiver.addFile( pomPropertiesFile, "META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties" );
+        archiver.addFile(pomPropertiesFile, "META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties");
     }
 }

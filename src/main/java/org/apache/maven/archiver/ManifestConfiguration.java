@@ -1,5 +1,3 @@
-package org.apache.maven.archiver;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.archiver;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archiver;
 
 /**
  * Capture common manifest configuration.
@@ -25,8 +24,7 @@ package org.apache.maven.archiver;
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
 // TODO Is this general enough to be in Plexus Archiver?
-public class ManifestConfiguration
-{
+public class ManifestConfiguration {
     /**
      * The simple layout.
      */
@@ -62,7 +60,6 @@ public class ManifestConfiguration
      */
     private boolean addDefaultEntries = true;
 
-
     /**
      * Add build environment information about Maven, JDK, and OS.
      *
@@ -95,8 +92,7 @@ public class ManifestConfiguration
      *
      * @return mainClass
      */
-    public String getMainClass()
-    {
+    public String getMainClass() {
         return mainClass;
     }
 
@@ -105,8 +101,7 @@ public class ManifestConfiguration
      *
      * @return the package name.
      */
-    public String getPackageName()
-    {
+    public String getPackageName() {
         return packageName;
     }
 
@@ -115,8 +110,7 @@ public class ManifestConfiguration
      *
      * @return if addClasspath true or false.
      */
-    public boolean isAddClasspath()
-    {
+    public boolean isAddClasspath() {
         return addClasspath;
     }
 
@@ -125,8 +119,7 @@ public class ManifestConfiguration
      *
      * @return {@link #addDefaultEntries}
      */
-    public boolean isAddDefaultEntries()
-    {
+    public boolean isAddDefaultEntries() {
         return addDefaultEntries;
     }
 
@@ -135,8 +128,7 @@ public class ManifestConfiguration
      *
      * @return {@link #addBuildEnvironmentEntries}
      */
-    public boolean isAddBuildEnvironmentEntries()
-    {
+    public boolean isAddBuildEnvironmentEntries() {
         return addBuildEnvironmentEntries;
     }
 
@@ -145,8 +137,7 @@ public class ManifestConfiguration
      *
      * @return {@link #addDefaultImplementationEntries}
      */
-    public boolean isAddDefaultImplementationEntries()
-    {
+    public boolean isAddDefaultImplementationEntries() {
         return addDefaultImplementationEntries;
     }
 
@@ -155,8 +146,7 @@ public class ManifestConfiguration
      *
      * @return {@link #addDefaultSpecificationEntries}
      */
-    public boolean isAddDefaultSpecificationEntries()
-    {
+    public boolean isAddDefaultSpecificationEntries() {
         return addDefaultSpecificationEntries;
     }
 
@@ -165,8 +155,7 @@ public class ManifestConfiguration
      *
      * @return {@link #addExtensions}
      */
-    public boolean isAddExtensions()
-    {
+    public boolean isAddExtensions() {
         return addExtensions;
     }
 
@@ -175,8 +164,7 @@ public class ManifestConfiguration
      *
      * @param addClasspath turn on addClasspath or off.
      */
-    public void setAddClasspath( boolean addClasspath )
-    {
+    public void setAddClasspath(boolean addClasspath) {
         this.addClasspath = addClasspath;
     }
 
@@ -185,8 +173,7 @@ public class ManifestConfiguration
      *
      * @param addDefaultEntries add default entries true/false.
      */
-    public void setAddDefaultEntries( boolean addDefaultEntries )
-    {
+    public void setAddDefaultEntries(boolean addDefaultEntries) {
         this.addDefaultEntries = addDefaultEntries;
     }
 
@@ -195,8 +182,7 @@ public class ManifestConfiguration
      *
      * @param addBuildEnvironmentEntries add build environment information true/false.
      */
-    public void setAddBuildEnvironmentEntries( boolean addBuildEnvironmentEntries )
-    {
+    public void setAddBuildEnvironmentEntries(boolean addBuildEnvironmentEntries) {
         this.addBuildEnvironmentEntries = addBuildEnvironmentEntries;
     }
 
@@ -205,8 +191,7 @@ public class ManifestConfiguration
      *
      * @param addDefaultImplementationEntries true to add default implementations false otherwise.
      */
-    public void setAddDefaultImplementationEntries( boolean addDefaultImplementationEntries )
-    {
+    public void setAddDefaultImplementationEntries(boolean addDefaultImplementationEntries) {
         this.addDefaultImplementationEntries = addDefaultImplementationEntries;
     }
 
@@ -215,8 +200,7 @@ public class ManifestConfiguration
      *
      * @param addDefaultSpecificationEntries add default specifications true/false.
      */
-    public void setAddDefaultSpecificationEntries( boolean addDefaultSpecificationEntries )
-    {
+    public void setAddDefaultSpecificationEntries(boolean addDefaultSpecificationEntries) {
         this.addDefaultSpecificationEntries = addDefaultSpecificationEntries;
     }
 
@@ -225,8 +209,7 @@ public class ManifestConfiguration
      *
      * @param addExtensions true to add extensions false otherwise.
      */
-    public void setAddExtensions( boolean addExtensions )
-    {
+    public void setAddExtensions(boolean addExtensions) {
         this.addExtensions = addExtensions;
     }
 
@@ -235,8 +218,7 @@ public class ManifestConfiguration
      *
      * @param classpathPrefix The prefix.
      */
-    public void setClasspathPrefix( String classpathPrefix )
-    {
+    public void setClasspathPrefix(String classpathPrefix) {
         this.classpathPrefix = classpathPrefix;
     }
 
@@ -245,8 +227,7 @@ public class ManifestConfiguration
      *
      * @param mainClass The main class.
      */
-    public void setMainClass( String mainClass )
-    {
+    public void setMainClass(String mainClass) {
         this.mainClass = mainClass;
     }
 
@@ -255,8 +236,7 @@ public class ManifestConfiguration
      *
      * @param packageName The package name.
      */
-    public void setPackageName( String packageName )
-    {
+    public void setPackageName(String packageName) {
         this.packageName = packageName;
     }
 
@@ -265,12 +245,10 @@ public class ManifestConfiguration
      *
      * @return The classpath prefix.
      */
-    public String getClasspathPrefix()
-    {
-        String cpp = classpathPrefix.replaceAll( "\\\\", "/" );
+    public String getClasspathPrefix() {
+        String cpp = classpathPrefix.replaceAll("\\\\", "/");
 
-        if ( cpp.length() != 0 && !cpp.endsWith( "/" ) )
-        {
+        if (cpp.length() != 0 && !cpp.endsWith("/")) {
             cpp += "/";
         }
 
@@ -287,8 +265,7 @@ public class ManifestConfiguration
      *
      * @return The classpath layout type.
      */
-    public String getClasspathLayoutType()
-    {
+    public String getClasspathLayoutType() {
         return classpathLayoutType;
     }
 
@@ -302,8 +279,7 @@ public class ManifestConfiguration
      *
      * @param classpathLayoutType The classpath layout type.
      */
-    public void setClasspathLayoutType( String classpathLayoutType )
-    {
+    public void setClasspathLayoutType(String classpathLayoutType) {
         this.classpathLayoutType = classpathLayoutType;
     }
 
@@ -321,8 +297,7 @@ public class ManifestConfiguration
      *
      * @return The custom classpath layout.
      */
-    public String getCustomClasspathLayout()
-    {
+    public String getCustomClasspathLayout() {
         return customClasspathLayout;
     }
 
@@ -348,8 +323,7 @@ public class ManifestConfiguration
      *
      * @param customClasspathLayout The custom classpath layout.
      */
-    public void setCustomClasspathLayout( String customClasspathLayout )
-    {
+    public void setCustomClasspathLayout(String customClasspathLayout) {
         this.customClasspathLayout = customClasspathLayout;
     }
 
@@ -362,8 +336,7 @@ public class ManifestConfiguration
      *
      * @return The state of {@link #useUniqueVersions}
      */
-    public boolean isUseUniqueVersions()
-    {
+    public boolean isUseUniqueVersions() {
         return useUniqueVersions;
     }
 
@@ -376,8 +349,7 @@ public class ManifestConfiguration
      *
      * @param useUniqueVersions true to use unique versions or not.
      */
-    public void setUseUniqueVersions( boolean useUniqueVersions )
-    {
+    public void setUseUniqueVersions(boolean useUniqueVersions) {
         this.useUniqueVersions = useUniqueVersions;
     }
 }

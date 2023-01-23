@@ -1,5 +1,3 @@
-package org.apache.maven.archiver;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.archiver;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archiver;
 
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -31,8 +30,7 @@ import java.util.Map;
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
 // TODO Is this general enough to be in Plexus Archiver?
-public class MavenArchiveConfiguration
-{
+public class MavenArchiveConfiguration {
     private boolean compress = true;
 
     private boolean recompressAddedZips = true;
@@ -43,7 +41,7 @@ public class MavenArchiveConfiguration
 
     private File manifestFile;
 
-    //TODO: Rename this attribute to manifestConfiguration;
+    // TODO: Rename this attribute to manifestConfiguration;
     private ManifestConfiguration manifest;
 
     private Map<String, String> manifestEntries = new LinkedHashMap<>();
@@ -65,8 +63,7 @@ public class MavenArchiveConfiguration
      *
      * @return {@link #compress}
      */
-    public boolean isCompress()
-    {
+    public boolean isCompress() {
         return compress;
     }
 
@@ -75,8 +72,7 @@ public class MavenArchiveConfiguration
      *
      * @return {@link #recompressAddedZips}
      */
-    public boolean isRecompressAddedZips()
-    {
+    public boolean isRecompressAddedZips() {
         return recompressAddedZips;
     }
 
@@ -85,8 +81,7 @@ public class MavenArchiveConfiguration
      *
      * @param recompressAddedZips {@link #recompressAddedZips}
      */
-    public void setRecompressAddedZips( boolean recompressAddedZips )
-    {
+    public void setRecompressAddedZips(boolean recompressAddedZips) {
         this.recompressAddedZips = recompressAddedZips;
     }
 
@@ -95,8 +90,7 @@ public class MavenArchiveConfiguration
      *
      * @return {@link #index}
      */
-    public boolean isIndex()
-    {
+    public boolean isIndex() {
         return index;
     }
 
@@ -105,8 +99,7 @@ public class MavenArchiveConfiguration
      *
      * @return {@link #addMavenDescriptor}
      */
-    public boolean isAddMavenDescriptor()
-    {
+    public boolean isAddMavenDescriptor() {
         return addMavenDescriptor;
     }
 
@@ -115,8 +108,7 @@ public class MavenArchiveConfiguration
      *
      * @return {@link #manifestFile}
      */
-    public File getManifestFile()
-    {
+    public File getManifestFile() {
         return manifestFile;
     }
 
@@ -125,11 +117,9 @@ public class MavenArchiveConfiguration
      *
      * @return {@link #manifest}
      */
-    //TODO: Change the name of this method into getManifestConfiguration()
-    public ManifestConfiguration getManifest()
-    {
-        if ( manifest == null )
-        {
+    // TODO: Change the name of this method into getManifestConfiguration()
+    public ManifestConfiguration getManifest() {
+        if (manifest == null) {
             manifest = new ManifestConfiguration();
         }
         return manifest;
@@ -140,8 +130,7 @@ public class MavenArchiveConfiguration
      *
      * @param compress set compress to true/false.
      */
-    public void setCompress( boolean compress )
-    {
+    public void setCompress(boolean compress) {
         this.compress = compress;
     }
 
@@ -150,8 +139,7 @@ public class MavenArchiveConfiguration
      *
      * @param index set index to true/false.
      */
-    public void setIndex( boolean index )
-    {
+    public void setIndex(boolean index) {
         this.index = index;
     }
 
@@ -160,8 +148,7 @@ public class MavenArchiveConfiguration
      *
      * @param addMavenDescriptor activate to add maven descriptor or not.
      */
-    public void setAddMavenDescriptor( boolean addMavenDescriptor )
-    {
+    public void setAddMavenDescriptor(boolean addMavenDescriptor) {
         this.addMavenDescriptor = addMavenDescriptor;
     }
 
@@ -170,8 +157,7 @@ public class MavenArchiveConfiguration
      *
      * @param manifestFile The manifest file.
      */
-    public void setManifestFile( File manifestFile )
-    {
+    public void setManifestFile(File manifestFile) {
         this.manifestFile = manifestFile;
     }
 
@@ -180,8 +166,7 @@ public class MavenArchiveConfiguration
      *
      * @param manifest {@link org.apache.maven.archiver.ManifestConfiguration}
      */
-    public void setManifest( ManifestConfiguration manifest )
-    {
+    public void setManifest(ManifestConfiguration manifest) {
         this.manifest = manifest;
     }
 
@@ -191,9 +176,8 @@ public class MavenArchiveConfiguration
      * @param key The key of the entry.
      * @param value The value of the entry.
      */
-    public void addManifestEntry( String key, String value )
-    {
-        manifestEntries.put( key, value );
+    public void addManifestEntry(String key, String value) {
+        manifestEntries.put(key, value);
     }
 
     /**
@@ -201,9 +185,8 @@ public class MavenArchiveConfiguration
      *
      * @param map The whole map which should be added.
      */
-    public void addManifestEntries( Map<String, String> map )
-    {
-        manifestEntries.putAll( map );
+    public void addManifestEntries(Map<String, String> map) {
+        manifestEntries.putAll(map);
     }
 
     /**
@@ -211,8 +194,7 @@ public class MavenArchiveConfiguration
      *
      * @return are there entries true yes false otherwise.
      */
-    public boolean isManifestEntriesEmpty()
-    {
+    public boolean isManifestEntriesEmpty() {
         return manifestEntries.isEmpty();
     }
 
@@ -221,8 +203,7 @@ public class MavenArchiveConfiguration
      *
      * @return {@link #manifestEntries}
      */
-    public Map<String, String> getManifestEntries()
-    {
+    public Map<String, String> getManifestEntries() {
         return manifestEntries;
     }
 
@@ -231,8 +212,7 @@ public class MavenArchiveConfiguration
      *
      * @param manifestEntries {@link #manifestEntries}
      */
-    public void setManifestEntries( Map<String, String> manifestEntries )
-    {
+    public void setManifestEntries(Map<String, String> manifestEntries) {
         this.manifestEntries = manifestEntries;
     }
 
@@ -241,9 +221,8 @@ public class MavenArchiveConfiguration
      *
      * @param section {@link org.apache.maven.archiver.ManifestSection}
      */
-    public void addManifestSection( ManifestSection section )
-    {
-        manifestSections.add( section );
+    public void addManifestSection(ManifestSection section) {
+        manifestSections.add(section);
     }
 
     /**
@@ -251,9 +230,8 @@ public class MavenArchiveConfiguration
      *
      * @param list Added list of {@link org.apache.maven.archiver.ManifestSection}.
      */
-    public void addManifestSections( List<ManifestSection> list )
-    {
-        manifestSections.addAll( list );
+    public void addManifestSections(List<ManifestSection> list) {
+        manifestSections.addAll(list);
     }
 
     /**
@@ -261,8 +239,7 @@ public class MavenArchiveConfiguration
      *
      * @return if manifestSections is empty or not.
      */
-    public boolean isManifestSectionsEmpty()
-    {
+    public boolean isManifestSectionsEmpty() {
         return manifestSections.isEmpty();
     }
 
@@ -271,8 +248,7 @@ public class MavenArchiveConfiguration
      *
      * @return {@link #manifestSections}
      */
-    public List<ManifestSection> getManifestSections()
-    {
+    public List<ManifestSection> getManifestSections() {
         return manifestSections;
     }
 
@@ -281,8 +257,7 @@ public class MavenArchiveConfiguration
      *
      * @param manifestSections set The list of {@link org.apache.maven.archiver.ManifestSection}.
      */
-    public void setManifestSections( List<ManifestSection> manifestSections )
-    {
+    public void setManifestSections(List<ManifestSection> manifestSections) {
         this.manifestSections = manifestSections;
     }
 
@@ -303,8 +278,7 @@ public class MavenArchiveConfiguration
      * @return True, if the target archive should always be created; false otherwise
      * @see #setForced(boolean)
      */
-    public boolean isForced()
-    {
+    public boolean isForced() {
         return forced;
     }
 
@@ -325,8 +299,7 @@ public class MavenArchiveConfiguration
      * @param forced True, if the target archive should always be created; false otherwise
      * @see #isForced()
      */
-    public void setForced( boolean forced )
-    {
+    public void setForced(boolean forced) {
         this.forced = forced;
     }
 
@@ -335,8 +308,7 @@ public class MavenArchiveConfiguration
      *
      * @return "pom.properties" location or null.
      */
-    public File getPomPropertiesFile()
-    {
+    public File getPomPropertiesFile() {
         return pomPropertiesFile;
     }
 
@@ -345,8 +317,7 @@ public class MavenArchiveConfiguration
      *
      * @param pomPropertiesFile "pom.properties" location or null.
      */
-    public void setPomPropertiesFile( File pomPropertiesFile )
-    {
+    public void setPomPropertiesFile(File pomPropertiesFile) {
         this.pomPropertiesFile = pomPropertiesFile;
     }
 }
