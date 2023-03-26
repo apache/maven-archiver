@@ -1,5 +1,3 @@
-package org.apache.maven.archiver;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.archiver;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archiver;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,8 +24,7 @@ import java.util.Map;
 /**
  * <p>ManifestSection class.</p>
  */
-public class ManifestSection
-{
+public class ManifestSection {
 
     private String name = null;
 
@@ -38,9 +36,8 @@ public class ManifestSection
      * @param key The key of the manifest entry.
      * @param value The appropriate value.
      */
-    public void addManifestEntry( String key, String value )
-    {
-        manifestEntries.put( key, value );
+    public void addManifestEntry(String key, String value) {
+        manifestEntries.put(key, value);
     }
 
     /**
@@ -48,8 +45,7 @@ public class ManifestSection
      *
      * @return The entries.
      */
-    public Map<String, String> getManifestEntries()
-    {
+    public Map<String, String> getManifestEntries() {
         return manifestEntries;
     }
 
@@ -58,8 +54,7 @@ public class ManifestSection
      *
      * @return The name.
      */
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -68,8 +63,7 @@ public class ManifestSection
      *
      * @param name the name.
      */
-    public void setName( String name )
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -78,9 +72,8 @@ public class ManifestSection
      *
      * @param map The map to add.
      */
-    public void addManifestEntries( Map<String, String> map )
-    {
-        manifestEntries.putAll( map );
+    public void addManifestEntries(Map<String, String> map) {
+        manifestEntries.putAll(map);
     }
 
     /**
@@ -88,8 +81,7 @@ public class ManifestSection
      *
      * @return true if empty false otherwise.
      */
-    public boolean isManifestEntriesEmpty()
-    {
+    public boolean isManifestEntriesEmpty() {
         return manifestEntries.isEmpty();
     }
 }

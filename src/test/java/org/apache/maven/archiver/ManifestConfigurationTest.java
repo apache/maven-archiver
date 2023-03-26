@@ -1,5 +1,3 @@
-package org.apache.maven.archiver;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,47 +16,43 @@ package org.apache.maven.archiver;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archiver;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-
-class ManifestConfigurationTest
-{
+class ManifestConfigurationTest {
 
     private ManifestConfiguration manifestConfiguration;
 
     @BeforeEach
-    public void before()
-    {
+    public void before() {
         this.manifestConfiguration = new ManifestConfiguration();
     }
 
     @Test
-    public void XXX()
-    {
-        assertThat( manifestConfiguration.getClasspathLayoutType() ).isEqualTo( ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_SIMPLE );
+    public void XXX() {
+        assertThat(manifestConfiguration.getClasspathLayoutType())
+                .isEqualTo(ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_SIMPLE);
     }
 
     @Test
-    public void getClasspathPrefixShouldReturnPrefixWithSlashesInsteadOfBackSlashes()
-    {
-        manifestConfiguration.setClasspathPrefix( "\\lib\\const\\" );
-        assertThat( manifestConfiguration.getClasspathPrefix() ).isEqualTo( "/lib/const/" );
+    public void getClasspathPrefixShouldReturnPrefixWithSlashesInsteadOfBackSlashes() {
+        manifestConfiguration.setClasspathPrefix("\\lib\\const\\");
+        assertThat(manifestConfiguration.getClasspathPrefix()).isEqualTo("/lib/const/");
     }
 
     @Test
-    public void getClasspathPrefixShouldReturnPrefixWithTraingSlash()
-    {
-        manifestConfiguration.setClasspathPrefix( "const" );
-        assertThat( manifestConfiguration.getClasspathPrefix() ).isEqualTo( "const/" );
+    public void getClasspathPrefixShouldReturnPrefixWithTraingSlash() {
+        manifestConfiguration.setClasspathPrefix("const");
+        assertThat(manifestConfiguration.getClasspathPrefix()).isEqualTo("const/");
     }
 
     @Test
-    public void getClasspathPrefixShouldReturnTheTrailingSlash()
-    {
-        manifestConfiguration.setClasspathPrefix( "const/" );
-        assertThat( manifestConfiguration.getClasspathPrefix() ).isEqualTo( "const/" );
+    public void getClasspathPrefixShouldReturnTheTrailingSlash() {
+        manifestConfiguration.setClasspathPrefix("const/");
+        assertThat(manifestConfiguration.getClasspathPrefix()).isEqualTo("const/");
     }
 }

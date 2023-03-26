@@ -1,5 +1,3 @@
-package org.apache.maven.archiver;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,58 +16,54 @@ package org.apache.maven.archiver;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.entry;
+package org.apache.maven.archiver;
 
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
+
 /**
  * @author Karl Heinz Marbaise <a href="mailto:khmarbaise@apache.org">khmarbaise@apache.org</a>.
  */
-class MavenArchiveConfigurationTest
-{
+class MavenArchiveConfigurationTest {
 
     private MavenArchiveConfiguration archive;
 
     @BeforeEach
-    public void before()
-    {
+    public void before() {
         archive = new MavenArchiveConfiguration();
-        archive.setManifest( new ManifestConfiguration() );
-        archive.setForced( false );
-        archive.setCompress( false );
-        archive.setIndex( false );
+        archive.setManifest(new ManifestConfiguration());
+        archive.setForced(false);
+        archive.setCompress(false);
+        archive.setIndex(false);
     }
 
     @Test
-    void addingSingleEntryShouldBeReturned()
-    {
-        archive.addManifestEntry( "key1", "value1" );
+    void addingSingleEntryShouldBeReturned() {
+        archive.addManifestEntry("key1", "value1");
         Map<String, String> manifestEntries = archive.getManifestEntries();
-        assertThat( manifestEntries ).containsExactly( entry( "key1", "value1" ) );
+        assertThat(manifestEntries).containsExactly(entry("key1", "value1"));
     }
 
     @Test
-    void addingTwoEntriesShouldBeReturnedInInsertOrder()
-    {
-        archive.addManifestEntry( "key1", "value1" );
-        archive.addManifestEntry( "key2", "value2" );
+    void addingTwoEntriesShouldBeReturnedInInsertOrder() {
+        archive.addManifestEntry("key1", "value1");
+        archive.addManifestEntry("key2", "value2");
         Map<String, String> manifestEntries = archive.getManifestEntries();
-        assertThat( manifestEntries ).containsExactly( entry( "key1", "value1" ), entry( "key2", "value2" ) );
+        assertThat(manifestEntries).containsExactly(entry("key1", "value1"), entry("key2", "value2"));
     }
 
     @Test
-    void addingThreeEntriesShouldBeReturnedInInsertOrder()
-    {
-        archive.addManifestEntry( "key1", "value1" );
-        archive.addManifestEntry( "key2", "value2" );
-        archive.addManifestEntry( "key3", "value3" );
+    void addingThreeEntriesShouldBeReturnedInInsertOrder() {
+        archive.addManifestEntry("key1", "value1");
+        archive.addManifestEntry("key2", "value2");
+        archive.addManifestEntry("key3", "value3");
         Map<String, String> manifestEntries = archive.getManifestEntries();
-        assertThat( manifestEntries ).containsExactly( entry( "key1", "value1" ), entry( "key2", "value2" ),
-                                                       entry( "key3", "value3" ) );
+        assertThat(manifestEntries)
+                .containsExactly(entry("key1", "value1"), entry("key2", "value2"), entry("key3", "value3"));
     }
 }
