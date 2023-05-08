@@ -35,6 +35,10 @@ public class MavenArchiveConfiguration {
 
     private boolean recompressAddedZips = true;
 
+    /**
+     * @deprecated See <a href="https://bugs.openjdk.org/browse/JDK-8305597">JDK-8305597</a>
+     */
+    @Deprecated
     private boolean index;
 
     private boolean addMavenDescriptor = true;
@@ -89,7 +93,9 @@ public class MavenArchiveConfiguration {
      * <p>isIndex.</p>
      *
      * @return {@link #index}
+     * @deprecated See <a href="https://bugs.openjdk.org/browse/JDK-8305597">JDK-8305597</a>
      */
+    @Deprecated
     public boolean isIndex() {
         return index;
     }
@@ -138,7 +144,9 @@ public class MavenArchiveConfiguration {
      * <p>Setter for the field <code>index</code>.</p>
      *
      * @param index set index to true/false.
+     * @deprecated See <a href="https://bugs.openjdk.org/browse/JDK-8305597">JDK-8305597</a>
      */
+    @Deprecated
     public void setIndex(boolean index) {
         this.index = index;
     }

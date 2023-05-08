@@ -131,9 +131,14 @@
           <tr>
             <td>index</td>
             <td>
-              Whether the created archive will contain an
-              <code>INDEX.LIST</code> file.
-              The default value is <code>false</code>.
+              <strong>Deprecated:</strong> See <a href="https://bugs.openjdk.org/browse/JDK-8305597">JDK-8305597</a>
+              <p>
+                Whether the created archive will contain an
+                <code>INDEX.LIST</code> file.
+              </p>
+              <p>
+                The default value is <code>false</code>.
+              </p>
             </td>
             <td>boolean</td>
             <td></td>
