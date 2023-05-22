@@ -223,7 +223,7 @@ public class MavenArchiver {
     }
 
     private void addManifestAttribute(Manifest manifest, String key, String value) throws ManifestException {
-        if (!StringUtils.isEmpty(value)) {
+        if (!(value == null || value.isEmpty())) {
             Manifest.Attribute attr = new Manifest.Attribute(key, value);
             manifest.addConfiguredAttribute(attr);
         } else {
@@ -772,7 +772,7 @@ public class MavenArchiver {
         }
 
         // Number representing seconds since the epoch
-        if (StringUtils.isNotEmpty(outputTimestamp) && StringUtils.isNumeric(outputTimestamp)) {
+        if ((outputTimestamp != null && !outputTimestamp.isEmpty()) && StringUtils.isNumeric(outputTimestamp)) {
             return Optional.of(Instant.ofEpochSecond(Long.parseLong(outputTimestamp)));
         }
 
