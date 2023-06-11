@@ -317,7 +317,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testDashesInClassPath_MSHARED_134()
+    void testDashesInClassPath_MSHARED_134()
             throws IOException, ManifestException, DependencyResolutionRequiredException {
         File jarFile = new File("target/test/dummyWithDashes.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
@@ -346,7 +346,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testDashesInClassPath_MSHARED_182()
+    void testDashesInClassPath_MSHARED_182()
             throws IOException, ManifestException, DependencyResolutionRequiredException {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
@@ -379,7 +379,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testCarriageReturnInManifestEntry() throws Exception {
+    void testCarriageReturnInManifestEntry() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -409,7 +409,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testDeprecatedCreateArchiveAPI() throws Exception {
+    void testDeprecatedCreateArchiveAPI() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -439,7 +439,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testMinimalManifestEntries() throws Exception {
+    void testMinimalManifestEntries() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -462,7 +462,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testManifestEntries() throws Exception {
+    void testManifestEntries() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -537,7 +537,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testManifestWithInvalidAutomaticModuleNameThrowsOnCreateArchive() throws Exception {
+    void testManifestWithInvalidAutomaticModuleNameThrowsOnCreateArchive() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -562,7 +562,7 @@ class MavenArchiverTest {
      * Test to make sure that manifest sections are present in the manifest prior to the archive has been created.
      */
     @Test
-    public void testManifestSections() throws Exception {
+    void testManifestSections() throws Exception {
         MavenArchiver archiver = new MavenArchiver();
 
         MavenSession session = getDummySession();
@@ -593,7 +593,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testDefaultClassPathValue() throws Exception {
+    void testDefaultClassPathValue() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProject();
         File jarFile = new File("target/test/dummy.jar");
@@ -626,7 +626,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testDefaultClassPathValue_WithSnapshot() throws Exception {
+    void testDefaultClassPathValue_WithSnapshot() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProjectWithSnapshot();
         File jarFile = new File("target/test/dummy.jar");
@@ -655,7 +655,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testMavenRepoClassPathValue() throws Exception {
+    void testMavenRepoClassPathValue() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProject();
         File jarFile = new File("target/test/dummy.jar");
@@ -692,7 +692,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void shouldCreateArchiveWithSimpleClassPathLayoutWhileSettingSimpleLayoutExplicit() throws Exception {
+    void shouldCreateArchiveWithSimpleClassPathLayoutWhileSettingSimpleLayoutExplicit() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProject();
         File jarFile = new File("target/test/dummy-explicit-simple.jar");
@@ -724,7 +724,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void shouldCreateArchiveCustomerLayoutSimple() throws Exception {
+    void shouldCreateArchiveCustomerLayoutSimple() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProject();
         File jarFile = new File("target/test/dummy-custom-layout-simple.jar");
@@ -757,7 +757,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void shouldCreateArchiveCustomLayoutSimpleNonUnique() throws Exception {
+    void shouldCreateArchiveCustomLayoutSimpleNonUnique() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProject();
         File jarFile = new File("target/test/dummy-custom-layout-simple-non-unique.jar");
@@ -791,7 +791,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void shouldCreateArchiveCustomLayoutRepository() throws Exception {
+    void shouldCreateArchiveCustomLayoutRepository() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProject();
         File jarFile = new File("target/test/dummy-custom-layout-repo.jar");
@@ -831,7 +831,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void shouldCreateArchiveCustomLayoutRepositoryNonUnique() throws Exception {
+    void shouldCreateArchiveCustomLayoutRepositoryNonUnique() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProject();
         File jarFile = new File("target/test/dummy-custom-layout-repo-non-unique.jar");
@@ -871,7 +871,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void shouldCreateArchiveWithSimpleClassPathLayoutUsingDefaults() throws Exception {
+    void shouldCreateArchiveWithSimpleClassPathLayoutUsingDefaults() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProject();
         File jarFile = new File("target/test/dummy-defaults.jar");
@@ -901,7 +901,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testMavenRepoClassPathValue_WithSnapshot() throws Exception {
+    void testMavenRepoClassPathValue_WithSnapshot() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProjectWithSnapshot();
         File jarFile = new File("target/test/dummy.jar");
@@ -938,7 +938,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testCustomClassPathValue() throws Exception {
+    void testCustomClassPathValue() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProject();
         File jarFile = new File("target/test/dummy.jar");
@@ -978,7 +978,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testCustomClassPathValue_WithSnapshotResolvedVersion() throws Exception {
+    void testCustomClassPathValue_WithSnapshotResolvedVersion() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProjectWithSnapshot();
         File jarFile = new File("target/test/dummy.jar");
@@ -1017,7 +1017,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testCustomClassPathValue_WithSnapshotForcingBaseVersion() throws Exception {
+    void testCustomClassPathValue_WithSnapshotForcingBaseVersion() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProjectWithSnapshot();
         File jarFile = new File("target/test/dummy.jar");
@@ -1054,7 +1054,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testDefaultPomProperties() throws Exception {
+    void testDefaultPomProperties() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProject();
         File jarFile = new File("target/test/dummy.jar");
@@ -1088,7 +1088,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testCustomPomProperties() throws Exception {
+    void testCustomPomProperties() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProject();
         File jarFile = new File("target/test/dummy.jar");
@@ -1356,7 +1356,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    public void testParseOutputTimestamp() {
+    void testParseOutputTimestamp() {
         MavenArchiver archiver = new MavenArchiver();
 
         assertThat(archiver.parseOutputTimestamp(null)).isNull();
@@ -1393,7 +1393,7 @@ class MavenArchiverTest {
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {".", " ", "_", "-", "T", "/", "!", "!", "*", "ñ"})
-    public void testEmptyParseOutputTimestampInstant(String value) {
+    void testEmptyParseOutputTimestampInstant(String value) {
         // Empty optional if null or 1 char
         assertThat(MavenArchiver.parseBuildOutputTimestamp(value)).isEmpty();
     }
@@ -1413,7 +1413,7 @@ class MavenArchiverTest {
         "1980-01-01T00:00:02Z,315532802",
         "2099-12-31T23:59:59Z,4102444799"
     })
-    public void testParseOutputTimestampInstant(String value, long expected) {
+    void testParseOutputTimestampInstant(String value, long expected) {
         assertThat(MavenArchiver.parseBuildOutputTimestamp(value)).contains(Instant.ofEpochSecond(expected));
     }
 
@@ -1428,7 +1428,7 @@ class MavenArchiverTest {
                 "Tue, 3 Jun 2008 11:05:30 GMT",
                 "2011-12-03T10:15:30+01:00[Europe/Paris]"
             })
-    public void testThrownParseOutputTimestampInstant(String outputTimestamp) {
+    void testThrownParseOutputTimestampInstant(String outputTimestamp) {
         // Invalid parsing
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> MavenArchiver.parseBuildOutputTimestamp(outputTimestamp))
@@ -1445,7 +1445,7 @@ class MavenArchiverTest {
                 "1980-01-01T00:15:35+01:00",
                 "1980-01-01T10:15:35+14:00"
             })
-    public void testThrownParseOutputTimestampInvalidRange(String outputTimestamp) {
+    void testThrownParseOutputTimestampInvalidRange(String outputTimestamp) {
         // date is not within the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> MavenArchiver.parseBuildOutputTimestamp(outputTimestamp))
@@ -1460,7 +1460,7 @@ class MavenArchiverTest {
         "1988-02-22T20:37:42+06,572539062"
     })
     @EnabledForJreRange(min = JRE.JAVA_9)
-    public void testShortOffset(String value, long expected) {
+    void testShortOffset(String value, long expected) {
         assertThat(MavenArchiver.parseBuildOutputTimestamp(value)).contains(Instant.ofEpochSecond(expected));
     }
 }

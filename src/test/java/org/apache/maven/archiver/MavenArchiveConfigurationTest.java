@@ -34,7 +34,7 @@ class MavenArchiveConfigurationTest {
     private MavenArchiveConfiguration archive;
 
     @BeforeEach
-    public void before() {
+    void before() {
         archive = new MavenArchiveConfiguration();
         archive.setManifest(new ManifestConfiguration());
         archive.setForced(false);

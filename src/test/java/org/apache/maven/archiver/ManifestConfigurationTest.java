@@ -28,30 +28,30 @@ class ManifestConfigurationTest {
     private ManifestConfiguration manifestConfiguration;
 
     @BeforeEach
-    public void before() {
+    void before() {
         this.manifestConfiguration = new ManifestConfiguration();
     }
 
     @Test
-    public void XXX() {
+    void XXX() {
         assertThat(manifestConfiguration.getClasspathLayoutType())
                 .isEqualTo(ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_SIMPLE);
     }
 
     @Test
-    public void getClasspathPrefixShouldReturnPrefixWithSlashesInsteadOfBackSlashes() {
+    void getClasspathPrefixShouldReturnPrefixWithSlashesInsteadOfBackSlashes() {
         manifestConfiguration.setClasspathPrefix("\\lib\\const\\");
         assertThat(manifestConfiguration.getClasspathPrefix()).isEqualTo("/lib/const/");
     }
 
     @Test
-    public void getClasspathPrefixShouldReturnPrefixWithTraingSlash() {
+    void getClasspathPrefixShouldReturnPrefixWithTraingSlash() {
         manifestConfiguration.setClasspathPrefix("const");
         assertThat(manifestConfiguration.getClasspathPrefix()).isEqualTo("const/");
     }
 
     @Test
-    public void getClasspathPrefixShouldReturnTheTrailingSlash() {
+    void getClasspathPrefixShouldReturnTheTrailingSlash() {
         manifestConfiguration.setClasspathPrefix("const/");
         assertThat(manifestConfiguration.getClasspathPrefix()).isEqualTo("const/");
     }
