@@ -56,7 +56,6 @@ import org.codehaus.plexus.interpolation.PrefixedPropertiesValueSource;
 import org.codehaus.plexus.interpolation.RecursionInterceptor;
 import org.codehaus.plexus.interpolation.StringSearchInterpolator;
 import org.codehaus.plexus.interpolation.ValueSource;
-import org.codehaus.plexus.util.StringUtils;
 
 import static org.apache.maven.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_CUSTOM;
 import static org.apache.maven.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_REPOSITORY;
@@ -390,9 +389,10 @@ public class MavenArchiver {
         }
 
         extraExpressions.setProperty("groupIdPath", artifact.getGroupId().replace('.', '/'));
-        if (StringUtils.isNotEmpty(artifact.getClassifier())) {
-            extraExpressions.setProperty("dashClassifier", "-" + artifact.getClassifier());
-            extraExpressions.setProperty("dashClassifier?", "-" + artifact.getClassifier());
+        String classifier = artifact.getClassifier();
+        if (classifier != null && !classifier.isEmpty()) {
+            extraExpressions.setProperty("dashClassifier", "-" + classifier);
+            extraExpressions.setProperty("dashClassifier?", "-" + classifier);
         } else {
             extraExpressions.setProperty("dashClassifier", "");
             extraExpressions.setProperty("dashClassifier?", "");
@@ -772,7 +772,7 @@ public class MavenArchiver {
         }
 
         // Number representing seconds since the epoch
-        if ((outputTimestamp != null && !outputTimestamp.isEmpty()) && StringUtils.isNumeric(outputTimestamp)) {
+        if (isNumeric(outputTimestamp)) {
             return Optional.of(Instant.ofEpochSecond(Long.parseLong(outputTimestamp)));
         }
 
@@ -798,6 +798,21 @@ public class MavenArchiver {
             throw new IllegalArgumentException(
                     "Invalid project.build.outputTimestamp value '" + outputTimestamp + "'", pe);
         }
+    }
+
+    private static boolean isNumeric(String str) {
+
+        if (str.isEmpty()) {
+            return false;
+        }
+
+        for (char c : str.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
