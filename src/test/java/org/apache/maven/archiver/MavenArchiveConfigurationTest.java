@@ -39,7 +39,6 @@ class MavenArchiveConfigurationTest {
         archive.setManifest(new ManifestConfiguration());
         archive.setForced(false);
         archive.setCompress(false);
-        archive.setIndex(false);
     }
 
     @Test
