@@ -1039,7 +1039,7 @@ class MavenArchiverTest {
         ProjectStub project = getProject();
         File pomFile = new File("src/test/resources/pom.xml");
         pomFile.setLastModified(System.currentTimeMillis() - 60000L);
-        project.setPomPath(pomFile);
+        project.setPomPath(pomFile.toPath());
         Model model = Model.newBuilder()
                 .groupId("org.apache.dummy")
                 .artifactId("dummy")
@@ -1096,7 +1096,7 @@ class MavenArchiverTest {
         ProjectStub project = getProject();
         File pomFile = new File("src/test/resources/pom.xml");
         pomFile.setLastModified(System.currentTimeMillis() - 60000L);
-        project.setPomPath(pomFile);
+        project.setPomPath(pomFile.toPath());
         project.setModel(Model.newBuilder()
                 .groupId("org.apache.dummy")
                 .artifactId("dummy")
