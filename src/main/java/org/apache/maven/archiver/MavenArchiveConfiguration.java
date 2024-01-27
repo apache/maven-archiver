@@ -18,7 +18,7 @@
  */
 package org.apache.maven.archiver;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,15 +35,9 @@ public class MavenArchiveConfiguration {
 
     private boolean recompressAddedZips = true;
 
-    /**
-     * @deprecated See <a href="https://bugs.openjdk.org/browse/JDK-8305597">JDK-8305597</a>
-     */
-    @Deprecated
-    private boolean index;
-
     private boolean addMavenDescriptor = true;
 
-    private File manifestFile;
+    private Path manifestFile;
 
     // TODO: Rename this attribute to manifestConfiguration;
     private ManifestConfiguration manifest;
@@ -60,7 +54,7 @@ public class MavenArchiveConfiguration {
     /**
      * @since 2.3
      */
-    private File pomPropertiesFile;
+    private Path pomPropertiesFile;
 
     /**
      * <p>isCompress.</p>
@@ -90,17 +84,6 @@ public class MavenArchiveConfiguration {
     }
 
     /**
-     * <p>isIndex.</p>
-     *
-     * @return {@link #index}
-     * @deprecated See <a href="https://bugs.openjdk.org/browse/JDK-8305597">JDK-8305597</a>
-     */
-    @Deprecated
-    public boolean isIndex() {
-        return index;
-    }
-
-    /**
      * <p>isAddMavenDescriptor.</p>
      *
      * @return {@link #addMavenDescriptor}
@@ -114,7 +97,7 @@ public class MavenArchiveConfiguration {
      *
      * @return {@link #manifestFile}
      */
-    public File getManifestFile() {
+    public Path getManifestFile() {
         return manifestFile;
     }
 
@@ -141,17 +124,6 @@ public class MavenArchiveConfiguration {
     }
 
     /**
-     * <p>Setter for the field <code>index</code>.</p>
-     *
-     * @param index set index to true/false.
-     * @deprecated See <a href="https://bugs.openjdk.org/browse/JDK-8305597">JDK-8305597</a>
-     */
-    @Deprecated
-    public void setIndex(boolean index) {
-        this.index = index;
-    }
-
-    /**
      * <p>Setter for the field <code>addMavenDescriptor</code>.</p>
      *
      * @param addMavenDescriptor activate to add maven descriptor or not.
@@ -165,7 +137,7 @@ public class MavenArchiveConfiguration {
      *
      * @param manifestFile The manifest file.
      */
-    public void setManifestFile(File manifestFile) {
+    public void setManifestFile(Path manifestFile) {
         this.manifestFile = manifestFile;
     }
 
@@ -316,7 +288,7 @@ public class MavenArchiveConfiguration {
      *
      * @return "pom.properties" location or null.
      */
-    public File getPomPropertiesFile() {
+    public Path getPomPropertiesFile() {
         return pomPropertiesFile;
     }
 
@@ -325,7 +297,7 @@ public class MavenArchiveConfiguration {
      *
      * @param pomPropertiesFile "pom.properties" location or null.
      */
-    public void setPomPropertiesFile(File pomPropertiesFile) {
+    public void setPomPropertiesFile(Path pomPropertiesFile) {
         this.pomPropertiesFile = pomPropertiesFile;
     }
 }
