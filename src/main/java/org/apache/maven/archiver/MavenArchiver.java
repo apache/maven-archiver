@@ -565,8 +565,7 @@ public class MavenArchiver {
             File pomPropertiesFile = new File(dir, "pom.properties");
 
             new PomPropertiesUtil()
-                    .createPomProperties(
-                            session, workingProject, archiver, customPomPropertiesFile, pomPropertiesFile, forced);
+                    .createPomProperties(workingProject, archiver, customPomPropertiesFile, pomPropertiesFile, forced);
         }
 
         // ----------------------------------------------------------------------
