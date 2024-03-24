@@ -103,9 +103,32 @@ public class PomPropertiesUtil {
      * @param forceCreation force creation true/false
      * @throws org.codehaus.plexus.archiver.ArchiverException archiver exception.
      * @throws java.io.IOException IO exception.
+     * @deprecated please use {@link #createPomProperties(MavenProject, Archiver, File, File, boolean)}
      */
+    @Deprecated
     public void createPomProperties(
             MavenSession session,
+            MavenProject project,
+            Archiver archiver,
+            File customPomPropertiesFile,
+            File pomPropertiesFile,
+            boolean forceCreation)
+            throws IOException {
+        createPomProperties(project, archiver, customPomPropertiesFile, pomPropertiesFile, forceCreation);
+    }
+
+    /**
+     * Creates the pom.properties file.
+     *
+     * @param project                 {@link org.apache.maven.project.MavenProject}
+     * @param archiver                {@link org.codehaus.plexus.archiver.Archiver}
+     * @param customPomPropertiesFile optional custom pom properties file
+     * @param pomPropertiesFile       The pom properties file.
+     * @param forceCreation           force creation true/false
+     * @throws org.codehaus.plexus.archiver.ArchiverException archiver exception.
+     * @throws java.io.IOException                            IO exception.
+     */
+    public void createPomProperties(
             MavenProject project,
             Archiver archiver,
             File customPomPropertiesFile,
