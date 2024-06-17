@@ -22,7 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * <p>ManifestSection class.</p>
+ * ManifestSection class.
  */
 public class ManifestSection {
 

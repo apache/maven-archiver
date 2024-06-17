@@ -20,8 +20,6 @@ package org.apache.maven.archiver;
 
 /**
  * Capture common manifest configuration.
- *
- * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
 // TODO Is this general enough to be in Plexus Archiver?
 public class ManifestConfiguration {
