@@ -28,7 +28,7 @@
 
   <groupId>org.apache.maven</groupId>
   <artifactId>maven-archiver</artifactId>
-  <version>3.6.3-SNAPSHOT</version>
+  <version>4.0.0-SNAPSHOT</version>
 
   <name>Apache Maven Archiver</name>
   <description>Provides utility methods for creating JARs and other archive files from a Maven project.</description>
@@ -55,8 +55,8 @@
   </distributionManagement>
 
   <properties>
-    <mavenVersion>3.2.5</mavenVersion>
-    <javaVersion>8</javaVersion>
+    <mavenVersion>4.0.0-beta-3</mavenVersion>
+    <javaVersion>17</javaVersion>
     <project.build.outputTimestamp>2024-03-24T22:30:56Z</project.build.outputTimestamp>
   </properties>
 
@@ -99,25 +99,20 @@
       Test dependencies
     -->
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
+      <groupId>org.apache.maven.plugin-testing</groupId>
+      <artifactId>maven-plugin-testing-harness</artifactId>
+      <version>4.0.0-alpha-3-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-params</artifactId>
+      <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <version>3.26.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>4.11.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>

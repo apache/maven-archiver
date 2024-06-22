@@ -19,20 +19,21 @@
 package org.apache.maven.archiver;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.project.MavenProject;
+import org.apache.maven.api.Project;
+import org.apache.maven.api.Session;
 import org.codehaus.plexus.archiver.Archiver;
 
 /**
@@ -43,16 +44,16 @@ import org.codehaus.plexus.archiver.Archiver;
  * @version $Id: $Id
  */
 public class PomPropertiesUtil {
-    private Properties loadPropertiesFile(File file) throws IOException {
+    private Properties loadPropertiesFile(Path file) throws IOException {
         Properties fileProps = new Properties();
-        try (InputStream istream = Files.newInputStream(file.toPath())) {
+        try (InputStream istream = Files.newInputStream(file)) {
             fileProps.load(istream);
             return fileProps;
         }
     }
 
-    private boolean sameContents(Properties props, File file) throws IOException {
-        if (!file.isFile()) {
+    private boolean sameContents(Properties props, Path file) throws IOException {
+        if (!Files.isRegularFile(file)) {
             return false;
         }
 
@@ -60,17 +61,17 @@ public class PomPropertiesUtil {
         return fileProps.equals(props);
     }
 
-    private void createPropertiesFile(Properties properties, File outputFile, boolean forceCreation)
+    private void createPropertiesFile(Properties properties, Path outputFile, boolean forceCreation)
             throws IOException {
-        File outputDir = outputFile.getParentFile();
-        if (outputDir != null && !outputDir.isDirectory() && !outputDir.mkdirs()) {
-            throw new IOException("Failed to create directory: " + outputDir);
+        Path outputDir = outputFile.getParent();
+        if (outputDir != null && !Files.isDirectory(outputDir)) {
+            Files.createDirectories(outputDir);
         }
         if (!forceCreation && sameContents(properties, outputFile)) {
             return;
         }
 
-        try (PrintWriter pw = new PrintWriter(outputFile, "ISO-8859-1");
+        try (PrintWriter pw = new PrintWriter(outputFile.toFile(), StandardCharsets.ISO_8859_1.name());
                 StringWriter sw = new StringWriter()) {
 
             properties.store(sw, null);
@@ -95,50 +96,47 @@ public class PomPropertiesUtil {
     /**
      * Creates the pom.properties file.
      *
-     * @param session {@link org.apache.maven.execution.MavenSession}
-     * @param project {@link org.apache.maven.project.MavenProject}
+     * @param session {@link org.apache.maven.api.Session}
+     * @param project {@link org.apache.maven.api.Project}
      * @param archiver {@link org.codehaus.plexus.archiver.Archiver}
      * @param customPomPropertiesFile optional custom pom properties file
      * @param pomPropertiesFile The pom properties file.
      * @param forceCreation force creation true/false
      * @throws org.codehaus.plexus.archiver.ArchiverException archiver exception.
      * @throws java.io.IOException IO exception.
-     * @deprecated please use {@link #createPomProperties(MavenProject, Archiver, File, File, boolean)}
-     */
-    @Deprecated
-    public void createPomProperties(
-            MavenSession session,
-            MavenProject project,
-            Archiver archiver,
-            File customPomPropertiesFile,
-            File pomPropertiesFile,
-            boolean forceCreation)
-            throws IOException {
-        createPomProperties(project, archiver, customPomPropertiesFile, pomPropertiesFile, forceCreation);
-    }
-
-    /**
-     * Creates the pom.properties file.
-     *
-     * @param project                 {@link org.apache.maven.project.MavenProject}
-     * @param archiver                {@link org.codehaus.plexus.archiver.Archiver}
-     * @param customPomPropertiesFile optional custom pom properties file
-     * @param pomPropertiesFile       The pom properties file.
-     * @param forceCreation           force creation true/false
-     * @throws org.codehaus.plexus.archiver.ArchiverException archiver exception.
-     * @throws java.io.IOException                            IO exception.
      */
     public void createPomProperties(
-            MavenProject project,
+            Session session,
+            Project project,
             Archiver archiver,
-            File customPomPropertiesFile,
-            File pomPropertiesFile,
+            Path customPomPropertiesFile,
+            Path pomPropertiesFile,
             boolean forceCreation)
             throws IOException {
         final String groupId = project.getGroupId();
         final String artifactId = project.getArtifactId();
         final String version = project.getVersion();
+        createPomProperties(
+                session,
+                groupId,
+                artifactId,
+                version,
+                archiver,
+                customPomPropertiesFile,
+                pomPropertiesFile,
+                forceCreation);
+    }
 
+    public void createPomProperties(
+            Session session,
+            String groupId,
+            String artifactId,
+            String version,
+            Archiver archiver,
+            Path customPomPropertiesFile,
+            Path pomPropertiesFile,
+            boolean forceCreation)
+            throws IOException {
         Properties p;
 
         if (customPomPropertiesFile != null) {
@@ -155,6 +153,7 @@ public class PomPropertiesUtil {
 
         createPropertiesFile(p, pomPropertiesFile, forceCreation);
 
-        archiver.addFile(pomPropertiesFile, "META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties");
+        archiver.addFile(
+                pomPropertiesFile.toFile(), "META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties");
     }
 }
