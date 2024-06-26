@@ -28,7 +28,7 @@
 
   <groupId>org.apache.maven</groupId>
   <artifactId>maven-archiver</artifactId>
-  <version>4.0.0-SNAPSHOT</version>
+  <version>4.0.0-beta-1</version>
 
   <name>Apache Maven Archiver</name>
   <description>Provides utility methods for creating JARs and other archive files from a Maven project.</description>
@@ -36,7 +36,7 @@
   <scm>
     <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-archiver.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-archiver.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>maven-archiver-4.0.0-beta-1</tag>
     <url>https://github.com/apache/maven-archiver/tree/${project.scm.tag}</url>
   </scm>
   <issueManagement>
@@ -65,7 +65,7 @@
     <plexusInterpolationVersion>1.27</plexusInterpolationVersion>
     <slf4jVersion>2.0.13</slf4jVersion>
 
-    <project.build.outputTimestamp>2024-03-24T22:30:56Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2024-06-26T08:05:49Z</project.build.outputTimestamp>
   </properties>
 
   <dependencies>
