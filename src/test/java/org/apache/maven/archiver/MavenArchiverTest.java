@@ -45,10 +45,7 @@ import org.apache.maven.api.plugin.testing.stubs.ProjectStub;
 import org.apache.maven.api.plugin.testing.stubs.SessionMock;
 import org.apache.maven.api.services.DependencyResolver;
 import org.apache.maven.api.services.DependencyResolverResult;
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
-import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
-import org.codehaus.plexus.archiver.jar.ManifestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledForJreRange;
@@ -245,8 +242,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testDashesInClassPath_MSHARED_134()
-            throws IOException, ManifestException, DependencyResolutionRequiredException {
+    void testDashesInClassPath_MSHARED_134() {
         File jarFile = new File("target/test/dummyWithDashes.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -272,8 +268,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testDashesInClassPath_MSHARED_182()
-            throws IOException, ManifestException, DependencyResolutionRequiredException {
+    void testDashesInClassPath_MSHARED_182() throws IOException {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
         MavenArchiver archiver = getMavenArchiver(jarArchiver);
@@ -1118,39 +1113,6 @@ class MavenArchiverTest {
         useArtifacts(getMockArtifact1(), getMockArtifact2(), getMockArtifact3());
 
         return project;
-    }
-
-    private ArtifactHandler getMockArtifactHandler() {
-        return new ArtifactHandler() {
-
-            public String getClassifier() {
-                return null;
-            }
-
-            public String getDirectory() {
-                return null;
-            }
-
-            public String getExtension() {
-                return "jar";
-            }
-
-            public String getLanguage() {
-                return null;
-            }
-
-            public String getPackaging() {
-                return null;
-            }
-
-            public boolean isAddedToClasspath() {
-                return true;
-            }
-
-            public boolean isIncludesDependencies() {
-                return false;
-            }
-        };
     }
 
     private DependencyStub getMockArtifact2() {

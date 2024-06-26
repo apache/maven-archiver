@@ -55,22 +55,18 @@
   </distributionManagement>
 
   <properties>
-    <mavenVersion>4.0.0-beta-3</mavenVersion>
     <javaVersion>17</javaVersion>
+    <mavenVersion>4.0.0-beta-3</mavenVersion>
+
+    <assertjVersion>3.26.0</assertjVersion>
+    <junitVersion>5.10.2</junitVersion>
+    <mavenPluginTestingVersion>4.0.0-alpha-3-SNAPSHOT</mavenPluginTestingVersion>
+    <plexusArchiverVersion>4.9.2</plexusArchiverVersion>
+    <plexusInterpolationVersion>1.27</plexusInterpolationVersion>
+    <slf4jVersion>2.0.13</slf4jVersion>
+
     <project.build.outputTimestamp>2024-03-24T22:30:56Z</project.build.outputTimestamp>
   </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.junit</groupId>
-        <artifactId>junit-bom</artifactId>
-        <version>5.10.2</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <!--
@@ -78,22 +74,32 @@
     -->
     <dependency>
       <groupId>org.apache.maven</groupId>
-      <artifactId>maven-core</artifactId>
+      <artifactId>maven-api-core</artifactId>
       <version>${mavenVersion}</version>
-      <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-api-model</artifactId>
+      <version>${mavenVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4jVersion}</version>
+    </dependency>
+
     <!--
       Plexus dependencies
     -->
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-archiver</artifactId>
-      <version>4.9.2</version>
+      <version>${plexusArchiverVersion}</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-interpolation</artifactId>
-      <version>1.27</version>
+      <version>${plexusInterpolationVersion}</version>
     </dependency>
     <!--
       Test dependencies
@@ -101,25 +107,52 @@
     <dependency>
       <groupId>org.apache.maven.plugin-testing</groupId>
       <artifactId>maven-plugin-testing-harness</artifactId>
-      <version>4.0.0-alpha-3-SNAPSHOT</version>
+      <version>${mavenPluginTestingVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-api-impl</artifactId>
+      <version>${mavenVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+      <version>${mavenVersion}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
+      <version>${junitVersion}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>3.26.0</version>
+      <version>${assertjVersion}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.7.36</version>
+      <version>${slf4jVersion}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <configuration>
+            <redirectTestOutputToFile>true</redirectTestOutputToFile>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>
