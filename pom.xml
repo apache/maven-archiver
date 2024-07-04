@@ -61,7 +61,7 @@
     <assertjVersion>3.26.0</assertjVersion>
     <junitVersion>5.10.2</junitVersion>
     <mavenPluginTestingVersion>4.0.0-beta-2-SNAPSHOT</mavenPluginTestingVersion>
-    <plexusArchiverVersion>4.9.2</plexusArchiverVersion>
+    <plexusArchiverVersion>4.10.0</plexusArchiverVersion>
     <plexusInterpolationVersion>1.27</plexusInterpolationVersion>
     <slf4jVersion>2.0.13</slf4jVersion>
 
