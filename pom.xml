@@ -59,7 +59,6 @@
     <mavenVersion>4.0.0-beta-3</mavenVersion>
 
     <assertjVersion>3.26.0</assertjVersion>
-    <junitVersion>5.10.3</junitVersion>
     <mavenPluginTestingVersion>4.0.0-beta-2-SNAPSHOT</mavenPluginTestingVersion>
     <plexusArchiverVersion>4.10.0</plexusArchiverVersion>
     <plexusInterpolationVersion>1.27</plexusInterpolationVersion>
@@ -125,7 +124,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>${junitVersion}</version>
+      <version>${versions.junit5}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
