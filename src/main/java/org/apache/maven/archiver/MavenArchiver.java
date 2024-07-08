@@ -584,23 +584,9 @@ public class MavenArchiver {
 
         // Configure the jar
         archiver.addConfiguredManifest(manifest);
-
         archiver.setCompress(archiveConfiguration.isCompress());
-
         archiver.setRecompressAddedZips(archiveConfiguration.isRecompressAddedZips());
-
-        archiver.setIndex(archiveConfiguration.isIndex());
-
         archiver.setDestFile(archiveFile);
-
-        // make the archiver index the jars on the classpath, if we are adding that to the manifest
-        if (archiveConfiguration.getManifest().isAddClasspath()) {
-            List<String> artifacts = project.getRuntimeClasspathElements();
-            for (String artifact : artifacts) {
-                File f = new File(artifact);
-                archiver.addConfiguredIndexJars(f);
-            }
-        }
 
         archiver.setForced(forced);
         if (!archiveConfiguration.isForced() && archiver.isSupportingForced()) {

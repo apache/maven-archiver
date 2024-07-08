@@ -65,6 +65,7 @@ import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static org.apache.maven.archiver.MavenArchiver.parseBuildOutputTimestamp;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -1168,7 +1169,6 @@ class MavenArchiverTest {
         model.setVersion("0.1.1");
 
         final MavenProject project = new MavenProject(model);
-        project.setExtensionArtifacts(Collections.emptySet());
         project.setRemoteArtifactRepositories(Collections.emptyList());
         project.setPluginArtifactRepositories(Collections.emptyList());
         project.setName("archiver test");
@@ -1330,37 +1330,36 @@ class MavenArchiverTest {
 
     @Test
     void testParseOutputTimestamp() {
-        MavenArchiver archiver = new MavenArchiver();
+        assertThat(parseBuildOutputTimestamp(null)).isEmpty();
+        assertThat(parseBuildOutputTimestamp("")).isEmpty();
+        assertThat(parseBuildOutputTimestamp(".")).isEmpty();
+        assertThat(parseBuildOutputTimestamp(" ")).isEmpty();
+        assertThat(parseBuildOutputTimestamp("_")).isEmpty();
+        assertThat(parseBuildOutputTimestamp("-")).isEmpty();
+        assertThat(parseBuildOutputTimestamp("/")).isEmpty();
+        assertThat(parseBuildOutputTimestamp("!")).isEmpty();
+        assertThat(parseBuildOutputTimestamp("*")).isEmpty();
 
-        assertThat(archiver.parseOutputTimestamp(null)).isNull();
-        assertThat(archiver.parseOutputTimestamp("")).isNull();
-        assertThat(archiver.parseOutputTimestamp(".")).isNull();
-        assertThat(archiver.parseOutputTimestamp(" ")).isNull();
-        assertThat(archiver.parseOutputTimestamp("_")).isNull();
-        assertThat(archiver.parseOutputTimestamp("-")).isNull();
-        assertThat(archiver.parseOutputTimestamp("/")).isNull();
-        assertThat(archiver.parseOutputTimestamp("!")).isNull();
-        assertThat(archiver.parseOutputTimestamp("*")).isNull();
+        assertThat(parseBuildOutputTimestamp("1570300662").get().getEpochSecond())
+                .isEqualTo(1570300662L);
+        assertThat(parseBuildOutputTimestamp("0").get().getEpochSecond()).isZero();
+        assertThat(parseBuildOutputTimestamp("1").get().getEpochSecond()).isEqualTo(1L);
 
-        assertThat(archiver.parseOutputTimestamp("1570300662").getTime()).isEqualTo(1570300662000L);
-        assertThat(archiver.parseOutputTimestamp("0").getTime()).isZero();
-        assertThat(archiver.parseOutputTimestamp("1").getTime()).isEqualTo(1000L);
-
-        assertThat(archiver.parseOutputTimestamp("2019-10-05T18:37:42Z").getTime())
-                .isEqualTo(1570300662000L);
-        assertThat(archiver.parseOutputTimestamp("2019-10-05T20:37:42+02:00").getTime())
-                .isEqualTo(1570300662000L);
-        assertThat(archiver.parseOutputTimestamp("2019-10-05T16:37:42-02:00").getTime())
-                .isEqualTo(1570300662000L);
+        assertThat(parseBuildOutputTimestamp("2019-10-05T18:37:42Z").get().getEpochSecond())
+                .isEqualTo(1570300662L);
+        assertThat(parseBuildOutputTimestamp("2019-10-05T20:37:42+02:00").get().getEpochSecond())
+                .isEqualTo(1570300662L);
+        assertThat(parseBuildOutputTimestamp("2019-10-05T16:37:42-02:00").get().getEpochSecond())
+                .isEqualTo(1570300662L);
 
         // These must result in IAE because we expect extended ISO format only (ie with - separator for date and
         // : separator for timezone), hence the XXX SimpleDateFormat for tz offset
         // X SimpleDateFormat accepts timezone without separator while date has separator, which is a mix between
         // basic (no separators, both for date and timezone) and extended (separator for both)
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> archiver.parseOutputTimestamp("2019-10-05T20:37:42+0200"));
+                .isThrownBy(() -> parseBuildOutputTimestamp("2019-10-05T20:37:42+0200"));
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> archiver.parseOutputTimestamp("2019-10-05T20:37:42-0200"));
+                .isThrownBy(() -> parseBuildOutputTimestamp("2019-10-05T20:37:42-0200"));
     }
 
     @ParameterizedTest
@@ -1368,7 +1367,7 @@ class MavenArchiverTest {
     @ValueSource(strings = {".", " ", "_", "-", "T", "/", "!", "!", "*", "ñ"})
     void testEmptyParseOutputTimestampInstant(String value) {
         // Empty optional if null or 1 char
-        assertThat(MavenArchiver.parseBuildOutputTimestamp(value)).isEmpty();
+        assertThat(parseBuildOutputTimestamp(value)).isEmpty();
     }
 
     @ParameterizedTest
@@ -1387,7 +1386,7 @@ class MavenArchiverTest {
         "2099-12-31T23:59:59Z,4102444799"
     })
     void testParseOutputTimestampInstant(String value, long expected) {
-        assertThat(MavenArchiver.parseBuildOutputTimestamp(value)).contains(Instant.ofEpochSecond(expected));
+        assertThat(parseBuildOutputTimestamp(value)).contains(Instant.ofEpochSecond(expected));
     }
 
     @ParameterizedTest
@@ -1404,7 +1403,7 @@ class MavenArchiverTest {
     void testThrownParseOutputTimestampInstant(String outputTimestamp) {
         // Invalid parsing
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> MavenArchiver.parseBuildOutputTimestamp(outputTimestamp))
+                .isThrownBy(() -> parseBuildOutputTimestamp(outputTimestamp))
                 .withCauseInstanceOf(DateTimeParseException.class);
     }
 
@@ -1421,7 +1420,7 @@ class MavenArchiverTest {
     void testThrownParseOutputTimestampInvalidRange(String outputTimestamp) {
         // date is not within the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> MavenArchiver.parseBuildOutputTimestamp(outputTimestamp))
+                .isThrownBy(() -> parseBuildOutputTimestamp(outputTimestamp))
                 .withMessageContaining("is not within the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z");
     }
 
@@ -1434,6 +1433,6 @@ class MavenArchiverTest {
     })
     @EnabledForJreRange(min = JRE.JAVA_9)
     void testShortOffset(String value, long expected) {
-        assertThat(MavenArchiver.parseBuildOutputTimestamp(value)).contains(Instant.ofEpochSecond(expected));
+        assertThat(parseBuildOutputTimestamp(value)).contains(Instant.ofEpochSecond(expected));
     }
 }
