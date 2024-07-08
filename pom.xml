@@ -55,7 +55,7 @@
   </distributionManagement>
 
   <properties>
-    <mavenVersion>3.6.3</mavenVersion>
+    <mavenVersion>3.2.5</mavenVersion>
     <javaVersion>8</javaVersion>
     <project.build.outputTimestamp>2024-03-24T22:30:56Z</project.build.outputTimestamp>
   </properties>
@@ -127,11 +127,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <repositories>
-    <repository>
-      <id>maven_central</id>
-      <name>Maven Central</name>
-      <url>https://repo.maven.apache.org/maven2/</url>
-    </repository>
-  </repositories>
 </project>
