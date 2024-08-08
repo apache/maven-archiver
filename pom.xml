@@ -62,7 +62,7 @@
     <mavenPluginTestingVersion>4.0.0-beta-2-SNAPSHOT</mavenPluginTestingVersion>
     <plexusArchiverVersion>4.10.0</plexusArchiverVersion>
     <plexusInterpolationVersion>1.27</plexusInterpolationVersion>
-    <slf4jVersion>2.0.13</slf4jVersion>
+    <slf4jVersion>2.0.15</slf4jVersion>
 
     <project.build.outputTimestamp>2024-06-26T08:06:04Z</project.build.outputTimestamp>
   </properties>
