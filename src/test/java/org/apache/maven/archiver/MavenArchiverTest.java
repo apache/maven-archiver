@@ -1281,7 +1281,8 @@ class MavenArchiverTest {
         "1988-02-22T15:23:47.76598Z,572541827",
         "2011-12-03T10:15:30+01:00,1322903730",
         "1980-01-01T00:00:02Z,315532802",
-        "2099-12-31T23:59:59Z,4102444799"
+        "2099-12-31T23:59:59Z,4102444799",
+        "REPRODUCIBLE_BUILD_STATIC_DATE,318211200"
     })
     void testParseOutputTimestampInstant(String value, long expected) {
         assertThat(MavenArchiver.parseBuildOutputTimestamp(value)).contains(Instant.ofEpochSecond(expected));

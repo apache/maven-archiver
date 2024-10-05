@@ -45,7 +45,7 @@ class ManifestConfigurationTest {
     }
 
     @Test
-    void getClasspathPrefixShouldReturnPrefixWithTraingSlash() {
+    void getClasspathPrefixShouldReturnPrefixWithTrailingSlash() {
         manifestConfiguration.setClasspathPrefix("const");
         assertThat(manifestConfiguration.getClasspathPrefix()).isEqualTo("const/");
     }

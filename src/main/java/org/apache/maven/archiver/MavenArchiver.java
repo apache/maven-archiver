@@ -101,6 +101,11 @@ public class MavenArchiver {
 
     private static final Instant DATE_MAX = Instant.parse("2099-12-31T23:59:59Z");
 
+    /**
+     * The special default time for reproducible builds that is also used by Gradle
+     */
+    private static final Instant REPRODUCIBLE_BUILD_STATIC_DATE = Instant.parse("1980-02-01T00:00:00Z");
+
     private static final List<String> ARTIFACT_EXPRESSION_PREFIXES;
 
     static {
@@ -679,6 +684,7 @@ public class MavenArchiver {
      *
      * <p>Either as {@link java.time.format.DateTimeFormatter#ISO_OFFSET_DATE_TIME} or as a number representing seconds
      * since the epoch (like <a href="https://reproducible-builds.org/docs/source-date-epoch/">SOURCE_DATE_EPOCH</a>).
+     * Use the special constant value {@code "REPRODUCIBLE_BUILD_STATIC_DATE"} to set the default time i.e. 1980-02-01T00:00:00Z.
      *
      * @param outputTimestamp the value of {@code ${project.build.outputTimestamp}} (may be {@code null})
      * @return the parsed timestamp as an {@code Optional<Instant>}, {@code empty} if input is {@code null} or input
@@ -691,6 +697,9 @@ public class MavenArchiver {
         // Fail-fast on nulls
         if (outputTimestamp == null) {
             return Optional.empty();
+        }
+        if (outputTimestamp.equalsIgnoreCase("REPRODUCIBLE_BUILD_STATIC_DATE")) {
+            return Optional.of(REPRODUCIBLE_BUILD_STATIC_DATE);
         }
 
         // Number representing seconds since the epoch
