@@ -695,7 +695,13 @@ public class MavenArchiver {
 
         // Number representing seconds since the epoch
         if (isNumeric(outputTimestamp)) {
-            return Optional.of(Instant.ofEpochSecond(Long.parseLong(outputTimestamp)));
+            final Instant date = Instant.ofEpochSecond(Long.parseLong(outputTimestamp));
+
+            if (date.isBefore(DATE_MIN) || date.isAfter(DATE_MAX)) {
+                throw new IllegalArgumentException(
+                        "'" + date + "' is not within the valid range " + DATE_MIN + " to " + DATE_MAX);
+            }
+            return Optional.of(date);
         }
 
         // no timestamp configured (1 character configuration is useful to override a full value during pom
