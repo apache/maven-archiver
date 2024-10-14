@@ -1342,9 +1342,6 @@ class MavenArchiverTest {
 
         assertThat(parseBuildOutputTimestamp("1570300662").get().getEpochSecond())
                 .isEqualTo(1570300662L);
-        assertThat(parseBuildOutputTimestamp("0").get().getEpochSecond()).isZero();
-        assertThat(parseBuildOutputTimestamp("1").get().getEpochSecond()).isEqualTo(1L);
-
         assertThat(parseBuildOutputTimestamp("2019-10-05T18:37:42Z").get().getEpochSecond())
                 .isEqualTo(1570300662L);
         assertThat(parseBuildOutputTimestamp("2019-10-05T20:37:42+02:00").get().getEpochSecond())
@@ -1372,9 +1369,6 @@ class MavenArchiverTest {
 
     @ParameterizedTest
     @CsvSource({
-        "0,0",
-        "1,1",
-        "9,9",
         "1570300662,1570300662",
         "2147483648,2147483648",
         "2019-10-05T18:37:42Z,1570300662",
@@ -1410,6 +1404,9 @@ class MavenArchiverTest {
     @ParameterizedTest
     @ValueSource(
             strings = {
+                "0",
+                "1",
+                "9",
                 "1980-01-01T00:00:01Z",
                 "2100-01-01T00:00Z",
                 "2100-02-28T23:59:59Z",
