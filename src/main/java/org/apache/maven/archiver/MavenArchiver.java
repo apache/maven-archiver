@@ -685,7 +685,9 @@ public class MavenArchiver {
      *         contains only 1 character (not a number)
      * @since 3.6.0
      * @throws IllegalArgumentException if the outputTimestamp is neither ISO 8601 nor an integer, or it's not within
-     *             the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z
+     *             the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z as defined by
+     *             <a href="https://pkwaredownloads.blob.core.windows.net/pem/APPNOTE.txt">ZIP application note</a>,
+     *             section 4.4.6.
      */
     public static Optional<Instant> parseBuildOutputTimestamp(String outputTimestamp) {
         // Fail-fast on nulls
