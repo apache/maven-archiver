@@ -127,6 +127,7 @@ public class PomPropertiesUtil {
                 forceCreation);
     }
 
+    // CHECKSTYLE_OFF: ParameterNumber
     public void createPomProperties(
             Session session,
             String groupId,
@@ -136,6 +137,7 @@ public class PomPropertiesUtil {
             Path customPomPropertiesFile,
             Path pomPropertiesFile,
             boolean forceCreation)
+            // CHECKSTYLE_ON
             throws IOException {
         Properties p;
 
