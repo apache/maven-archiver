@@ -41,6 +41,7 @@ import org.apache.maven.api.model.Build;
 import org.apache.maven.api.model.Model;
 import org.apache.maven.api.model.Organization;
 import org.apache.maven.api.plugin.testing.stubs.ArtifactStub;
+import org.apache.maven.api.plugin.testing.stubs.ProducedArtifactStub;
 import org.apache.maven.api.plugin.testing.stubs.ProjectStub;
 import org.apache.maven.api.plugin.testing.stubs.SessionMock;
 import org.apache.maven.api.services.DependencyResolver;
@@ -1047,7 +1048,7 @@ class MavenArchiverTest {
                         .build())
                 .build();
         project.setModel(model);
-        ArtifactStub artifact = new ArtifactStub();
+        ProducedArtifactStub artifact = new ProducedArtifactStub();
         artifact.setGroupId("org.apache.dummy");
         artifact.setArtifactId("dummy");
         artifact.setVersion("0.1.1");
@@ -1103,7 +1104,7 @@ class MavenArchiverTest {
                         .build())
                 .build());
 
-        ArtifactStub artifact = new ArtifactStub();
+        ProducedArtifactStub artifact = new ProducedArtifactStub();
         artifact.setGroupId("org.apache.dummy");
         artifact.setArtifactId("dummy");
         artifact.setVersion("0.1.1");
@@ -1378,7 +1379,7 @@ class MavenArchiverTest {
         }
 
         @Override
-        public DependencyCoordinate toCoordinate() {
+        public DependencyCoordinates toCoordinates() {
             return null;
         }
 
