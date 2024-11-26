@@ -18,18 +18,11 @@
  */
 package org.apache.maven.shared.archiver;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.api.Project;
@@ -71,26 +64,8 @@ public class PomPropertiesUtil {
             return;
         }
 
-        try ( Writer writer = Files.newBufferedWriter(outputFile, StandardCharsets.ISO_8859_1);
-              StringWriter sw = new StringWriter()) {
-
-            properties.store(sw, null);
-
-            List<String> lines = new ArrayList<>();
-            try (BufferedReader r = new BufferedReader(new StringReader(sw.toString()))) {
-                String line;
-                while ((line = r.readLine()) != null) {
-                    if (!line.startsWith("#")) {
-                        lines.add(line);
-                    }
-                }
-            }
-
-            Collections.sort(lines);
-            for (String line : lines) {
-                writer.write(line);
-                writer.write( '\n' );
-            }
+        try (OutputStream out = Files.newOutputStream(outputFile)) {
+            properties.store(out, null);
         }
     }
 
