@@ -64,5 +64,6 @@ class PomPropertiesUtilTest {
         assertEquals("artifactId: bar", contents.get( 0 ));
         assertEquals("groupId: org.foo", contents.get( 1 ));
         assertEquals("version: 2.1.5", contents.get( 2 ));
+        assertEquals( 3, contents.size() );
     }
 }
