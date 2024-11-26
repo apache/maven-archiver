@@ -29,7 +29,13 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -1198,7 +1204,7 @@ class MavenArchiverTest {
         }
     }
 
-    public Manifest getJarFileManifest(File jarFile) throws IOException {
+    private Manifest getJarFileManifest(File jarFile) throws IOException {
         try (JarFile jar = new JarFile(jarFile)) {
             return jar.getManifest();
         }
