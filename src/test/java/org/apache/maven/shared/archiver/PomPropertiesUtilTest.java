@@ -59,7 +59,7 @@ class PomPropertiesUtilTest {
         assertEquals("bar", actual.getProperty( "artifactId" ));
         assertEquals("2.1.5", actual.getProperty( "version" ));
 
-        // Now read the raw file to check for alphabetical order
+        // Now read the file directly to check for alphabetical order
         List<String> contents = Files.readAllLines( pomPropertiesFile, StandardCharsets.ISO_8859_1 );
         assertEquals("artifactId: bar", contents.get( 0 ));
         assertEquals("groupId: org.foo", contents.get( 1 ));
