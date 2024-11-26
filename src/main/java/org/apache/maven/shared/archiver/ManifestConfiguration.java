@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.archiver;
+package org.apache.maven.shared.archiver;
 
 /**
  * Capture common manifest configuration.
@@ -259,7 +259,7 @@ public class ManifestConfiguration {
      * 'repository' (CLASSPATH_LAYOUT_TYPE_REPOSITORY, or the same as a maven classpath layout), and 'custom'
      * (CLASSPATH_LAYOUT_TYPE_CUSTOM). <br>
      * <b>NOTE:</b> If you specify a type of 'custom' you MUST set
-     * {@link org.apache.maven.archiver.ManifestConfiguration#setCustomClasspathLayout(String)}.
+     * {@link ManifestConfiguration#setCustomClasspathLayout(String)}.
      *
      * @return The classpath layout type.
      */
@@ -271,9 +271,9 @@ public class ManifestConfiguration {
      * Set the type of layout to use when formatting classpath entries. Should be one of: 'simple'
      * (CLASSPATH_LAYOUT_TYPE_SIMPLE), 'repository' (CLASSPATH_LAYOUT_TYPE_REPOSITORY, or the same as a maven classpath
      * layout), and 'custom' (CLASSPATH_LAYOUT_TYPE_CUSTOM). The constant names noted here are defined in the
-     * {@link org.apache.maven.archiver.ManifestConfiguration} class. <br>
+     * {@link ManifestConfiguration} class. <br>
      * <b>NOTE:</b> If you specify a type of 'custom' you MUST set
-     * {@link org.apache.maven.archiver.ManifestConfiguration#setCustomClasspathLayout(String)}.
+     * {@link ManifestConfiguration#setCustomClasspathLayout(String)}.
      *
      * @param classpathLayoutType The classpath layout type.
      */
@@ -283,7 +283,7 @@ public class ManifestConfiguration {
 
     /**
      * Retrieve the layout expression for use when the layout type set in
-     * {@link org.apache.maven.archiver.ManifestConfiguration#setClasspathLayoutType(String)} has the value 'custom'.
+     * {@link ManifestConfiguration#setClasspathLayoutType(String)} has the value 'custom'.
      * <b>The default value is
      * null.</b> Expressions will be evaluated against the following ordered list of classpath-related objects:
      * <ol>
@@ -301,7 +301,7 @@ public class ManifestConfiguration {
 
     /**
      * Set the layout expression for use when the layout type set in
-     * {@link org.apache.maven.archiver.ManifestConfiguration#setClasspathLayoutType(String)} has the value 'custom'.
+     * {@link ManifestConfiguration#setClasspathLayoutType(String)} has the value 'custom'.
      * Expressions will be
      * evaluated against the following ordered list of classpath-related objects:
      * <ol>
@@ -312,10 +312,10 @@ public class ManifestConfiguration {
      * <b>NOTE:</b> If you specify a layout type of 'custom' you MUST set this layout expression.
      * You can take a look at
      * <ol>
-     * <li>{@link org.apache.maven.archiver.MavenArchiver#SIMPLE_LAYOUT}</li>
-     * <li>{@link org.apache.maven.archiver.MavenArchiver#SIMPLE_LAYOUT_NONUNIQUE}</li>
-     * <li>{@link org.apache.maven.archiver.MavenArchiver#REPOSITORY_LAYOUT}</li>
-     * <li>{@link org.apache.maven.archiver.MavenArchiver#REPOSITORY_LAYOUT_NONUNIQUE}</li>
+     * <li>{@link MavenArchiver#SIMPLE_LAYOUT}</li>
+     * <li>{@link MavenArchiver#SIMPLE_LAYOUT_NONUNIQUE}</li>
+     * <li>{@link MavenArchiver#REPOSITORY_LAYOUT}</li>
+     * <li>{@link MavenArchiver#REPOSITORY_LAYOUT_NONUNIQUE}</li>
      * </ol>
      * how such an expression looks like.
      *

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.archiver;
+package org.apache.maven.shared.archiver;
 
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
@@ -144,7 +144,7 @@ public class MavenArchiveConfiguration {
     /**
      * <p>Setter for the field <code>manifest</code>.</p>
      *
-     * @param manifest {@link org.apache.maven.archiver.ManifestConfiguration}
+     * @param manifest {@link ManifestConfiguration}
      */
     public void setManifest(ManifestConfiguration manifest) {
         this.manifest = manifest;
@@ -199,7 +199,7 @@ public class MavenArchiveConfiguration {
     /**
      * <p>addManifestSection.</p>
      *
-     * @param section {@link org.apache.maven.archiver.ManifestSection}
+     * @param section {@link ManifestSection}
      */
     public void addManifestSection(ManifestSection section) {
         manifestSections.add(section);
@@ -208,7 +208,7 @@ public class MavenArchiveConfiguration {
     /**
      * <p>addManifestSections.</p>
      *
-     * @param list Added list of {@link org.apache.maven.archiver.ManifestSection}.
+     * @param list Added list of {@link ManifestSection}.
      */
     public void addManifestSections(List<ManifestSection> list) {
         manifestSections.addAll(list);
@@ -235,7 +235,7 @@ public class MavenArchiveConfiguration {
     /**
      * <p>Setter for the field <code>manifestSections</code>.</p>
      *
-     * @param manifestSections set The list of {@link org.apache.maven.archiver.ManifestSection}.
+     * @param manifestSections set The list of {@link ManifestSection}.
      */
     public void setManifestSections(List<ManifestSection> manifestSections) {
         this.manifestSections = manifestSections;
