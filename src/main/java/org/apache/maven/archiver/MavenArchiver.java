@@ -368,12 +368,6 @@ public class MavenArchiver {
             addManifestAttribute(m, entries, "Main-Class", mainClass);
         }
 
-        /*
-        if (config.isAddExtensions()) {
-            handleExtensions(result.getDependencies(), entries, m);
-        }
-        */
-
         addCustomEntries(m, entries, config);
 
         return m;
