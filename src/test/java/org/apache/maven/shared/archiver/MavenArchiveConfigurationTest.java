@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.archiver;
+package org.apache.maven.shared.archiver;
 
 import java.util.Map;
 

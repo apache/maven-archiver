@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.archiver;
+package org.apache.maven.shared.archiver;
 
 import javax.lang.model.SourceVersion;
 
@@ -60,9 +60,9 @@ import org.codehaus.plexus.interpolation.RecursionInterceptor;
 import org.codehaus.plexus.interpolation.StringSearchInterpolator;
 import org.codehaus.plexus.interpolation.ValueSource;
 
-import static org.apache.maven.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_CUSTOM;
-import static org.apache.maven.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_REPOSITORY;
-import static org.apache.maven.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_SIMPLE;
+import static org.apache.maven.shared.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_CUSTOM;
+import static org.apache.maven.shared.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_REPOSITORY;
+import static org.apache.maven.shared.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_SIMPLE;
 
 /**
  * MavenArchiver class.
@@ -188,7 +188,7 @@ public class MavenArchiver {
      * Return a pre-configured manifest.
      *
      * @param project {@link org.apache.maven.api.Project}
-     * @param config  {@link org.apache.maven.archiver.ManifestConfiguration}
+     * @param config  {@link ManifestConfiguration}
      * @return {@link org.codehaus.plexus.archiver.jar.Manifest}
      * @throws MavenArchiverException exception.
      */
@@ -227,7 +227,7 @@ public class MavenArchiver {
      *
      * @param session {@link org.apache.maven.api.Session}
      * @param project {@link org.apache.maven.api.Project}
-     * @param config  {@link org.apache.maven.archiver.ManifestConfiguration}
+     * @param config  {@link ManifestConfiguration}
      * @param entries The entries.
      * @return {@link org.codehaus.plexus.archiver.jar.Manifest}
      * @throws MavenArchiverException exception
@@ -487,7 +487,7 @@ public class MavenArchiver {
      *
      * @param session              {@link org.apache.maven.api.Session}
      * @param project              {@link org.apache.maven.api.Project}
-     * @param archiveConfiguration {@link org.apache.maven.archiver.MavenArchiveConfiguration}
+     * @param archiveConfiguration {@link MavenArchiveConfiguration}
      * @throws MavenArchiverException Archiver Exception.
      */
     public void createArchive(Session session, Project project, MavenArchiveConfiguration archiveConfiguration)
