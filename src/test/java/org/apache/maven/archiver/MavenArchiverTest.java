@@ -1069,9 +1069,6 @@ class MavenArchiverTest {
 
         ProjectStub project = new ProjectStub();
         project.setModel(model);
-        //        project.setExtensionArtifacts(Collections.emptySet());
-        //        project.setRemoteArtifactRepositories(Collections.emptyList());
-        //        project.setPluginArtifactRepositories(Collections.emptyList());
         return project;
     }
 
@@ -1189,18 +1186,6 @@ class MavenArchiverTest {
     }
 
     private Session getDummySession(Map<String, String> systemProperties) {
-        //        Date startTime = new Date();
-
-        //        MavenExecutionRequest request = new DefaultMavenExecutionRequest();
-        //        request.setSystemProperties(systemProperties);
-        //        request.setGoals(null);
-        //        request.setStartTime(startTime);
-        //        request.setUserSettingsFile(null);
-
-        //        MavenExecutionResult result = new DefaultMavenExecutionResult();
-        //
-        //        RepositorySystemSession rss = new DefaultRepositorySystemSession();
-
         Session session = SessionMock.getMockSession("target/local-repo");
         when(session.getSystemProperties()).thenReturn(systemProperties);
 
