@@ -105,6 +105,7 @@ public class PomPropertiesUtil {
 
     // CHECKSTYLE_OFF: ParameterNumber
     public void createPomProperties(
+            // TODO the session isn't needed here
             Session session,
             String groupId,
             String artifactId,
