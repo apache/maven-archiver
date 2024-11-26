@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.maven.api.Project;
 import org.apache.maven.api.Session;
 import org.codehaus.plexus.archiver.Archiver;
@@ -78,12 +79,17 @@ public class PomPropertiesUtil {
 
         try (Writer out = Files.newBufferedWriter(outputFile, StandardCharsets.ISO_8859_1)) {
             for (String key : sortedPropertyNames) {
-                out.write(key);
+                out.write(escape(key));
                 out.write("=");
-                out.write(unsortedProperties.getProperty(key));
+                out.write(escape(unsortedProperties.getProperty(key)));
                 out.write('\n');
             }
         }
+    }
+
+    private static String escape(String s) {
+        String escaped = StringEscapeUtils.escapeJava(s);
+        return escaped;
     }
 
     /**
