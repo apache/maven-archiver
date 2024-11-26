@@ -20,20 +20,15 @@ package org.apache.maven.shared.archiver;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.apache.maven.api.Project;
 import org.apache.maven.api.Session;
@@ -79,14 +74,14 @@ public class PomPropertiesUtil {
         // to write the file using a Writer.
         Set<String> propertyNames = unsortedProperties.stringPropertyNames();
         List<String> sortedPropertyNames = new ArrayList<>(propertyNames);
-        Collections.sort( sortedPropertyNames );
+        Collections.sort(sortedPropertyNames);
 
-        try ( Writer out = Files.newBufferedWriter(outputFile, StandardCharsets.ISO_8859_1)) {
+        try (Writer out = Files.newBufferedWriter(outputFile, StandardCharsets.ISO_8859_1)) {
             for (String key : sortedPropertyNames) {
-                out.write( key );
-                out.write( ": " );
-                out.write( unsortedProperties.getProperty( key ) );
-                out.write( '\n' );
+                out.write(key);
+                out.write(": ");
+                out.write(unsortedProperties.getProperty(key));
+                out.write('\n');
             }
         }
     }

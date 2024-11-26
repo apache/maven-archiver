@@ -23,7 +23,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import org.apache.maven.api.Session;
@@ -38,32 +37,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class PomPropertiesUtilTest {
 
     @Test
-    void testCreatePomProperties( @TempDir(cleanup = CleanupMode.ALWAYS) Path tempDirectory)
-            throws IOException
-    {
+    void testCreatePomProperties(@TempDir(cleanup = CleanupMode.ALWAYS) Path tempDirectory) throws IOException {
         PomPropertiesUtil util = new PomPropertiesUtil();
-        Path pomPropertiesFile = tempDirectory.resolve( "bar.properties" );
-        util.createPomProperties( (Session) null,
-                        "org.foo",
-                        "bar",
-                        "2.1.5",
-                        new JarArchiver(),
-                        null,
-                        pomPropertiesFile,
-                        true);
+        Path pomPropertiesFile = tempDirectory.resolve("bar.properties");
+        util.createPomProperties(
+                (Session) null, "org.foo", "bar", "2.1.5", new JarArchiver(), null, pomPropertiesFile, true);
 
-        assertThat( pomPropertiesFile ).exists();
+        assertThat(pomPropertiesFile).exists();
         Properties actual = new Properties();
-        actual.load( Files.newInputStream(pomPropertiesFile));
-        assertEquals("org.foo", actual.getProperty( "groupId" ));
-        assertEquals("bar", actual.getProperty( "artifactId" ));
-        assertEquals("2.1.5", actual.getProperty( "version" ));
+        actual.load(Files.newInputStream(pomPropertiesFile));
+        assertEquals("org.foo", actual.getProperty("groupId"));
+        assertEquals("bar", actual.getProperty("artifactId"));
+        assertEquals("2.1.5", actual.getProperty("version"));
 
         // Now read the file directly to check for alphabetical order
-        List<String> contents = Files.readAllLines( pomPropertiesFile, StandardCharsets.ISO_8859_1 );
-        assertEquals("artifactId: bar", contents.get( 0 ));
-        assertEquals("groupId: org.foo", contents.get( 1 ));
-        assertEquals("version: 2.1.5", contents.get( 2 ));
-        assertEquals( 3, contents.size() );
+        List<String> contents = Files.readAllLines(pomPropertiesFile, StandardCharsets.ISO_8859_1);
+        assertEquals("artifactId: bar", contents.get(0));
+        assertEquals("groupId: org.foo", contents.get(1));
+        assertEquals("version: 2.1.5", contents.get(2));
+        assertEquals(3, contents.size());
     }
 }
