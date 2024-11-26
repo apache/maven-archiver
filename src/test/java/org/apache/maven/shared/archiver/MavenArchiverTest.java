@@ -89,16 +89,6 @@ class MavenArchiverTest {
         when(dependencyResolverResult.getDependencies()).thenReturn(dependencies);
     }
 
-    static class ArtifactComparator implements Comparator<Artifact> {
-        public int compare(Artifact o1, Artifact o2) {
-            return o1.getArtifactId().compareTo(o2.getArtifactId());
-        }
-
-        public boolean equals(Object o) {
-            return false;
-        }
-    }
-
     @ParameterizedTest
     @EmptySource
     @ValueSource(
