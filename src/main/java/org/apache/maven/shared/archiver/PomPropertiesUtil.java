@@ -79,7 +79,7 @@ public class PomPropertiesUtil {
         try (Writer out = Files.newBufferedWriter(outputFile, StandardCharsets.ISO_8859_1)) {
             for (String key : sortedPropertyNames) {
                 out.write(key);
-                out.write(": ");
+                out.write("=");
                 out.write(unsortedProperties.getProperty(key));
                 out.write('\n');
             }
