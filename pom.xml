@@ -27,7 +27,7 @@
   </parent>
 
   <artifactId>maven-archiver</artifactId>
-  <version>4.0.0-beta-2</version>
+  <version>4.0.0-beta-3-SNAPSHOT</version>
 
   <name>Apache Maven Archiver</name>
   <description>Provides utility methods for creating JARs and other archive files from a Maven project.</description>
@@ -63,7 +63,7 @@
     <plexusInterpolationVersion>1.27</plexusInterpolationVersion>
     <slf4jVersion>2.0.16</slf4jVersion>
 
-    <project.build.outputTimestamp>2024-11-26T09:57:15Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2024-11-26T09:58:32Z</project.build.outputTimestamp>
   </properties>
 
   <dependencies>
