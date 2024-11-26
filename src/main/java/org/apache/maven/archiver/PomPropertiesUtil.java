@@ -21,9 +21,9 @@ package org.apache.maven.archiver;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -71,8 +71,8 @@ public class PomPropertiesUtil {
             return;
         }
 
-        try (PrintWriter pw = new PrintWriter(outputFile.toFile(), StandardCharsets.ISO_8859_1);
-                StringWriter sw = new StringWriter()) {
+        try ( Writer writer = Files.newBufferedWriter(outputFile, StandardCharsets.ISO_8859_1);
+              StringWriter sw = new StringWriter()) {
 
             properties.store(sw, null);
 
@@ -87,8 +87,9 @@ public class PomPropertiesUtil {
             }
 
             Collections.sort(lines);
-            for (String l : lines) {
-                pw.println(l);
+            for (String line : lines) {
+                writer.write(line);
+                writer.write( '\n' );
             }
         }
     }
