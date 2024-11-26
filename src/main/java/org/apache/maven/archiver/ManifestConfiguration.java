@@ -246,7 +246,7 @@ public class ManifestConfiguration {
     public String getClasspathPrefix() {
         String cpp = classpathPrefix.replaceAll("\\\\", "/");
 
-        if (cpp.length() != 0 && !cpp.endsWith("/")) {
+        if (!cpp.isEmpty() && !cpp.endsWith("/")) {
             cpp += "/";
         }
 

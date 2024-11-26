@@ -71,7 +71,7 @@ public class PomPropertiesUtil {
             return;
         }
 
-        try (PrintWriter pw = new PrintWriter(outputFile.toFile(), StandardCharsets.ISO_8859_1.name());
+        try (PrintWriter pw = new PrintWriter(outputFile.toFile(), StandardCharsets.ISO_8859_1);
                 StringWriter sw = new StringWriter()) {
 
             properties.store(sw, null);
