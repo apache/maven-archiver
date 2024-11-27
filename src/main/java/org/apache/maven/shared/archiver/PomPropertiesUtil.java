@@ -27,10 +27,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.text.StringEscapeUtils;
 import org.apache.maven.api.Project;
 import org.apache.maven.api.Session;
 import org.codehaus.plexus.archiver.Archiver;
@@ -88,8 +88,23 @@ public class PomPropertiesUtil {
     }
 
     private static String escape(String s) {
-        String escaped = StringEscapeUtils.escapeJava(s);
-        return escaped;
+        StringBuilder sb = new StringBuilder(s.length());
+        for (char c : s.toCharArray()) {
+            if (Character.isWhitespace(c) || c == '#' || c == '!' || c == '=' || c == ':') { // backslash escape
+                sb.append('\\');
+                sb.append(c);
+            } else if (c < 256) { // 8859-1
+                sb.append(c);
+            } else {
+                sb.append("\\u");
+                String hexString = Integer.toHexString(c).toUpperCase(Locale.ENGLISH);
+                while (hexString.length() < 4) {
+                    hexString = '0' + hexString;
+                }
+                sb.append(hexString);
+            }
+        }
+        return sb.toString();
     }
 
     /**
