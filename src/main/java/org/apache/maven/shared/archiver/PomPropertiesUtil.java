@@ -54,7 +54,9 @@ public class PomPropertiesUtil {
         if (outputDir != null && !Files.isDirectory(outputDir)) {
             Files.createDirectories(outputDir);
         }
-
+        // For reproducible builds, sort the properties and drop comments.
+        // The java.util.Properties class doesn't guarantee order so we have
+        // to write the file using a Writer.
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         properties.store(baos, null);
         String nl = System.lineSeparator();
