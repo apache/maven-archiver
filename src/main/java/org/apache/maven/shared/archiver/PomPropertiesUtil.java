@@ -18,9 +18,9 @@
  */
 package org.apache.maven.shared.archiver;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -54,10 +54,11 @@ public class PomPropertiesUtil {
         if (outputDir != null && !Files.isDirectory(outputDir)) {
             Files.createDirectories(outputDir);
         }
-        StringWriter sw = new StringWriter();
-        properties.store(sw, null);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        properties.store(baos, null);
         String nl = System.lineSeparator();
-        String output = Stream.of(sw.toString().split("\\R"))
+        String output = Stream.of(baos.toString(StandardCharsets.ISO_8859_1).split("\\R"))
                 .filter(line -> !line.startsWith("#"))
                 .sorted()
                 .collect(Collectors.joining(nl, "", nl));
