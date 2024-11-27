@@ -50,7 +50,7 @@ public class PomPropertiesUtil {
 
     private void createPropertiesFile(Properties properties, Path outputFile) throws IOException {
         Path outputDir = outputFile.getParent();
-        if (outputDir != null && !Files.isDirectory(outputDir)) {
+        if (outputDir != null) {
             Files.createDirectories(outputDir);
         }
         // For reproducible builds, sort the properties and drop comments.
