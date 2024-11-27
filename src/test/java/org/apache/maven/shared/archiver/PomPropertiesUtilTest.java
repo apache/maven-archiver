@@ -91,6 +91,7 @@ class PomPropertiesUtilTest {
             out.write("a\\u0020key\\u0020with\\u0009whitespace=value\\u0020with\\u0009whitespace\n");
             out.write("zkey=value with \\\\ not at end of line\n");
             out.write("ykey=\\tvalue with whitespace at beginning\n");
+            out.write("xkey=\\u00E9\\u00FC\\u00E5\n");
         }
 
         util.createPomProperties(
@@ -109,15 +110,17 @@ class PomPropertiesUtilTest {
         assertEquals("value with\twhitespace", actual.getProperty("a key with\twhitespace"));
         assertEquals("value with \\ not at end of line", actual.getProperty("zkey"));
         assertEquals("\tvalue with whitespace at beginning", actual.getProperty("ykey"));
+        assertEquals("éüå", actual.getProperty("xkey"));
 
         // Now read the file directly to check for alphabetical order and encoding
         List<String> contents = Files.readAllLines(pomPropertiesFile, StandardCharsets.ISO_8859_1);
-        assertEquals(6, contents.size());
+        assertEquals(7, contents.size());
         assertEquals("a\\ key\\ with\\\twhitespace=value with\twhitespace", contents.get(0));
         assertEquals("artifactId=\\u3053\\u3093\\u306B\\u3061\\u306F", contents.get(1));
         assertEquals("groupId=org.foo", contents.get(2));
         assertEquals("version=2.1.5", contents.get(3));
-        assertEquals("ykey=\\\tvalue with whitespace at beginning", contents.get(4));
-        assertEquals("zkey=value with \\\\ not at end of line", contents.get(5));
+        assertEquals("xkey=\\u00E9\\u00FC\\u00E5", contents.get(4));
+        assertEquals("ykey=\\\tvalue with whitespace at beginning", contents.get(5));
+        assertEquals("zkey=value with \\\\ not at end of line", contents.get(6));
     }
 }

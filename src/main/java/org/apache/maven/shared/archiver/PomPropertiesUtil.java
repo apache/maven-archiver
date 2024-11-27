@@ -98,21 +98,13 @@ public class PomPropertiesUtil {
                     || c == '\\') { // backslash escape
                 sb.append('\\');
                 sb.append(c);
-            } else if (c < 256) { // 8859-1
+            } else if (c < 128) { // ASCII
                 sb.append(c);
             } else {
                 sb.append(hexEncode(c));
             }
         }
         return sb.toString();
-    }
-
-    private static String hexEncode(char c) {
-        String hexString = "\\u" + Integer.toHexString(c).toUpperCase(Locale.ENGLISH);
-        while (hexString.length() < 4) {
-            hexString = '0' + hexString;
-        }
-        return hexString;
     }
 
     private static String escapeValue(String s) {
@@ -126,7 +118,7 @@ public class PomPropertiesUtil {
                 sb.append('\\');
                 sb.append(c);
                 atBeginning = false;
-            } else if (c < 256) { // 8859-1
+            } else if (c < 128) { // ASCII
                 sb.append(c);
                 atBeginning = false;
             } else {
@@ -135,6 +127,14 @@ public class PomPropertiesUtil {
             }
         }
         return sb.toString();
+    }
+
+    private static String hexEncode(char c) {
+        String hexString = Integer.toHexString(c).toUpperCase(Locale.ENGLISH);
+        while (hexString.length() < 4) {
+            hexString = '0' + hexString;
+        }
+        return "\\u" + hexString;
     }
 
     /**
