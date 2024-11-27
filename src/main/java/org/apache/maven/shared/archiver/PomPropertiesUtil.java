@@ -27,7 +27,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.maven.api.Project;
 import org.codehaus.plexus.archiver.Archiver;
@@ -60,7 +59,8 @@ public class PomPropertiesUtil {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         properties.store(baos, null);
         String nl = System.lineSeparator();
-        String output = Stream.of(baos.toString(StandardCharsets.ISO_8859_1).split("\\R"))
+        String output = baos.toString(StandardCharsets.ISO_8859_1)
+                .lines()
                 .filter(line -> !line.startsWith("#"))
                 .sorted()
                 .collect(Collectors.joining(nl, "", nl));
