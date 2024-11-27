@@ -18,23 +18,19 @@
  */
 package org.apache.maven.shared.archiver;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.apache.maven.api.Project;
-import org.apache.maven.api.Session;
 import org.codehaus.plexus.archiver.Archiver;
+import org.codehaus.plexus.util.io.CachingWriter;
 
 /**
  * This class is responsible for creating the <code>pom.properties</code> file
@@ -52,92 +48,54 @@ public class PomPropertiesUtil {
         }
     }
 
-    private boolean sameContents(Properties props, Path file) throws IOException {
-        if (!Files.isRegularFile(file)) {
-            return false;
-        }
-
-        Properties fileProps = loadPropertiesFile(file);
-        return fileProps.equals(props);
-    }
-
-    private void createPropertiesFile(Properties properties, Path outputFile, boolean forceCreation)
-            throws IOException {
+    private void createPropertiesFile(Properties properties, Path outputFile) throws IOException {
         Path outputDir = outputFile.getParent();
-        if (outputDir != null && !Files.isDirectory(outputDir)) {
+        if (outputDir != null) {
             Files.createDirectories(outputDir);
         }
-        if (!forceCreation && sameContents(properties, outputFile)) {
-            return;
-        }
-
-        try (PrintWriter pw = new PrintWriter(outputFile.toFile(), StandardCharsets.ISO_8859_1.name());
-                StringWriter sw = new StringWriter()) {
-
-            properties.store(sw, null);
-
-            List<String> lines = new ArrayList<>();
-            try (BufferedReader r = new BufferedReader(new StringReader(sw.toString()))) {
-                String line;
-                while ((line = r.readLine()) != null) {
-                    if (!line.startsWith("#")) {
-                        lines.add(line);
-                    }
-                }
-            }
-
-            Collections.sort(lines);
-            for (String l : lines) {
-                pw.println(l);
-            }
+        // For reproducible builds, sort the properties and drop comments.
+        // The java.util.Properties class doesn't guarantee order so we have
+        // to write the file using a Writer.
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        properties.store(baos, null);
+        // The encoding can be either UTF-8 or ISO-8859-1, as any non ascii character
+        // is transformed into a \\uxxxx sequence anyway
+        String output = baos.toString(StandardCharsets.ISO_8859_1)
+                .lines()
+                .filter(line -> !line.startsWith("#"))
+                .sorted()
+                .collect(Collectors.joining("\n", "", "\n")); // system independent new line
+        try (Writer writer = new CachingWriter(outputFile, StandardCharsets.ISO_8859_1)) {
+            writer.write(output);
         }
     }
 
     /**
      * Creates the pom.properties file.
      *
-     * @param session {@link org.apache.maven.api.Session}
      * @param project {@link org.apache.maven.api.Project}
      * @param archiver {@link org.codehaus.plexus.archiver.Archiver}
      * @param customPomPropertiesFile optional custom pom properties file
      * @param pomPropertiesFile The pom properties file.
-     * @param forceCreation force creation true/false
      * @throws org.codehaus.plexus.archiver.ArchiverException archiver exception.
      * @throws java.io.IOException IO exception.
      */
     public void createPomProperties(
-            Session session,
-            Project project,
-            Archiver archiver,
-            Path customPomPropertiesFile,
-            Path pomPropertiesFile,
-            boolean forceCreation)
+            Project project, Archiver archiver, Path customPomPropertiesFile, Path pomPropertiesFile)
             throws IOException {
         final String groupId = project.getGroupId();
         final String artifactId = project.getArtifactId();
         final String version = project.getVersion();
-        createPomProperties(
-                session,
-                groupId,
-                artifactId,
-                version,
-                archiver,
-                customPomPropertiesFile,
-                pomPropertiesFile,
-                forceCreation);
+        createPomProperties(groupId, artifactId, version, archiver, customPomPropertiesFile, pomPropertiesFile);
     }
 
-    // CHECKSTYLE_OFF: ParameterNumber
     public void createPomProperties(
-            Session session,
             String groupId,
             String artifactId,
             String version,
             Archiver archiver,
             Path customPomPropertiesFile,
-            Path pomPropertiesFile,
-            boolean forceCreation)
-            // CHECKSTYLE_ON
+            Path pomPropertiesFile)
             throws IOException {
         Properties p;
 
@@ -153,7 +111,7 @@ public class PomPropertiesUtil {
 
         p.setProperty("version", version);
 
-        createPropertiesFile(p, pomPropertiesFile, forceCreation);
+        createPropertiesFile(p, pomPropertiesFile);
 
         archiver.addFile(
                 pomPropertiesFile.toFile(), "META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties");

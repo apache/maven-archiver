@@ -540,14 +540,7 @@ public class MavenArchiver {
 
             new PomPropertiesUtil()
                     .createPomProperties(
-                            session,
-                            groupId,
-                            artifactId,
-                            version,
-                            archiver,
-                            customPomPropertiesFile,
-                            pomPropertiesFile,
-                            forced);
+                            groupId, artifactId, version, archiver, customPomPropertiesFile, pomPropertiesFile);
         }
 
         // ----------------------------------------------------------------------
