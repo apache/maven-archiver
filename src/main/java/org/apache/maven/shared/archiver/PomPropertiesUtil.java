@@ -60,13 +60,13 @@ public class PomPropertiesUtil {
         properties.store(baos, null);
         // The encoding can be either UTF-8 or ISO-8859-1, as any non ascii character
         // is transformed into a \\uxxxx sequence anyway
-        String output = baos.toString(StandardCharsets.UTF_8)
+        String output = baos.toString(StandardCharsets.ISO_8859_1)
                 .lines()
                 .filter(line -> !line.startsWith("#"))
                 .sorted()
                 .collect(Collectors.joining("\n", "", "\n")); // system independent new line
-        try (Writer pw = new CachingWriter(outputFile, StandardCharsets.UTF_8)) {
-            pw.write(output);
+        try (Writer writer = new CachingWriter(outputFile, StandardCharsets.ISO_8859_1)) {
+            writer.write(output);
         }
     }
 
