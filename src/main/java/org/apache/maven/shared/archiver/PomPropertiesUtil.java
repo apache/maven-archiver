@@ -79,29 +79,59 @@ public class PomPropertiesUtil {
 
         try (Writer out = Files.newBufferedWriter(outputFile, StandardCharsets.ISO_8859_1)) {
             for (String key : sortedPropertyNames) {
-                out.write(escape(key));
+                out.write(escapeKey(key));
                 out.write("=");
-                out.write(escape(unsortedProperties.getProperty(key)));
+                out.write(escapeValue(unsortedProperties.getProperty(key)));
                 out.write('\n');
             }
         }
     }
 
-    private static String escape(String s) {
+    private static String escapeKey(String s) {
         StringBuilder sb = new StringBuilder(s.length());
         for (char c : s.toCharArray()) {
-            if (Character.isWhitespace(c) || c == '#' || c == '!' || c == '=' || c == ':') { // backslash escape
+            if (Character.isWhitespace(c)
+                    || c == '#'
+                    || c == '!'
+                    || c == '='
+                    || c == ':'
+                    || c == '\\') { // backslash escape
                 sb.append('\\');
                 sb.append(c);
             } else if (c < 256) { // 8859-1
                 sb.append(c);
             } else {
-                sb.append("\\u");
-                String hexString = Integer.toHexString(c).toUpperCase(Locale.ENGLISH);
-                while (hexString.length() < 4) {
-                    hexString = '0' + hexString;
-                }
-                sb.append(hexString);
+                sb.append(hexEncode(c));
+            }
+        }
+        return sb.toString();
+    }
+
+    private static String hexEncode(char c) {
+        String hexString = "\\u" + Integer.toHexString(c).toUpperCase(Locale.ENGLISH);
+        while (hexString.length() < 4) {
+            hexString = '0' + hexString;
+        }
+        return hexString;
+    }
+
+    private static String escapeValue(String s) {
+        StringBuilder sb = new StringBuilder(s.length());
+        boolean atBeginning = true;
+        for (char c : s.toCharArray()) {
+            if (Character.isWhitespace(c) && atBeginning) {
+                sb.append('\\');
+                sb.append(c);
+            } else if (c == '#' || c == '!' || c == '=' || c == ':' || c == '\\') { // backslash escape
+                sb.append('\\');
+                sb.append(c);
+                atBeginning = false;
+            } else if (c < 256) { // 8859-1
+                sb.append(c);
+                atBeginning = false;
+            } else {
+                sb.append(hexEncode(c));
+                atBeginning = false;
             }
         }
         return sb.toString();

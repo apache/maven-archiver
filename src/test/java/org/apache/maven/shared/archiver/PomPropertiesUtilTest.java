@@ -89,6 +89,8 @@ class PomPropertiesUtilTest {
         Path customPomPropertiesFile = tempDirectory.resolve("custom.properties");
         try (Writer out = Files.newBufferedWriter(customPomPropertiesFile, StandardCharsets.ISO_8859_1)) {
             out.write("a\\u0020key\\u0020with\\u0009whitespace=value\\u0020with\\u0009whitespace\n");
+            out.write("zkey=value with \\\\ not at end of line\n");
+            out.write("ykey=\\tvalue with whitespace at beginning\n");
         }
 
         util.createPomProperties(
@@ -105,13 +107,17 @@ class PomPropertiesUtilTest {
         Properties actual = new Properties();
         actual.load(Files.newInputStream(pomPropertiesFile));
         assertEquals("value with\twhitespace", actual.getProperty("a key with\twhitespace"));
+        assertEquals("value with \\ not at end of line", actual.getProperty("zkey"));
+        assertEquals("\tvalue with whitespace at beginning", actual.getProperty("ykey"));
 
         // Now read the file directly to check for alphabetical order and encoding
         List<String> contents = Files.readAllLines(pomPropertiesFile, StandardCharsets.ISO_8859_1);
-        assertEquals(4, contents.size());
-        assertEquals("a\\ key\\ with\\\twhitespace=value\\ with\\\twhitespace", contents.get(0));
+        assertEquals(6, contents.size());
+        assertEquals("a\\ key\\ with\\\twhitespace=value with\twhitespace", contents.get(0));
         assertEquals("artifactId=\\u3053\\u3093\\u306B\\u3061\\u306F", contents.get(1));
         assertEquals("groupId=org.foo", contents.get(2));
         assertEquals("version=2.1.5", contents.get(3));
+        assertEquals("ykey=\\\tvalue with whitespace at beginning", contents.get(4));
+        assertEquals("zkey=value with \\\\ not at end of line", contents.get(5));
     }
 }
