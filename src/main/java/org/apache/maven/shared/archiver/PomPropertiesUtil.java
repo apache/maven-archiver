@@ -58,13 +58,14 @@ public class PomPropertiesUtil {
         // to write the file using a Writer.
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         properties.store(baos, null);
-        String nl = System.lineSeparator();
-        String output = baos.toString(StandardCharsets.ISO_8859_1)
+        // The encoding can be either UTF-8 or ISO-8859-1, as any non ascii character
+        // is transformed into a \\uxxxx sequence anyway
+        String output = baos.toString(StandardCharsets.UTF_8)
                 .lines()
                 .filter(line -> !line.startsWith("#"))
                 .sorted()
-                .collect(Collectors.joining(nl, "", nl));
-        try (Writer pw = new CachingWriter(outputFile, StandardCharsets.ISO_8859_1)) {
+                .collect(Collectors.joining("\n", "", "\n")); // system independent new line
+        try (Writer pw = new CachingWriter(outputFile, StandardCharsets.UTF_8)) {
             pw.write(output);
         }
     }
