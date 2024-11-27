@@ -19,6 +19,7 @@
 package org.apache.maven.shared.archiver;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -77,5 +78,42 @@ class PomPropertiesUtilTest {
         assertEquals("groupId=org.foo", contents.get(1));
         assertEquals("version=2.1.5", contents.get(2));
         assertEquals(3, contents.size());
+    }
+
+    @Test
+    void testWhitespaceEscape() throws IOException {
+        Path pomPropertiesFile = tempDirectory.resolve("bar.properties");
+        Path customPomPropertiesFile = tempDirectory.resolve("custom.properties");
+        try (Writer out = Files.newBufferedWriter(customPomPropertiesFile, StandardCharsets.ISO_8859_1)) {
+            out.write("a\\u0020key\\u0020with\\u0009whitespace=value\\u0020with\\u0009whitespace\n");
+            out.write("zkey=value with \\\\ not at end of line\n");
+            out.write("ykey=\\tvalue with tab at beginning\n");
+            out.write("xkey=\\ value with whitespace at beginning\n");
+            out.write("wkey=\\u00E9\\u00FC\\u00E5\n");
+        }
+
+        util.createPomProperties(
+                "org.foo", "こんにちは", "2.1.5", new JarArchiver(), customPomPropertiesFile, pomPropertiesFile);
+        assertThat(pomPropertiesFile).exists();
+
+        Properties actual = new Properties();
+        actual.load(Files.newInputStream(pomPropertiesFile));
+        assertEquals("value with\twhitespace", actual.getProperty("a key with\twhitespace"));
+        assertEquals("value with \\ not at end of line", actual.getProperty("zkey"));
+        assertEquals("\tvalue with tab at beginning", actual.getProperty("ykey"));
+        assertEquals(" value with whitespace at beginning", actual.getProperty("xkey"));
+        assertEquals("éüå", actual.getProperty("wkey"));
+
+        // Now read the file directly to check for alphabetical order and encoding
+        List<String> contents = Files.readAllLines(pomPropertiesFile, StandardCharsets.ISO_8859_1);
+        assertEquals(8, contents.size());
+        assertEquals("a\\ key\\ with\\twhitespace=value with\\twhitespace", contents.get(0));
+        assertEquals("artifactId=\\u3053\\u3093\\u306B\\u3061\\u306F", contents.get(1));
+        assertEquals("groupId=org.foo", contents.get(2));
+        assertEquals("version=2.1.5", contents.get(3));
+        assertEquals("wkey=\\u00E9\\u00FC\\u00E5", contents.get(4));
+        assertEquals("xkey=\\ value with whitespace at beginning", contents.get(5));
+        assertEquals("ykey=\\tvalue with tab at beginning", contents.get(6));
+        assertEquals("zkey=value with \\\\ not at end of line", contents.get(7));
     }
 }
