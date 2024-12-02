@@ -61,7 +61,7 @@
     <mavenPluginTestingVersion>4.0.0-beta-2</mavenPluginTestingVersion>
     <plexusArchiverVersion>4.10.0</plexusArchiverVersion>
     <plexusInterpolationVersion>1.27</plexusInterpolationVersion>
-    <plexusUtilsVersion>4.0.1</plexusUtilsVersion>
+    <plexusUtilsVersion>4.0.2</plexusUtilsVersion>
     <slf4jVersion>2.0.16</slf4jVersion>
     <mockitoVersion>4.6.1</mockitoVersion>
 
