@@ -61,7 +61,8 @@
     <mavenPluginTestingVersion>4.0.0-beta-2</mavenPluginTestingVersion>
     <plexusArchiverVersion>4.10.0</plexusArchiverVersion>
     <plexusInterpolationVersion>1.27</plexusInterpolationVersion>
-    <slf4jVersion>2.0.16</slf4jVersion>
+    <plexusUtilsVersion>4.0.2</plexusUtilsVersion>
+    <mockitoVersion>4.6.1</mockitoVersion>
 
     <project.build.outputTimestamp>2024-11-27T16:58:36Z</project.build.outputTimestamp>
   </properties>
@@ -80,11 +81,6 @@
       <artifactId>maven-api-model</artifactId>
       <version>${mavenVersion}</version>
     </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4jVersion}</version>
-    </dependency>
 
     <!--
       Plexus dependencies
@@ -99,6 +95,12 @@
       <artifactId>plexus-interpolation</artifactId>
       <version>${plexusInterpolationVersion}</version>
     </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>${plexusUtilsVersion}</version>
+    </dependency>
+
     <!--
       Test dependencies
     -->
@@ -115,14 +117,14 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-core</artifactId>
-      <version>${mavenVersion}</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>${versions.junit5}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
+      <artifactId>junit-jupiter-params</artifactId>
       <version>${versions.junit5}</version>
       <scope>test</scope>
     </dependency>
@@ -133,9 +135,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>${slf4jVersion}</version>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockitoVersion}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -149,6 +151,21 @@
           <configuration>
             <redirectTestOutputToFile>true</redirectTestOutputToFile>
           </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>analyze</id>
+              <goals>
+                <goal>analyze-only</goal>
+              </goals>
+              <configuration>
+                <failOnWarning>true</failOnWarning>
+              </configuration>
+            </execution>
+          </executions>
         </plugin>
       </plugins>
     </pluginManagement>
