@@ -62,7 +62,7 @@
     <plexusArchiverVersion>4.10.0</plexusArchiverVersion>
     <plexusInterpolationVersion>1.27</plexusInterpolationVersion>
     <plexusUtilsVersion>4.0.2</plexusUtilsVersion>
-    <mockitoVersion>4.6.1</mockitoVersion>
+    <mockitoVersion>5.0.0</mockitoVersion>
 
     <project.build.outputTimestamp>2024-11-27T16:58:36Z</project.build.outputTimestamp>
   </properties>
