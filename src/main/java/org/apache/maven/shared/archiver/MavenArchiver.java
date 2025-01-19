@@ -687,8 +687,10 @@ public class MavenArchiver {
             final Instant date = Instant.ofEpochSecond(Long.parseLong(outputTimestamp));
 
             if (date.isBefore(DATE_MIN) || date.isAfter(DATE_MAX)) {
-                throw new IllegalArgumentException(
-                        "'" + date + "' is not within the valid range " + DATE_MIN + " to " + DATE_MAX);
+                return Optional.of(DATE_MIN);
+                // TODO: Log a warning
+                //  throw new IllegalArgumentException(
+                //          "'" + date + "' is not within the valid range " + DATE_MIN + " to " + DATE_MAX);
             }
             return Optional.of(date);
         }
@@ -707,8 +709,10 @@ public class MavenArchiver {
                     .toInstant();
 
             if (date.isBefore(DATE_MIN) || date.isAfter(DATE_MAX)) {
-                throw new IllegalArgumentException(
-                        "'" + date + "' is not within the valid range " + DATE_MIN + " to " + DATE_MAX);
+                return Optional.of(DATE_MIN);
+                // TODO: Log a warning
+                //  throw new IllegalArgumentException(
+                //          "'" + date + "' is not within the valid range " + DATE_MIN + " to " + DATE_MAX);
             }
             return Optional.of(date);
         } catch (DateTimeParseException pe) {
