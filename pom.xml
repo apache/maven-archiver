@@ -57,7 +57,7 @@
     <javaVersion>17</javaVersion>
     <mavenVersion>4.0.0-beta-5</mavenVersion>
 
-    <assertjVersion>3.27.2</assertjVersion>
+    <assertjVersion>3.27.3</assertjVersion>
     <mavenPluginTestingVersion>4.0.0-beta-2</mavenPluginTestingVersion>
     <plexusArchiverVersion>4.10.0</plexusArchiverVersion>
     <plexusInterpolationVersion>1.27</plexusInterpolationVersion>
