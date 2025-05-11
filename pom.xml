@@ -40,8 +40,8 @@
     <url>https://github.com/apache/maven-archiver/tree/${project.scm.tag}</url>
   </scm>
   <issueManagement>
-    <system>jira</system>
-    <url>https://issues.apache.org/jira/issues/?jql=project%3DMSHARED+AND+component%3Dmaven-archiver</url>
+    <system>GitHub Issues</system>
+    <url>https://github.com/apache/maven-archiver/issues</url>
   </issueManagement>
   <ciManagement>
     <system>Jenkins</system>
