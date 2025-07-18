@@ -28,3 +28,11 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+  - package-ecosystem: "maven"
+    directory: "/"
+    target-branch: maven-archiver-3.x
+    schedule:
+      interval: "daily"
+    ignore:
+      # Ignore Maven Core updates
+      - dependency-name: "org.apache.maven:*"
