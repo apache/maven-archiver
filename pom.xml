@@ -150,6 +150,9 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <configuration>
             <redirectTestOutputToFile>true</redirectTestOutputToFile>
+            <excludedEnvironmentVariables>
+              <excludedEnvironmentVariable>SOURCE_DATE_EPOCH</excludedEnvironmentVariable>
+            </excludedEnvironmentVariables>
           </configuration>
         </plugin>
         <plugin>
