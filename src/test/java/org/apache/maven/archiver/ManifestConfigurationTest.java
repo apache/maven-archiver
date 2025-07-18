@@ -33,7 +33,7 @@ class ManifestConfigurationTest {
     }
 
     @Test
-    void XXX() {
+    void classpathLayouttTypeSimple() {
         assertThat(manifestConfiguration.getClasspathLayoutType())
                 .isEqualTo(ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_SIMPLE);
     }

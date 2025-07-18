@@ -77,10 +77,6 @@ class MavenArchiverTest {
         public int compare(Artifact o1, Artifact o2) {
             return o1.getArtifactId().compareTo(o2.getArtifactId());
         }
-
-        public boolean equals(Object o) {
-            return false;
-        }
     }
 
     @ParameterizedTest
@@ -324,7 +320,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testDashesInClassPath_MSHARED_134() throws Exception {
+    void testDashesInClassPathMSHARED134() throws Exception {
         File jarFile = new File("target/test/dummyWithDashes.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -352,7 +348,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testDashesInClassPath_MSHARED_182() throws Exception {
+    void testDashesInClassPathMSHARED182() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
         MavenArchiver archiver = getMavenArchiver(jarArchiver);
@@ -630,7 +626,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testDefaultClassPathValue_WithSnapshot() throws Exception {
+    void testDefaultClassPathValueWithSnapshot() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProjectWithSnapshot();
         File jarFile = new File("target/test/dummy.jar");
@@ -908,7 +904,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testMavenRepoClassPathValue_WithSnapshot() throws Exception {
+    void testMavenRepoClassPathValueWithSnapshot() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProjectWithSnapshot();
         File jarFile = new File("target/test/dummy.jar");
@@ -985,7 +981,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testCustomClassPathValue_WithSnapshotResolvedVersion() throws Exception {
+    void testCustomClassPathValueWithSnapshotResolvedVersion() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProjectWithSnapshot();
         File jarFile = new File("target/test/dummy.jar");
@@ -1024,7 +1020,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testCustomClassPathValue_WithSnapshotForcingBaseVersion() throws Exception {
+    void testCustomClassPathValueWithSnapshotForcingBaseVersion() throws Exception {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProjectWithSnapshot();
         File jarFile = new File("target/test/dummy.jar");
