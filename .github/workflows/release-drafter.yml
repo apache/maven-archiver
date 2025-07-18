@@ -20,6 +20,7 @@ on:
   push:
     branches:
       - master
+      - maven-archiver-3.x
   workflow_dispatch:
 
 jobs:
