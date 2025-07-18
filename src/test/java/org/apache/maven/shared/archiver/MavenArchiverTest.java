@@ -42,7 +42,13 @@ import java.util.jar.Manifest;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 
-import org.apache.maven.api.*;
+import org.apache.maven.api.Dependency;
+import org.apache.maven.api.DependencyCoordinates;
+import org.apache.maven.api.DependencyScope;
+import org.apache.maven.api.PathScope;
+import org.apache.maven.api.Project;
+import org.apache.maven.api.Session;
+import org.apache.maven.api.Type;
 import org.apache.maven.api.model.Build;
 import org.apache.maven.api.model.Model;
 import org.apache.maven.api.model.Organization;
@@ -239,7 +245,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testDashesInClassPath_MSHARED_134() {
+    void testDashesInClassPathMSHARED134() {
         File jarFile = new File("target/test/dummyWithDashes.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -265,7 +271,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testDashesInClassPath_MSHARED_182() throws IOException {
+    void testDashesInClassPathMSHARED182() throws IOException {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
         MavenArchiver archiver = getMavenArchiver(jarArchiver);
@@ -527,7 +533,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testDefaultClassPathValue_WithSnapshot() throws Exception {
+    void testDefaultClassPathValueWithSnapshot() throws Exception {
         Project project = getDummyProjectWithSnapshot();
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
@@ -797,7 +803,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testMavenRepoClassPathValue_WithSnapshot() throws Exception {
+    void testMavenRepoClassPathValueWithSnapshot() throws Exception {
         Project project = getDummyProjectWithSnapshot();
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
@@ -872,7 +878,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testCustomClassPathValue_WithSnapshotResolvedVersion() throws Exception {
+    void testCustomClassPathValueWithSnapshotResolvedVersion() throws Exception {
         Project project = getDummyProjectWithSnapshot();
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
@@ -910,7 +916,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testCustomClassPathValue_WithSnapshotForcingBaseVersion() throws Exception {
+    void testCustomClassPathValueWithSnapshotForcingBaseVersion() throws Exception {
         Project project = getDummyProjectWithSnapshot();
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
