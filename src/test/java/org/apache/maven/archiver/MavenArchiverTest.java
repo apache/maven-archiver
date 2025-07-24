@@ -559,8 +559,36 @@ class MavenArchiverTest {
     }
 
     /*
-     * Test to make sure that manifest sections are present in the manifest prior to the archive has been created.
+     * Test to make sure that empty Automatic-Module-Name will result in no
+     * Automatic-Module-Name attribute at all, but that the archive will be created.
      */
+    @Test
+    void testManifestWithEmptyAutomaticModuleName() throws Exception {
+        File jarFile = new File("target/test/dummy.jar");
+        JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
+
+        MavenArchiver archiver = getMavenArchiver(jarArchiver);
+
+        MavenSession session = getDummySession();
+        MavenProject project = getDummyProject();
+        MavenArchiveConfiguration config = new MavenArchiveConfiguration();
+
+        Map<String, String> manifestEntries = new HashMap<>();
+        manifestEntries.put("Automatic-Module-Name", "");
+        config.setManifestEntries(manifestEntries);
+
+        archiver.createArchive(session, project, config);
+        assertThat(jarFile).exists();
+
+        final Manifest jarFileManifest = getJarFileManifest(jarFile);
+        Attributes manifest = jarFileManifest.getMainAttributes();
+
+        assertThat(manifest).doesNotContainKey(new Attributes.Name("Automatic-Module-Name"));
+    }
+
+    //
+    // Test to make sure that manifest sections are present in the manifest prior to the archive has been created.
+    //
     @Test
     void testManifestSections() throws Exception {
         MavenArchiver archiver = new MavenArchiver();
