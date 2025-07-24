@@ -677,9 +677,15 @@ public class MavenArchiver {
      *             section 4.4.6.
      */
     public static Optional<Instant> parseBuildOutputTimestamp(String outputTimestamp) {
-        // Fail-fast on nulls
-        if (outputTimestamp == null) {
-            return Optional.empty();
+        final String sourceDateEpoch = System.getenv("SOURCE_DATE_EPOCH");
+        // Fail fast on null and no timestamp configured (1 character configuration is useful to override
+        // a full value during pom inheritance)
+        if (outputTimestamp == null || (outputTimestamp.length() < 2 && !isNumeric(outputTimestamp))) {
+            if (sourceDateEpoch == null) {
+                return Optional.empty();
+            } else {
+                outputTimestamp = sourceDateEpoch;
+            }
         }
 
         // Number representing seconds since the epoch
@@ -691,12 +697,6 @@ public class MavenArchiver {
                         "'" + date + "' is not within the valid range " + DATE_MIN + " to " + DATE_MAX);
             }
             return Optional.of(date);
-        }
-
-        // no timestamp configured (1 character configuration is useful to override a full value during pom
-        // inheritance)
-        if (outputTimestamp.length() < 2) {
-            return Optional.empty();
         }
 
         try {
