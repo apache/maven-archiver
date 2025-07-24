@@ -566,7 +566,9 @@ public class MavenArchiver {
         }
         String automaticModuleName = manifest.getMainSection().getAttributeValue("Automatic-Module-Name");
         if (automaticModuleName != null) {
-            if (!isValidModuleName(automaticModuleName)) {
+            if (automaticModuleName.isEmpty()) {
+                manifest.getMainSection().removeAttribute("Automatic-Module-Name");
+            } else if (!isValidModuleName(automaticModuleName)) {
                 throw new ManifestException("Invalid automatic module name: '" + automaticModuleName + "'");
             }
         }
