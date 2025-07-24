@@ -66,7 +66,6 @@ import static org.apache.maven.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_T
  *
  * @author <a href="evenisse@apache.org">Emmanuel Venisse</a>
  * @author kama
- * @version $Id: $Id
  */
 public class MavenArchiver {
 
@@ -745,6 +744,9 @@ public class MavenArchiver {
      * <p>Either as {@link java.time.format.DateTimeFormatter#ISO_OFFSET_DATE_TIME} or as a number representing seconds
      * since the epoch (like <a href="https://reproducible-builds.org/docs/source-date-epoch/">SOURCE_DATE_EPOCH</a>).
      *
+     * <p>Since 3.6.4, if not configured or disabled, the {@code SOURCE_DATE_EPOCH} environment variable is used as
+     * a fallback value, to ease forcing Reproducible Build externally when the build has not enabled it natively in POM.
+     *
      * @param outputTimestamp the value of {@code ${project.build.outputTimestamp}} (may be {@code null})
      * @return the parsed timestamp as an {@code Optional<Instant>}, {@code empty} if input is {@code null} or input
      *         contains only 1 character (not a number)
@@ -753,16 +755,17 @@ public class MavenArchiver {
      *             the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z as defined by
      *             <a href="https://pkwaredownloads.blob.core.windows.net/pem/APPNOTE.txt">ZIP application note</a>,
      *             section 4.4.6.
+     * @see <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=74682318">Maven Wiki "Reproducible/Verifiable
+     *      Builds"</a>
      */
     public static Optional<Instant> parseBuildOutputTimestamp(String outputTimestamp) {
-        final String sourceDateEpoch = System.getenv("SOURCE_DATE_EPOCH");
         // Fail fast on null and no timestamp configured (1 character configuration is useful to override
         // a full value during pom inheritance)
         if (outputTimestamp == null || (outputTimestamp.length() < 2 && !isNumeric(outputTimestamp))) {
-            if (sourceDateEpoch == null) {
+            // Reproducible Builds not configured or disabled => fallback to SOURCE_DATE_EPOCH env
+            outputTimestamp = System.getenv("SOURCE_DATE_EPOCH");
+            if (outputTimestamp == null) {
                 return Optional.empty();
-            } else {
-                outputTimestamp = sourceDateEpoch;
             }
         }
 
@@ -796,7 +799,6 @@ public class MavenArchiver {
     }
 
     private static boolean isNumeric(String str) {
-
         if (str.isEmpty()) {
             return false;
         }
