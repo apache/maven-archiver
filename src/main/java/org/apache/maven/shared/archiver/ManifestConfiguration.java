@@ -241,12 +241,12 @@ public class ManifestConfiguration {
     /**
      * <p>Getter for the field <code>classpathPrefix</code>.</p>
      *
-     * @return The classpath prefix.
+     * @return the classpath prefix
      */
     public String getClasspathPrefix() {
         String cpp = classpathPrefix.replaceAll("\\\\", "/");
 
-        if (cpp.length() != 0 && !cpp.endsWith("/")) {
+        if (!cpp.endsWith("/")) {
             cpp += "/";
         }
 

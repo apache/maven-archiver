@@ -453,7 +453,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testManifestWithInvalidAutomaticModuleNameThrowsOnCreateArchive() throws Exception {
+    void testManifestWithInvalidAutomaticModuleNameThrowsOnCreateArchive() {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -504,7 +504,7 @@ class MavenArchiverTest {
     // Test to make sure that manifest sections are present in the manifest prior to the archive has been created.
     //
     @Test
-    void testManifestSections() throws Exception {
+    void testManifestSections() {
         MavenArchiver archiver = new MavenArchiver();
 
         Project project = getDummyProject();
