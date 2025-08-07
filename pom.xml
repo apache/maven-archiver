@@ -34,9 +34,8 @@
   <description>Provides utility methods for creating JARs and other archive files from a Maven project.</description>
 
   <scm>
-    <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-archiver.git</connection>
-    <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-archiver.git</developerConnection>
-    <tag>HEAD</tag>
+    <connection>scm:git:https://github.com/apache/maven-archiver.git</connection>
+    <developerConnection>scm:git:https://github.com/apache/maven-archiver.git</developerConnection>
     <url>https://github.com/apache/maven-archiver/tree/${project.scm.tag}</url>
   </scm>
   <issueManagement>
