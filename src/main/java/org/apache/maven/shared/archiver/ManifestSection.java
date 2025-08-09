@@ -33,8 +33,8 @@ public class ManifestSection {
     /**
      * <p>addManifestEntry.</p>
      *
-     * @param key The key of the manifest entry.
-     * @param value The appropriate value.
+     * @param key the key of the manifest entry
+     * @param value the appropriate value
      */
     public void addManifestEntry(String key, String value) {
         manifestEntries.put(key, value);
@@ -43,7 +43,7 @@ public class ManifestSection {
     /**
      * <p>Getter for the field <code>manifestEntries</code>.</p>
      *
-     * @return The entries.
+     * @return the entries
      */
     public Map<String, String> getManifestEntries() {
         return manifestEntries;
@@ -52,7 +52,7 @@ public class ManifestSection {
     /**
      * <p>Getter for the field <code>name</code>.</p>
      *
-     * @return The name.
+     * @return the name
      */
     public String getName() {
         return name;
@@ -61,7 +61,7 @@ public class ManifestSection {
     /**
      * <p>Setter for the field <code>name</code>.</p>
      *
-     * @param name the name.
+     * @param name the name
      */
     public void setName(String name) {
         this.name = name;
@@ -70,7 +70,7 @@ public class ManifestSection {
     /**
      * <p>addManifestEntries.</p>
      *
-     * @param map The map to add.
+     * @param map the map to add
      */
     public void addManifestEntries(Map<String, String> map) {
         manifestEntries.putAll(map);
@@ -79,7 +79,7 @@ public class ManifestSection {
     /**
      * <p>isManifestEntriesEmpty.</p>
      *
-     * @return true if empty false otherwise.
+     * @return true if empty false otherwise
      */
     public boolean isManifestEntriesEmpty() {
         return manifestEntries.isEmpty();

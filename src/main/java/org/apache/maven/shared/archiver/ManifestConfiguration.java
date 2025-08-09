@@ -23,6 +23,7 @@ package org.apache.maven.shared.archiver;
  */
 // TODO Is this general enough to be in Plexus Archiver?
 public class ManifestConfiguration {
+
     /**
      * The simple layout.
      */
@@ -34,7 +35,7 @@ public class ManifestConfiguration {
     public static final String CLASSPATH_LAYOUT_TYPE_REPOSITORY = "repository";
 
     /**
-     * custom layout type.
+     * Custom layout type.
      */
     public static final String CLASSPATH_LAYOUT_TYPE_CUSTOM = "custom";
 
@@ -97,7 +98,7 @@ public class ManifestConfiguration {
     /**
      * <p>Getter for the field <code>packageName</code>.</p>
      *
-     * @return the package name.
+     * @return the package name
      */
     public String getPackageName() {
         return packageName;
@@ -106,7 +107,7 @@ public class ManifestConfiguration {
     /**
      * <p>isAddClasspath.</p>
      *
-     * @return if addClasspath true or false.
+     * @return if addClasspath true or false
      */
     public boolean isAddClasspath() {
         return addClasspath;
@@ -160,7 +161,7 @@ public class ManifestConfiguration {
     /**
      * <p>Setter for the field <code>addClasspath</code>.</p>
      *
-     * @param addClasspath turn on addClasspath or off.
+     * @param addClasspath turn on addClasspath or off
      */
     public void setAddClasspath(boolean addClasspath) {
         this.addClasspath = addClasspath;
@@ -169,7 +170,7 @@ public class ManifestConfiguration {
     /**
      * <p>Setter for the field <code>addDefaultEntries</code>.</p>
      *
-     * @param addDefaultEntries add default entries true/false.
+     * @param addDefaultEntries add default entries true/false
      */
     public void setAddDefaultEntries(boolean addDefaultEntries) {
         this.addDefaultEntries = addDefaultEntries;
@@ -178,7 +179,7 @@ public class ManifestConfiguration {
     /**
      * <p>Setter for the field <code>addBuildEnvironmentEntries</code>.</p>
      *
-     * @param addBuildEnvironmentEntries add build environment information true/false.
+     * @param addBuildEnvironmentEntries add build environment information true/false
      */
     public void setAddBuildEnvironmentEntries(boolean addBuildEnvironmentEntries) {
         this.addBuildEnvironmentEntries = addBuildEnvironmentEntries;
@@ -187,7 +188,7 @@ public class ManifestConfiguration {
     /**
      * <p>Setter for the field <code>addDefaultImplementationEntries</code>.</p>
      *
-     * @param addDefaultImplementationEntries true to add default implementations false otherwise.
+     * @param addDefaultImplementationEntries true to add default implementations false otherwise
      */
     public void setAddDefaultImplementationEntries(boolean addDefaultImplementationEntries) {
         this.addDefaultImplementationEntries = addDefaultImplementationEntries;
@@ -196,7 +197,7 @@ public class ManifestConfiguration {
     /**
      * <p>Setter for the field <code>addDefaultSpecificationEntries</code>.</p>
      *
-     * @param addDefaultSpecificationEntries add default specifications true/false.
+     * @param addDefaultSpecificationEntries add default specifications true/false
      */
     public void setAddDefaultSpecificationEntries(boolean addDefaultSpecificationEntries) {
         this.addDefaultSpecificationEntries = addDefaultSpecificationEntries;
@@ -205,7 +206,7 @@ public class ManifestConfiguration {
     /**
      * <p>Setter for the field <code>addExtensions</code>.</p>
      *
-     * @param addExtensions true to add extensions false otherwise.
+     * @param addExtensions true to add extensions false otherwise
      */
     public void setAddExtensions(boolean addExtensions) {
         this.addExtensions = addExtensions;
@@ -214,7 +215,7 @@ public class ManifestConfiguration {
     /**
      * <p>Setter for the field <code>classpathPrefix</code>.</p>
      *
-     * @param classpathPrefix The prefix.
+     * @param classpathPrefix the prefix
      */
     public void setClasspathPrefix(String classpathPrefix) {
         this.classpathPrefix = classpathPrefix;
@@ -223,7 +224,7 @@ public class ManifestConfiguration {
     /**
      * <p>Setter for the field <code>mainClass</code>.</p>
      *
-     * @param mainClass The main class.
+     * @param mainClass the main class
      */
     public void setMainClass(String mainClass) {
         this.mainClass = mainClass;
@@ -232,7 +233,7 @@ public class ManifestConfiguration {
     /**
      * <p>Setter for the field <code>packageName</code>.</p>
      *
-     * @param packageName The package name.
+     * @param packageName the package name
      */
     public void setPackageName(String packageName) {
         this.packageName = packageName;
@@ -241,15 +242,13 @@ public class ManifestConfiguration {
     /**
      * <p>Getter for the field <code>classpathPrefix</code>.</p>
      *
-     * @return The classpath prefix.
+     * @return the classpath prefix
      */
     public String getClasspathPrefix() {
         String cpp = classpathPrefix.replaceAll("\\\\", "/");
-
         if (cpp.length() != 0 && !cpp.endsWith("/")) {
             cpp += "/";
         }
-
         return cpp;
     }
 
@@ -261,7 +260,7 @@ public class ManifestConfiguration {
      * <b>NOTE:</b> If you specify a type of 'custom' you MUST set
      * {@link ManifestConfiguration#setCustomClasspathLayout(String)}.
      *
-     * @return The classpath layout type.
+     * @return the classpath layout type
      */
     public String getClasspathLayoutType() {
         return classpathLayoutType;
@@ -275,7 +274,7 @@ public class ManifestConfiguration {
      * <b>NOTE:</b> If you specify a type of 'custom' you MUST set
      * {@link ManifestConfiguration#setCustomClasspathLayout(String)}.
      *
-     * @param classpathLayoutType The classpath layout type.
+     * @param classpathLayoutType the classpath layout type
      */
     public void setClasspathLayoutType(String classpathLayoutType) {
         this.classpathLayoutType = classpathLayoutType;
@@ -293,7 +292,7 @@ public class ManifestConfiguration {
      * <br>
      * <b>NOTE:</b> If you specify a layout type of 'custom' you MUST set this layout expression.
      *
-     * @return The custom classpath layout.
+     * @return the custom classpath layout
      */
     public String getCustomClasspathLayout() {
         return customClasspathLayout;
@@ -319,7 +318,7 @@ public class ManifestConfiguration {
      * </ol>
      * how such an expression looks like.
      *
-     * @param customClasspathLayout The custom classpath layout.
+     * @param customClasspathLayout the custom classpath layout
      */
     public void setCustomClasspathLayout(String customClasspathLayout) {
         this.customClasspathLayout = customClasspathLayout;
@@ -332,7 +331,7 @@ public class ManifestConfiguration {
      * <b>NOTE:</b> If the snapshot was installed locally, this flag will not have an effect on
      * that artifact's inclusion, since it will have the same version either way (i.e. -SNAPSHOT naming).
      *
-     * @return The state of {@link #useUniqueVersions}
+     * @return the state of {@link #useUniqueVersions}
      */
     public boolean isUseUniqueVersions() {
         return useUniqueVersions;
@@ -345,7 +344,7 @@ public class ManifestConfiguration {
      * <b>NOTE:</b> If the snapshot was installed locally, this flag will not have an effect on that artifact's
      * inclusion, since it will have the same version either way (i.e. -SNAPSHOT naming).
      *
-     * @param useUniqueVersions true to use unique versions or not.
+     * @param useUniqueVersions true to use unique versions or not
      */
     public void setUseUniqueVersions(boolean useUniqueVersions) {
         this.useUniqueVersions = useUniqueVersions;

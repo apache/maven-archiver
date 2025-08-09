@@ -31,6 +31,7 @@ import java.util.Map;
  */
 // TODO Is this general enough to be in Plexus Archiver?
 public class MavenArchiveConfiguration {
+
     private boolean compress = true;
 
     private boolean recompressAddedZips = true;
@@ -117,7 +118,7 @@ public class MavenArchiveConfiguration {
     /**
      * <p>Setter for the field <code>compress</code>.</p>
      *
-     * @param compress set compress to true/false.
+     * @param compress set compress to true/false
      */
     public void setCompress(boolean compress) {
         this.compress = compress;
@@ -126,7 +127,7 @@ public class MavenArchiveConfiguration {
     /**
      * <p>Setter for the field <code>addMavenDescriptor</code>.</p>
      *
-     * @param addMavenDescriptor activate to add maven descriptor or not.
+     * @param addMavenDescriptor activate to add maven descriptor or not
      */
     public void setAddMavenDescriptor(boolean addMavenDescriptor) {
         this.addMavenDescriptor = addMavenDescriptor;
@@ -135,7 +136,7 @@ public class MavenArchiveConfiguration {
     /**
      * <p>Setter for the field <code>manifestFile</code>.</p>
      *
-     * @param manifestFile The manifest file.
+     * @param manifestFile the manifest file
      */
     public void setManifestFile(Path manifestFile) {
         this.manifestFile = manifestFile;
@@ -153,8 +154,8 @@ public class MavenArchiveConfiguration {
     /**
      * <p>addManifestEntry.</p>
      *
-     * @param key The key of the entry.
-     * @param value The value of the entry.
+     * @param key the key of the entry
+     * @param value the value of the entry
      */
     public void addManifestEntry(String key, String value) {
         manifestEntries.put(key, value);
@@ -163,7 +164,7 @@ public class MavenArchiveConfiguration {
     /**
      * <p>addManifestEntries.</p>
      *
-     * @param map The whole map which should be added.
+     * @param map the whole map which should be added
      */
     public void addManifestEntries(Map<String, String> map) {
         manifestEntries.putAll(map);
@@ -172,7 +173,7 @@ public class MavenArchiveConfiguration {
     /**
      * <p>isManifestEntriesEmpty.</p>
      *
-     * @return are there entries true yes false otherwise.
+     * @return are there entries true yes false otherwise
      */
     public boolean isManifestEntriesEmpty() {
         return manifestEntries.isEmpty();
@@ -208,7 +209,7 @@ public class MavenArchiveConfiguration {
     /**
      * <p>addManifestSections.</p>
      *
-     * @param list Added list of {@link ManifestSection}.
+     * @param list added list of {@link ManifestSection}
      */
     public void addManifestSections(List<ManifestSection> list) {
         manifestSections.addAll(list);
@@ -217,7 +218,7 @@ public class MavenArchiveConfiguration {
     /**
      * <p>isManifestSectionsEmpty.</p>
      *
-     * @return if manifestSections is empty or not.
+     * @return if manifestSections is empty or not
      */
     public boolean isManifestSectionsEmpty() {
         return manifestSections.isEmpty();
@@ -235,7 +236,7 @@ public class MavenArchiveConfiguration {
     /**
      * <p>Setter for the field <code>manifestSections</code>.</p>
      *
-     * @param manifestSections set The list of {@link ManifestSection}.
+     * @param manifestSections set The list of {@link ManifestSection}
      */
     public void setManifestSections(List<ManifestSection> manifestSections) {
         this.manifestSections = manifestSections;
@@ -255,7 +256,7 @@ public class MavenArchiveConfiguration {
      * ignored.
      * </p>
      *
-     * @return True, if the target archive should always be created; false otherwise
+     * @return true, if the target archive should always be created; false otherwise
      * @see #setForced(boolean)
      */
     public boolean isForced() {
@@ -276,7 +277,7 @@ public class MavenArchiveConfiguration {
      * ignored.
      * </p>
      *
-     * @param forced True, if the target archive should always be created; false otherwise
+     * @param forced true, if the target archive should always be created; false otherwise
      * @see #isForced()
      */
     public void setForced(boolean forced) {
