@@ -16,6 +16,4 @@
 # under the License.
 
 _extends: maven-gh-actions-shared:.github/release-drafter.yml
-
-filter-by-commitish: true
-commitish: maven-archiver-3.x
+tag-template: maven-archiver-$RESOLVED_VERSION
