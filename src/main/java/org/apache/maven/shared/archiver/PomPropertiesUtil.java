@@ -76,7 +76,7 @@ public class PomPropertiesUtil {
      * @param project {@link org.apache.maven.api.Project}
      * @param archiver {@link org.codehaus.plexus.archiver.Archiver}
      * @param customPomPropertiesFile optional custom pom properties file
-     * @param pomPropertiesFile The pom properties file.
+     * @param pomPropertiesFile the pom properties file.
      * @throws org.codehaus.plexus.archiver.ArchiverException archiver exception.
      * @throws java.io.IOException IO exception.
      */

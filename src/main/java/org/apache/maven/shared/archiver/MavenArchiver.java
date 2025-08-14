@@ -85,7 +85,7 @@ public class MavenArchiver {
                     + "${artifact.version}${dashClassifier?}.${artifact.extension}";
 
     /**
-     * simple layout non unique.
+     * Simple layout non unique.
      */
     public static final String SIMPLE_LAYOUT_NONUNIQUE =
             "${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}";
@@ -228,7 +228,7 @@ public class MavenArchiver {
      * @param session {@link org.apache.maven.api.Session}
      * @param project {@link org.apache.maven.api.Project}
      * @param config  {@link ManifestConfiguration}
-     * @param entries The entries.
+     * @param entries the entries.
      * @return {@link org.codehaus.plexus.archiver.jar.Manifest}
      * @throws MavenArchiverException exception
      */
@@ -476,7 +476,7 @@ public class MavenArchiver {
     /**
      * <p>setOutputFile.</p>
      *
-     * @param outputFile Set output file.
+     * @param outputFile set output file.
      */
     public void setOutputFile(File outputFile) {
         archiveFile = outputFile;
@@ -488,7 +488,7 @@ public class MavenArchiver {
      * @param session              {@link org.apache.maven.api.Session}
      * @param project              {@link org.apache.maven.api.Project}
      * @param archiveConfiguration {@link MavenArchiveConfiguration}
-     * @throws MavenArchiverException Archiver Exception.
+     * @throws MavenArchiverException archiver Exception.
      */
     public void createArchive(Session session, Project project, MavenArchiveConfiguration archiveConfiguration)
             throws MavenArchiverException {
@@ -665,23 +665,16 @@ public class MavenArchiver {
 
     /**
      * Parse output timestamp configured for Reproducible Builds' archive entries.
-     *
      * <p>Either as {@link java.time.format.DateTimeFormatter#ISO_OFFSET_DATE_TIME} or as a number representing seconds
      * since the epoch (like <a href="https://reproducible-builds.org/docs/source-date-epoch/">SOURCE_DATE_EPOCH</a>).
-     *
      * <p>Since 3.6.4, if not configured or disabled, the {@code SOURCE_DATE_EPOCH} environment variable is used as
      * a fallback value, to ease forcing Reproducible Build externally when the build has not enabled it natively in POM.
      *
      * @param outputTimestamp the value of {@code ${project.build.outputTimestamp}} (may be {@code null})
      * @return the parsed timestamp as an {@code Optional<Instant>}, {@code empty} if input is {@code null} or input
-     *         contains only 1 character (not a number)
      * @since 3.6.0
      * @throws IllegalArgumentException if the outputTimestamp is neither ISO 8601 nor an integer, or it's not within
-     *             the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z as defined by
-     *             <a href="https://pkwaredownloads.blob.core.windows.net/pem/APPNOTE.txt">ZIP application note</a>,
-     *             section 4.4.6.
      * @see <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=74682318">Maven Wiki "Reproducible/Verifiable
-     *      Builds"</a>
      */
     public static Optional<Instant> parseBuildOutputTimestamp(String outputTimestamp) {
         // Fail fast on null and no timestamp configured (1 character configuration is useful to override
