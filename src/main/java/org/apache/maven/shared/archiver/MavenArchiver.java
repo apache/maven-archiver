@@ -85,7 +85,7 @@ public class MavenArchiver {
                     + "${artifact.version}${dashClassifier?}.${artifact.extension}";
 
     /**
-     * simple layout non unique.
+     * Simple layout non unique.
      */
     public static final String SIMPLE_LAYOUT_NONUNIQUE =
             "${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}";
@@ -190,7 +190,7 @@ public class MavenArchiver {
      * @param project {@link org.apache.maven.api.Project}
      * @param config  {@link ManifestConfiguration}
      * @return {@link org.codehaus.plexus.archiver.jar.Manifest}
-     * @throws MavenArchiverException exception.
+     * @throws MavenArchiverException exception
      */
     // TODO Add user attributes list and user groups list
     public Manifest getManifest(Project project, ManifestConfiguration config) throws MavenArchiverException {
@@ -228,7 +228,7 @@ public class MavenArchiver {
      * @param session {@link org.apache.maven.api.Session}
      * @param project {@link org.apache.maven.api.Project}
      * @param config  {@link ManifestConfiguration}
-     * @param entries The entries.
+     * @param entries the entries
      * @return {@link org.codehaus.plexus.archiver.jar.Manifest}
      * @throws MavenArchiverException exception
      */
@@ -476,7 +476,7 @@ public class MavenArchiver {
     /**
      * <p>setOutputFile.</p>
      *
-     * @param outputFile Set output file.
+     * @param outputFile set output file
      */
     public void setOutputFile(File outputFile) {
         archiveFile = outputFile;
@@ -488,7 +488,7 @@ public class MavenArchiver {
      * @param session              {@link org.apache.maven.api.Session}
      * @param project              {@link org.apache.maven.api.Project}
      * @param archiveConfiguration {@link MavenArchiveConfiguration}
-     * @throws MavenArchiverException Archiver Exception.
+     * @throws MavenArchiverException archiver Exception
      */
     public void createArchive(Session session, Project project, MavenArchiveConfiguration archiveConfiguration)
             throws MavenArchiverException {
@@ -679,7 +679,7 @@ public class MavenArchiver {
      * @throws IllegalArgumentException if the outputTimestamp is neither ISO 8601 nor an integer, or it's not within
      *             the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z as defined by
      *             <a href="https://pkwaredownloads.blob.core.windows.net/pem/APPNOTE.txt">ZIP application note</a>,
-     *             section 4.4.6.
+     *             section 4.4.6
      * @see <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=74682318">Maven Wiki "Reproducible/Verifiable
      *      Builds"</a>
      */
