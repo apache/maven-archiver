@@ -59,7 +59,7 @@
 
     <assertjVersion>3.27.3</assertjVersion>
     <mavenPluginTestingVersion>4.0.0-beta-4</mavenPluginTestingVersion>
-    <plexusArchiverVersion>4.10.0</plexusArchiverVersion>
+    <plexusArchiverVersion>4.10.1</plexusArchiverVersion>
     <plexusInterpolationVersion>1.28</plexusInterpolationVersion>
     <plexusUtilsVersion>4.0.2</plexusUtilsVersion>
     <mockitoVersion>5.0.0</mockitoVersion>
