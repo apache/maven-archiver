@@ -252,7 +252,7 @@ public class MavenArchiver {
         Manifest m = new Manifest();
 
         if (config.isAddDefaultEntries()) {
-            handleDefaultEntries(m, entries);
+            handleDefaultEntries(project, m, entries);
         }
 
         if (config.isAddBuildEnvironmentEntries()) {
@@ -607,12 +607,17 @@ public class MavenArchiver {
         archiver.createArchive();
     }
 
-    private void handleDefaultEntries(Manifest m, Map<String, String> entries) throws ManifestException {
+    private void handleDefaultEntries(MavenProject project, Manifest m, Map<String, String> entries)
+            throws ManifestException {
         String createdBy = this.createdBy;
         if (createdBy == null) {
             createdBy = createdBy(CREATED_BY, "org.apache.maven", "maven-archiver");
         }
         addManifestAttribute(m, entries, "Created-By", createdBy);
+        String javaVersion = BuildHelper.discoverJavaRelease(project);
+        if (javaVersion != null) {
+            addManifestAttribute(m, entries, "Java-Version", javaVersion);
+        }
         if (buildJdkSpecDefaultEntry) {
             addManifestAttribute(m, entries, "Build-Jdk-Spec", System.getProperty("java.specification.version"));
         }
