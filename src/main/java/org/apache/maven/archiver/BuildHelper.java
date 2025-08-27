@@ -28,7 +28,7 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 /**
  * Helper to detect info about build info in a MavenProject, as configured in plugins.
- * 
+ *
  * @since 3.6.5
  */
 public class BuildHelper {
@@ -53,15 +53,17 @@ public class BuildHelper {
             jdk = getPluginParameter(project, compiler, "target", "maven.compiler.target");
         }
 
-        if (jdk != null) {
-            jdk = normalizeJavaVersion(jdk);
-        }
-
-        return jdk;
+        return normalizeJavaVersion(jdk);
     }
 
+    /**
+     * Normalize Java version, for versions 5 to 8 where there is a 1.x alias.
+     *
+     * @param jdk can be null
+     * @return normalized version if an alias was used
+     */
     public static String normalizeJavaVersion(String jdk) {
-        if (jdk.length() == 3 && Arrays.asList("1.5", "1.6", "1.7", "1.8").contains(jdk)) {
+        if (jdk != null && jdk.length() == 3 && Arrays.asList("1.5", "1.6", "1.7", "1.8").contains(jdk)) {
             jdk = jdk.substring(2);
         }
         return jdk;
@@ -71,6 +73,13 @@ public class BuildHelper {
         return getPlugin(project, "org.apache.maven.plugins:maven-compiler-plugin");
     }
 
+    /**
+     * Get plugin from project based on coordinates {@code groupId:artifactId}.
+     *
+     * @param project not null
+     * @param pluginGa {@code groupId:artifactId}
+     * @return the plugin from build or pluginManagement, if available in project
+     */
     public static Plugin getPlugin(MavenProject project, String pluginGa) {
         Plugin plugin = getPlugin(project.getBuild(), pluginGa);
         if (plugin == null) {
@@ -79,6 +88,15 @@ public class BuildHelper {
         return plugin;
     }
 
+    /**
+     * Get plugin parameter value if configured in current project.
+     *
+     * @param project not null
+     * @param plugin can be null
+     * @param parameter the parameter name when configured in plugin's configuration
+     * @param defaultValueProperty the property name when default value is used for the plugin parameter
+     * @return the value, or null if not configured at all, but using internal default from plugin.
+     */
     public static String getPluginParameter(
             MavenProject project, Plugin plugin, String parameter, String defaultValueProperty) {
         String value = getPluginParameter(plugin, parameter);
