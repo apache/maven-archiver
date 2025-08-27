@@ -63,7 +63,9 @@ public class BuildHelper {
      * @return normalized version if an alias was used
      */
     public static String normalizeJavaVersion(String jdk) {
-        if (jdk != null && jdk.length() == 3 && Arrays.asList("1.5", "1.6", "1.7", "1.8").contains(jdk)) {
+        if (jdk != null
+                && jdk.length() == 3
+                && Arrays.asList("1.5", "1.6", "1.7", "1.8").contains(jdk)) {
             jdk = jdk.substring(2);
         }
         return jdk;
