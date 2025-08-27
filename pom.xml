@@ -81,6 +81,11 @@
       <artifactId>maven-api-model</artifactId>
       <version>${mavenVersion}</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-api-xml</artifactId>
+      <version>${mavenVersion}</version>
+    </dependency>
 
     <!--
       Plexus dependencies
@@ -100,7 +105,6 @@
       <artifactId>plexus-utils</artifactId>
       <version>${plexusUtilsVersion}</version>
     </dependency>
-
     <!--
       Test dependencies
     -->
