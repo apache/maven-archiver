@@ -56,14 +56,6 @@
   <properties>
     <javaVersion>17</javaVersion>
     <mavenVersion>4.0.0-rc-4</mavenVersion>
-
-    <assertjVersion>3.27.4</assertjVersion>
-    <mavenPluginTestingVersion>4.0.0-beta-4</mavenPluginTestingVersion>
-    <plexusArchiverVersion>4.10.1</plexusArchiverVersion>
-    <plexusInterpolationVersion>1.28</plexusInterpolationVersion>
-    <plexusUtilsVersion>4.0.2</plexusUtilsVersion>
-    <mockitoVersion>5.0.0</mockitoVersion>
-
     <project.build.outputTimestamp>2025-08-07T11:11:03Z</project.build.outputTimestamp>
   </properties>
 
@@ -93,25 +85,25 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-archiver</artifactId>
-      <version>${plexusArchiverVersion}</version>
+      <version>4.10.1</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-interpolation</artifactId>
-      <version>${plexusInterpolationVersion}</version>
+      <version>1.28</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>${plexusUtilsVersion}</version>
+      <version>3.6.0</version>
     </dependency>
     <!--
       Test dependencies
     -->
     <dependency>
-      <groupId>org.apache.maven.plugin-testing</groupId>
-      <artifactId>maven-plugin-testing-harness</artifactId>
-      <version>${mavenPluginTestingVersion}</version>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-testing</artifactId>
+      <version>${mavenVersion}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -123,25 +115,23 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>${versions.junit5}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
-      <version>${versions.junit5}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>${assertjVersion}</version>
+      <version>3.27.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>${mockitoVersion}</version>
+      <version>5.19.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
