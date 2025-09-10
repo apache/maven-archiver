@@ -30,7 +30,7 @@ public class ManifestConfiguration {
     public static final String CLASSPATH_LAYOUT_TYPE_SIMPLE = "simple";
 
     /**
-     * The layout type
+     * The layout type.
      */
     public static final String CLASSPATH_LAYOUT_TYPE_REPOSITORY = "repository";
 
