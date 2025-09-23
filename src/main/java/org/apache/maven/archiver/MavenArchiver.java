@@ -715,8 +715,7 @@ public class MavenArchiver {
      * @return the parsed timestamp, may be <code>null</code> if <code>null</code> input or input contains only 1
      *         character
      * @since 3.5.0
-     * @throws IllegalArgumentException if the outputTimestamp is neither ISO 8601 nor an integer, or it's not within
-     *             the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z
+     * @throws IllegalArgumentException if the outputTimestamp is neither ISO 8601 nor an integer
      * @deprecated Use {@link #parseBuildOutputTimestamp(String)} instead.
      */
     @Deprecated
@@ -752,6 +751,7 @@ public class MavenArchiver {
      * @return the parsed timestamp as an {@code Optional<Instant>}, {@code empty} if input is {@code null} or input
      *         contains only 1 character (not a number)
      * @since 3.6.0
+     * @throws IllegalArgumentException if the outputTimestamp is neither ISO 8601 nor an integer.
      * @see <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=74682318">Maven Wiki "Reproducible/Verifiable
      *      Builds"</a>
      */
