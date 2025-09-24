@@ -97,10 +97,6 @@ public class MavenArchiver {
             "${artifact.groupIdPath}/${artifact.artifactId}/" + "${artifact.baseVersion}/${artifact.artifactId}-"
                     + "${artifact.baseVersion}${dashClassifier?}.${artifact.extension}";
 
-    private static final Instant DATE_MIN = Instant.parse("1980-01-01T00:00:02Z");
-
-    private static final Instant DATE_MAX = Instant.parse("2099-12-31T23:59:59Z");
-
     private static final List<String> ARTIFACT_EXPRESSION_PREFIXES;
 
     static {
@@ -719,8 +715,7 @@ public class MavenArchiver {
      * @return the parsed timestamp, may be <code>null</code> if <code>null</code> input or input contains only 1
      *         character
      * @since 3.5.0
-     * @throws IllegalArgumentException if the outputTimestamp is neither ISO 8601 nor an integer, or it's not within
-     *             the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z
+     * @throws IllegalArgumentException if the outputTimestamp is neither ISO 8601 nor an integer
      * @deprecated Use {@link #parseBuildOutputTimestamp(String)} instead.
      */
     @Deprecated
@@ -756,10 +751,7 @@ public class MavenArchiver {
      * @return the parsed timestamp as an {@code Optional<Instant>}, {@code empty} if input is {@code null} or input
      *         contains only 1 character (not a number)
      * @since 3.6.0
-     * @throws IllegalArgumentException if the outputTimestamp is neither ISO 8601 nor an integer, or it's not within
-     *             the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z as defined by
-     *             <a href="https://pkwaredownloads.blob.core.windows.net/pem/APPNOTE.txt">ZIP application note</a>,
-     *             section 4.4.6.
+     * @throws IllegalArgumentException if the outputTimestamp is neither ISO 8601 nor an integer.
      * @see <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=74682318">Maven Wiki "Reproducible/Verifiable
      *      Builds"</a>
      */
@@ -777,11 +769,6 @@ public class MavenArchiver {
         // Number representing seconds since the epoch
         if (isNumeric(outputTimestamp)) {
             final Instant date = Instant.ofEpochSecond(Long.parseLong(outputTimestamp));
-
-            if (date.isBefore(DATE_MIN) || date.isAfter(DATE_MAX)) {
-                throw new IllegalArgumentException(
-                        "'" + date + "' is not within the valid range " + DATE_MIN + " to " + DATE_MAX);
-            }
             return Optional.of(date);
         }
 
@@ -791,11 +778,6 @@ public class MavenArchiver {
                     .withOffsetSameInstant(ZoneOffset.UTC)
                     .truncatedTo(ChronoUnit.SECONDS)
                     .toInstant();
-
-            if (date.isBefore(DATE_MIN) || date.isAfter(DATE_MAX)) {
-                throw new IllegalArgumentException(
-                        "'" + date + "' is not within the valid range " + DATE_MIN + " to " + DATE_MAX);
-            }
             return Optional.of(date);
         } catch (DateTimeParseException pe) {
             throw new IllegalArgumentException(
