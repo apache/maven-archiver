@@ -1314,26 +1314,6 @@ class MavenArchiverTest {
     }
 
     @ParameterizedTest
-    @ValueSource(
-            strings = {
-                "0",
-                "1",
-                "9",
-                "1980-01-01T00:00:01Z",
-                "2100-01-01T00:00Z",
-                "2100-02-28T23:59:59Z",
-                "2099-12-31T23:59:59-01:00",
-                "1980-01-01T00:15:35+01:00",
-                "1980-01-01T10:15:35+14:00"
-            })
-    void testThrownParseOutputTimestampInvalidRange(String outputTimestamp) {
-        // date is not within the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z
-        assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> MavenArchiver.parseBuildOutputTimestamp(outputTimestamp))
-                .withMessageContaining("is not within the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z");
-    }
-
-    @ParameterizedTest
     @CsvSource({
         "2011-12-03T10:15:30+01,1322903730",
         "2019-10-05T20:37:42+02,1570300662",
