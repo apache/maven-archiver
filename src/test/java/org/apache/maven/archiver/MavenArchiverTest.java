@@ -1436,4 +1436,24 @@ class MavenArchiverTest {
     void testShortOffset(String value, long expected) {
         assertThat(parseBuildOutputTimestamp(value)).contains(Instant.ofEpochSecond(expected));
     }
+
+    private void testJar(String name, String timestamp) throws Exception {
+        File jarFile = new File("target/test/dummy-" + name + ".jar");
+        JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
+
+        MavenArchiver archiver = getMavenArchiver(jarArchiver);
+        archiver.configureReproducibleBuild(timestamp);
+
+        MavenSession session = getDummySession();
+        MavenProject project = getDummyProject();
+
+        archiver.createArchive(session, project, new MavenArchiveConfiguration());
+        assertThat(jarFile).exists();
+    }
+
+    @Test
+    void testJar() throws Exception {
+        testJar("1970", "10");
+        testJar("2000", "2000-01-01T00:00:00Z");
+    }
 }
