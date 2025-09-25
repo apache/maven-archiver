@@ -45,6 +45,8 @@ import java.util.jar.Manifest;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
@@ -69,6 +71,8 @@ import static org.apache.maven.archiver.MavenArchiver.parseBuildOutputTimestamp;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.codehaus.plexus.archiver.util.Streams.bufferedOutputStream;
+import static org.codehaus.plexus.archiver.util.Streams.fileOutputStream;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -1454,6 +1458,30 @@ class MavenArchiverTest {
     @Test
     void testJar() throws Exception {
         testJar("1970", "10");
+        testJar("1970-0h0m10", "1970-01-01T00:00:10Z");
+        testJar("1970-2h", "1970-01-01T02:00:00Z");
+        testJar("1970-1h59", "1970-01-01T01:59:00Z");
+        testJar("1970-1h", "1970-01-01T01:00:00Z");
+        testJar("1970-0h59", "1970-01-01T00:59:00Z");
         testJar("2000", "2000-01-01T00:00:00Z");
+    }
+
+    @Test
+    void testCompress() throws Exception {
+        File zipFile = new File("target/test/dummy.zip");
+        ZipArchiveOutputStream zipArchiveOutputStream =
+                new ZipArchiveOutputStream(bufferedOutputStream(fileOutputStream(zipFile, "zip")));
+        zipArchiveOutputStream.setEncoding("UTF-8");
+        zipArchiveOutputStream.setCreateUnicodeExtraFields(ZipArchiveOutputStream.UnicodeExtraFieldPolicy.NEVER);
+        zipArchiveOutputStream.setMethod(ZipArchiveOutputStream.DEFLATED);
+
+        ZipArchiveEntry ze = new ZipArchiveEntry("f.txt");
+        ze.setTime(0);
+
+        zipArchiveOutputStream.putArchiveEntry(ze);
+        zipArchiveOutputStream.write(1);
+        zipArchiveOutputStream.closeArchiveEntry();
+
+        zipArchiveOutputStream.close();
     }
 }
