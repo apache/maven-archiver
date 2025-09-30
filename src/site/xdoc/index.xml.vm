@@ -33,8 +33,7 @@
         for that plugin.
       </p>
 
-      <source>
-&lt;<a href="#class_archive">archive</a>&gt;
+      <source>&lt;<a href="#class_archive">archive</a>&gt;
   &lt;addMavenDescriptor/&gt;
   &lt;compress/&gt;
   &lt;forced/&gt;
@@ -67,8 +66,7 @@
       &lt;/manifestEntries&gt;
     &lt;manifestSection/&gt;
   &lt;/manifestSections&gt;
-&lt;/archive&gt;
-      </source>
+&lt;/archive&gt;</source>
 
       <a name="class_archive"/>
       <subsection name="archive">
@@ -188,8 +186,7 @@
           The auto created <code>META-INF/maven/${groupId}/${artifactId}/pom.properties</code> file will contain the
           following content:
         </p>
-        <source>
-artifactId=\${project.artifactId}
+        <source>artifactId=\${project.artifactId}
 groupId=\${project.groupId}
 version=\${project.version}</source>
       </subsection>
@@ -220,8 +217,7 @@ version=\${project.version}</source>
             <td>3.4.0</td>
             <td>
               If the manifest will contain these entries:
-              <source>
-Created-By: Maven Archiver ${project.version}
+              <source>Created-By: Maven Archiver ${project.version}
 Build-Jdk-Spec: ${java.specification.version}
 Java-Version: &#36;{project maven.compiler.release/target}</source>
               Since 3.5.0, the default value of <code>Created-By</code> entry can be overridden (usually by plugin code) using
@@ -237,8 +233,7 @@ Java-Version: &#36;{project maven.compiler.release/target}</source>
             <td>2.1 and 2.6</td>
             <td>
               If the manifest will contain these entries:
-              <source>
-Implementation-Title: \${project.name}
+              <source>Implementation-Title: \${project.name}
 Implementation-Version: \${project.version}
 Implementation-Vendor: \${project.organization.name}</source>
               The default value is <code>false</code>.
@@ -250,8 +245,7 @@ Implementation-Vendor: \${project.organization.name}</source>
             <td>2.1</td>
             <td>
               If the manifest will contain these entries:
-              <source>
-Specification-Title: \${project.name}
+              <source>Specification-Title: \${project.name}
 Specification-Version: \${project.artifact.selectedVersion.majorVersion}.\${project.artifact.selectedVersion.minorVersion}
 Specification-Vendor: \${project.organization.name}</source>
               The default value is <code>false</code>.
@@ -263,8 +257,7 @@ Specification-Vendor: \${project.organization.name}</source>
             <td>3.4.0</td>
             <td>
               If the manifest will contain these entries:
-              <source>
-Build-Tool: ${maven.build.version}
+              <source>Build-Tool: ${maven.build.version}
 Build-Jdk: ${java.version} (${java.vendor})
 Build-Os:  ${os.name} (${os.version}; (${os.arch})</source>
               The default value is <code>false</code>.
