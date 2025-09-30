@@ -72,43 +72,47 @@
 
       <a name="class_archive"/>
       <subsection name="archive">
+        <p>The <code>&lt;archive&gt;</code> element is the root of the archiver configuration.
+        The following table lists all of the possible child elements.</p>
         <table>
           <tr>
             <th>Element</th>
-            <th>Description</th>
             <th>Type</th>
             <th>Since</th>
+            <th>Description</th>
           </tr>
           <tr>
-            <td>addMavenDescriptor</td>
+            <td><code>addMavenDescriptor</code></td>
+            <td><code>boolean</code></td>
+            <td></td>
             <td>
               Whether the created archive will contain these two Maven files:
               <ul>
                 <li>
-                  The pom file, located in the archive in
+                  The <code>pom.xml</code> file, located in the archive in
                   <code>META-INF/maven/${groupId}/${artifactId}/pom.xml</code>
                 </li>
                 <li>
-                  A <a href="#pom-properties-content">pom.properties</a> file,
+                  A <code><a href="#pom-properties-content">pom.properties</a></code> file,
                   located in the archive in <code>META-INF/maven/${groupId}/${artifactId}/pom.properties</code>
                 </li>
               </ul>
               The default value is <code>true</code>.
             </td>
-            <td>boolean</td>
-            <td></td>
           </tr>
           <tr>
-            <td>compress</td>
+            <td><code>compress</code></td>
+            <td><code>boolean</code></td>
+            <td></td>
             <td>
               Activate compression for the archive.
               The default value is <code>true</code>.
             </td>
-            <td>boolean</td>
-            <td></td>
           </tr>
           <tr>
-            <td>forced</td>
+            <td><code>forced</code></td>
+            <td><code>boolean</code></td>
+            <td>2.2</td>
             <td>
               Whether recreating the archive is forced (default) or not. Setting
               this option to <code>false</code>, means that the archiver should compare the
@@ -125,11 +129,11 @@
               </p>
               The default value is <code>true</code>.
             </td>
-            <td>boolean</td>
-            <td>2.2</td>
           </tr>
           <tr>
-            <td>index</td>
+            <td><code>index</code></td>
+            <td><code>boolean</code></td>
+            <td></td>
             <td>
               <strong>Deprecated:</strong> See <a href="https://bugs.openjdk.org/browse/JDK-8305597">JDK-8305597</a>
               <p>
@@ -140,39 +144,37 @@
                 The default value is <code>false</code>.
               </p>
             </td>
-            <td>boolean</td>
-            <td></td>
           </tr>
           <tr>
-            <td>pomPropertiesFile</td>
+            <td><code>pomPropertiesFile</code></td>
+            <td><code>File</code></td>
+            <td>2.3</td>
             <td>
               Use this to override the auto created
               <a href="#pom-properties-content">pom.properties</a> file
               (only if <code>addMavenDescriptor</code> is set to <code>true</code>)
             </td>
-            <td>File</td>
-            <td>2.3</td>
           </tr>
           <tr>
-            <td>manifestFile</td>
+            <td><code>manifestFile</code></td>
+            <td><code>File</code></td>
+            <td></td>
             <td>With this you can supply your own manifest file.</td>
-            <td>File</td>
+          </tr>
+          <tr>
+            <td><code><a href="#class_manifest">manifest</a></code></td>
+            <td></td>
+            <td></td>
             <td></td>
           </tr>
           <tr>
-            <td><a href="#class_manifest">manifest</a></td>
+            <td><code>manifestEntries</code></td>
+            <td><code>Map</code></td>
             <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>manifestEntries</td>
             <td>A list of key/value pairs to add to the manifest.</td>
-            <td>Map</td>
-            <td></td>
           </tr>
           <tr>
-            <td><a href="#class_manifestSection">manifestSections</a></td>
+            <td><code><a href="#class_manifestSection">manifestSections</a></code></td>
             <td></td>
             <td></td>
             <td></td>
@@ -183,7 +185,7 @@
       <a name="pom-properties-content"/>
       <subsection name="pom.properties content">
         <p>
-          The auto created <code>pom.properties</code> file will contain the
+          The auto created <code>META-INF/maven/${groupId}/${artifactId}/pom.properties</code> file will contain the
           following content:
         </p>
         <source>
@@ -194,24 +196,28 @@ version=\${project.version}</source>
 
       <a name="class_manifest"/>
       <subsection name="manifest">
+        <p>The <code>&lt;manifest&gt;</code> element configures main section of <code>META-INF/MANIFEST.MF</code>.
+        The following table lists all of the possible child elements.</p>
         <table>
           <tr>
             <th>Element</th>
-            <th>Description</th>
             <th>Type</th>
             <th>Since</th>
+            <th>Description</th>
           </tr>
           <tr>
-            <td>addClasspath</td>
+            <td><code>addClasspath</code></td>
+            <td><code>boolean</code></td>
+            <td></td>
             <td>
               Whether to create a <code>Class-Path</code> manifest entry.
               The default value is <code>false</code>.
             </td>
-            <td>boolean</td>
-            <td></td>
           </tr>
           <tr>
-            <td>addDefaultEntries</td>
+            <td><code>addDefaultEntries</code></td>
+            <td><code>boolean</code></td>
+            <td>3.4.0</td>
             <td>
               If the manifest will contain these entries:
               <source>
@@ -224,11 +230,11 @@ Java-Version: &#36;{project maven.compiler.release/target}</source>
               <a href="./apidocs/org/apache/maven/archiver/BuildHelper.html">BuildHelper.discoverJavaRelease(...)</a> API.<br />
               The default value is <code>true</code>.
             </td>
-            <td>boolean</td>
-            <td>3.4.0</td>
           </tr>
           <tr>
-            <td>addDefaultImplementationEntries</td>
+            <td><code>addDefaultImplementationEntries</code></td>
+            <td><code>boolean</code></td>
+            <td>2.1 and 2.6</td>
             <td>
               If the manifest will contain these entries:
               <source>
@@ -237,11 +243,11 @@ Implementation-Version: \${project.version}
 Implementation-Vendor: \${project.organization.name}</source>
               The default value is <code>false</code>.
             </td>
-            <td>boolean</td>
-            <td>2.1 and 2.6</td>
           </tr>
           <tr>
-            <td>addDefaultSpecificationEntries</td>
+            <td><code>addDefaultSpecificationEntries</code></td>
+            <td><code>boolean</code></td>
+            <td>2.1</td>
             <td>
               If the manifest will contain these entries:
               <source>
@@ -250,11 +256,11 @@ Specification-Version: \${project.artifact.selectedVersion.majorVersion}.\${proj
 Specification-Vendor: \${project.organization.name}</source>
               The default value is <code>false</code>.
             </td>
-            <td>boolean</td>
-            <td>2.1</td>
           </tr>
           <tr>
-            <td>addBuildEnvironmentEntries</td>
+            <td><code>addBuildEnvironmentEntries</code></td>
+            <td><code>boolean</code></td>
+            <td>3.4.0</td>
             <td>
               If the manifest will contain these entries:
               <source>
@@ -263,21 +269,21 @@ Build-Jdk: ${java.version} (${java.vendor})
 Build-Os:  ${os.name} (${os.version}; (${os.arch})</source>
               The default value is <code>false</code>.
             </td>
-            <td>boolean</td>
-            <td>3.4.0</td>
           </tr>
           <tr>
-            <td>addExtensions</td>
+            <td><code>addExtensions</code></td>
+            <td><code>boolean</code></td>
+            <td></td>
             <td>
               Whether to create an <code>Extension-List</code> manifest
               entry.
               The default value is <code>false</code>.
             </td>
-            <td>boolean</td>
-            <td></td>
           </tr>
           <tr>
-            <td>classpathLayoutType</td>
+            <td><code>classpathLayoutType</code></td>
+            <td><code>String</code></td>
+            <td>2.4</td>
             <td>
               The type of layout to use when formatting entries in the created
               <code>Class-Path</code>. Valid values are: <code>simple</code>,
@@ -288,21 +294,21 @@ Build-Os:  ${os.name} (${os.version}; (${os.arch})</source>
               <b>must</b> also set <code>customClasspathLayout</code>.
               The default value is <code>simple</code>.
             </td>
-            <td>String</td>
-            <td>2.4</td>
           </tr>
           <tr>
-            <td>classpathPrefix</td>
+            <td><code>classpathPrefix</code></td>
+            <td><code>String</code></td>
+            <td></td>
             <td>
               A text that will be prefixed to all your <code>Class-Path</code>
               entries.
               The default value is <code>&quot;&quot;</code>.
             </td>
-            <td>String</td>
-            <td></td>
           </tr>
           <tr>
-            <td>customClasspathLayout</td>
+            <td><code>customClasspathLayout</code></td>
+            <td><code>String</code></td>
+            <td>2.4</td>
             <td>
               The layout expression to use when the layout type set in
               <code>classpathLayoutType</code> has the value <code>custom</code>.
@@ -315,55 +321,55 @@ Build-Os:  ${os.name} (${os.version}; (${os.arch})</source>
               <b>Note:</b> If you specify a layout type of <code>custom</code>
               you <b>must</b> set this layout expression.
             </td>
-            <td>String</td>
-            <td>2.4</td>
           </tr>
           <tr>
-            <td>mainClass</td>
+            <td><code>mainClass</code></td>
+            <td><code>String</code></td>
+            <td></td>
             <td>The <code>Main-Class</code> manifest entry.</td>
-            <td>String</td>
-            <td></td>
           </tr>
           <tr>
-            <td>packageName</td>
+            <td><code>packageName</code></td>
+            <td><code>String</code></td>
+            <td></td>
             <td>Package manifest entry.</td>
-            <td>String</td>
-            <td></td>
           </tr>
           <tr>
-            <td>useUniqueVersions</td>
+            <td><code>useUniqueVersions</code></td>
+            <td><code>boolean</code></td>
+            <td>2.4</td>
             <td>
               Whether to use unique timestamp Snapshot versions rather than -SNAPSHOT versions.
               The default value is <code>true</code>.
             </td>
-            <td>boolean</td>
-            <td>2.4</td>
           </tr>
         </table>
       </subsection>
 
       <a name="class_manifestSection"/>
       <subsection name="manifestSection">
+        <p>The <code>&lt;manifestSection&gt;</code> element configures sections of <code>META-INF/MANIFEST.MF</code>.
+        The following table lists all of the possible child elements.</p>
         <table>
           <tr>
             <th>Element</th>
-            <th>Description</th>
             <th>Type</th>
             <th>Since</th>
+            <th>Description</th>
           </tr>
           <tr>
-            <td>name</td>
+            <td><code>name</code></td>
+            <td><code>String</code></td>
+            <td></td>
             <td>
               The name of the section.
             </td>
-            <td>String</td>
-            <td></td>
           </tr>
           <tr>
-            <td>manifestEntries</td>
-            <td>A list of key/value pairs to add to the manifest.</td>
-            <td>Map</td>
+            <td><code>manifestEntries</code></td>
+            <td><code>Map</code></td>
             <td></td>
+            <td>A list of key/value pairs to add to the manifest.</td>
           </tr>
         </table>
       </subsection>
