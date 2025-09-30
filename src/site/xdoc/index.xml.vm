@@ -216,9 +216,12 @@ version=\${project.version}</source>
               If the manifest will contain these entries:
               <source>
 Created-By: Maven Archiver ${project.version}
-Build-Jdk-Spec: ${java.specification.version}</source>
-              Since 3.5.0, the default value of <code>Created-By</code> entry can be overridden using
+Build-Jdk-Spec: ${java.specification.version}
+Java-Version: &#36;{project maven.compiler.release/target}</source>
+              Since 3.5.0, the default value of <code>Created-By</code> entry can be overridden (usually by plugin code) using
               <a href="./apidocs/org/apache/maven/archiver/MavenArchiver.html">MavenArchiver.setCreatedBy(...)</a> API.<br />
+              Since 3.6.5, <code>Java-Version</code> entry is discovered by
+              <a href="./apidocs/org/apache/maven/archiver/BuildHelper.html">BuildHelper.discoverJavaRelease(...)</a> API.<br />
               The default value is <code>true</code>.
             </td>
             <td>boolean</td>
