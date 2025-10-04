@@ -41,6 +41,7 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.apache.maven.api.Dependency;
 import org.apache.maven.api.DependencyCoordinates;
@@ -1384,5 +1385,34 @@ class MavenArchiverTest {
         public void setPath(Path path) {
             this.path = path;
         }
+    }
+
+    private long testReproducibleJarEntryTime(String name, String timestamp) throws Exception {
+        File jarFile = new File("target/test/dummy-" + name + ".jar");
+
+        MavenArchiver archiver = getMavenArchiver(getCleanJarArchiver(jarFile));
+        archiver.configureReproducibleBuild(timestamp);
+        archiver.createArchive(getDummySession(), getDummyProject(), new MavenArchiveConfiguration());
+
+        assertThat(jarFile).exists();
+        ZipFile zf = new ZipFile(jarFile);
+        ZipEntry ze = zf.getEntry("META-INF/MANIFEST.MF");
+        return ze.getTime();
+    }
+
+    /**
+     * before upgrading plexus archiver to 4.10.2 to benefit from https://github.com/codehaus-plexus/plexus-archiver/pull/388
+     * $ zipdetails target/test/dummy-1970.jar
+     * gives negative Extended Timestamp in Java, that is seen as some point in time in 2106 (zip spec is unsigned)
+     * 0027 Extra ID #0001        5455 'UT: Extended Timestamp'
+     * 0029   Length              0005
+     * 002B   Flags               '01 mod'
+     * 002C   Mod Time            FFFFF1FA 'Sun Feb  7 06:28:26 2106'
+     * @throws Exception
+     */
+    @Test
+    void testReproducibleJar19700101() throws Exception {
+        long entryTime = testReproducibleJarEntryTime("1970", "10");
+        assertThat(entryTime).isGreaterThanOrEqualTo(0);
     }
 }
