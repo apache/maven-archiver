@@ -287,7 +287,7 @@ public class MavenArchiveConfiguration {
     /**
      * Returns the location of the "pom.properties" file. May be null, in which case a default value is choosen.
      *
-     * @return "pom.properties" location or null.
+     * @return "pom.properties" location or null
      */
     public Path getPomPropertiesFile() {
         return pomPropertiesFile;
@@ -296,7 +296,7 @@ public class MavenArchiveConfiguration {
     /**
      * Sets the location of the "pom.properties" file. May be null, in which case a default value is choosen.
      *
-     * @param pomPropertiesFile "pom.properties" location or null.
+     * @param pomPropertiesFile "pom.properties" location or null
      */
     public void setPomPropertiesFile(Path pomPropertiesFile) {
         this.pomPropertiesFile = pomPropertiesFile;
