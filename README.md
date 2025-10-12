@@ -23,7 +23,7 @@ Contributing to [Apache Maven Archiver](https://maven.apache.org/shared/maven-ar
 [![Jenkins Status](https://img.shields.io/jenkins/s/https/ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archiver/job/master.svg)][build]
 [![Jenkins tests](https://img.shields.io/jenkins/t/https/ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archiver/job/master.svg)][test-results]
 
-Maven 3: [maven-archiver-3.x](/apache/maven-archiver/tree/maven-archiver-3.x) [![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven/maven-archiver.svg?label=Maven%20Central&filter=3*)](https://search.maven.org/artifact/org.apache.maven/maven-archiver)
+Maven 3: [maven-archiver-3.x](https://github.com/apache/maven-archiver/tree/maven-archiver-3.x) [![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven/maven-archiver.svg?label=Maven%20Central&filter=3*)](https://search.maven.org/artifact/org.apache.maven/maven-archiver)
 [![Reproducible Builds](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jvm-repo-rebuild/reproducible-central/master/content/org/apache/maven/shared/archiver/badge.json)](https://github.com/jvm-repo-rebuild/reproducible-central/blob/master/content/org/apache/maven/shared/archiver/README.md)
 [![Jenkins Status](https://img.shields.io/jenkins/s/https/ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archiver/job/maven-archiver-3.x.svg)][build-3]
 [![Jenkins tests](https://img.shields.io/jenkins/t/https/ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archiver/job/maven-archiver-3.x.svg)][test-results-3]
