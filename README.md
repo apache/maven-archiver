@@ -17,9 +17,13 @@
 Contributing to [Apache Maven Archiver](https://maven.apache.org/shared/maven-archiver/)
 ======================
 
-[![Apache License, Version 2.0, January 2004](https://img.shields.io/github/license/apache/maven.svg?label=License)][license]
-[![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven/maven-archiver.svg?label=Maven%20Central)](https://search.maven.org/artifact/org.apache.maven/maven-archiver)
-[![Reproducible Builds](https://img.shields.io/badge/Reproducible_Builds-ok-green?labelColor=blue)](https://github.com/jvm-repo-rebuild/reproducible-central/blob/master/content/org/apache/maven/shared/archiver/README.md)
+[![Apache License, Version 2.0, January 2004](https://img.shields.io/github/license/apache/maven.svg?label=License)][license] [![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven/maven-archiver.svg?label=Maven%20Central&filter=3*)](https://search.maven.org/artifact/org.apache.maven/maven-archiver)
+[![Reproducible Builds](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jvm-repo-rebuild/reproducible-central/master/content/org/apache/maven/shared/archiver/badge.json)](https://github.com/jvm-repo-rebuild/reproducible-central/blob/master/content/org/apache/maven/shared/archiver/README.md)
+[![Jenkins Status](https://img.shields.io/jenkins/s/https/ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archiver/job/maven-archiver-3.x.svg)][build-3]
+[![Jenkins tests](https://img.shields.io/jenkins/t/https/ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archiver/job/maven-archiver-3.x.svg)][test-results-3]
+
+Maven 4: [master](https://github.com/apache/maven-archiver/tree/master) [![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven.shared/maven-archiver.svg?label=Maven%20Central)](https://search.maven.org/artifact/org.apache.maven.shared/maven-archiver)
+[![Reproducible Builds](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jvm-repo-rebuild/reproducible-central/master/content/org/apache/maven/shared/maven-archiver/badge.json)](https://github.com/jvm-repo-rebuild/reproducible-central/blob/master/content/org/apache/maven/shared/maven-archiver/README.md)
 [![Jenkins Status](https://img.shields.io/jenkins/s/https/ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archiver/job/master.svg)][build]
 [![Jenkins tests](https://img.shields.io/jenkins/t/https/ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archiver/job/master.svg)][test-results]
 
@@ -59,7 +63,7 @@ There are some guidelines which will make applying PRs easier for us:
     If you feel the source code should be reformatted, create a separate PR for this change.
   + Check for unnecessary whitespace with `git diff --check` before committing.
 + Make sure you have added the necessary tests (JUnit/IT) for your changes.
-+ Run all the tests with `mvn -Prun-its verify` to assure nothing else was accidentally broken.
++ Run all the tests with `mvn verify` to assure nothing else was accidentally broken.
 + Submit a pull request to the repository in the Apache organization.
 
 If you plan to contribute on a regular basis, please consider filing a [contributor license agreement][cla].
@@ -81,4 +85,6 @@ Additional Resources
 [cla]: https://www.apache.org/licenses/#clas
 [maven-wiki]: https://cwiki.apache.org/confluence/display/MAVEN/Index
 [test-results]: https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archiver/job/master/lastCompletedBuild/testReport/
+[test-results-3]: https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archiver/job/maven-archiver-3.x/lastCompletedBuild/testReport/
 [build]: https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archiver/job/master/
+[build-3]: https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archiver/job/maven-archiver-3.x/
