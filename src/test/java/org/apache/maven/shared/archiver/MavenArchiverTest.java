@@ -108,18 +108,18 @@ class MavenArchiverTest {
                 "123.at.start.is.invalid",
                 "digit.at.123start.is.invalid"
             })
-    void testInvalidModuleNames(String value) {
+    void invalidModuleNames(String value) {
         assertThat(MavenArchiver.isValidModuleName(value)).isFalse();
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"a", "a.b", "a_b", "trailing0.digits123.are456.ok789", "UTF8.chars.are.okay.äëïöüẍ", "ℤ€ℕ"})
-    void testValidModuleNames(String value) {
+    void validModuleNames(String value) {
         assertThat(MavenArchiver.isValidModuleName(value)).isTrue();
     }
 
     @Test
-    void testMultiClassPath() throws Exception {
+    void multiClassPath() throws Exception {
         final File tempFile = File.createTempFile("maven-archiver-test-", ".jar");
 
         try {
@@ -153,7 +153,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testRecreation() throws Exception {
+    void recreation() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -193,7 +193,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testNotGenerateImplementationVersionForMANIFESTMF() throws Exception {
+    void notGenerateImplementationVersionForMANIFESTMF() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -214,7 +214,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testGenerateImplementationVersionForMANIFESTMF() throws Exception {
+    void generateImplementationVersionForMANIFESTMF() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -246,7 +246,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testDashesInClassPathMSHARED134() {
+    void dashesInClassPathMSHARED134() {
         File jarFile = new File("target/test/dummyWithDashes.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -272,7 +272,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testDashesInClassPathMSHARED182() throws IOException {
+    void dashesInClassPathMSHARED182() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
         MavenArchiver archiver = getMavenArchiver(jarArchiver);
@@ -300,7 +300,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testCarriageReturnInManifestEntry() throws Exception {
+    void carriageReturnInManifestEntry() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -329,7 +329,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testDeprecatedCreateArchiveAPI() throws Exception {
+    void deprecatedCreateArchiveAPI() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -359,7 +359,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testMinimalManifestEntries() throws Exception {
+    void minimalManifestEntries() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -381,7 +381,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testManifestEntries() throws Exception {
+    void manifestEntries() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -454,7 +454,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testManifestWithInvalidAutomaticModuleNameThrowsOnCreateArchive() throws Exception {
+    void manifestWithInvalidAutomaticModuleNameThrowsOnCreateArchive() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -479,7 +479,7 @@ class MavenArchiverTest {
      * Automatic-Module-Name attribute at all, but that the archive will be created.
      */
     @Test
-    void testManifestWithEmptyAutomaticModuleName() throws Exception {
+    void manifestWithEmptyAutomaticModuleName() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -505,7 +505,7 @@ class MavenArchiverTest {
     // Test to make sure that manifest sections are present in the manifest prior to the archive has been created.
     //
     @Test
-    void testManifestSections() throws Exception {
+    void manifestSections() throws Exception {
         MavenArchiver archiver = new MavenArchiver();
 
         Project project = getDummyProject();
@@ -534,7 +534,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testDefaultClassPathValue() throws Exception {
+    void defaultClassPathValue() throws Exception {
         Project project = getDummyProject();
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
@@ -561,7 +561,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testDefaultClassPathValueWithSnapshot() throws Exception {
+    void defaultClassPathValueWithSnapshot() throws Exception {
         Project project = getDummyProjectWithSnapshot();
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
@@ -589,7 +589,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testMavenRepoClassPathValue() throws Exception {
+    void mavenRepoClassPathValue() throws Exception {
         Project project = getDummyProject();
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
@@ -831,7 +831,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testMavenRepoClassPathValueWithSnapshot() throws Exception {
+    void mavenRepoClassPathValueWithSnapshot() throws Exception {
         Project project = getDummyProjectWithSnapshot();
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
@@ -867,7 +867,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testCustomClassPathValue() throws Exception {
+    void customClassPathValue() throws Exception {
         Project project = getDummyProject();
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
@@ -906,7 +906,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testCustomClassPathValueWithSnapshotResolvedVersion() throws Exception {
+    void customClassPathValueWithSnapshotResolvedVersion() throws Exception {
         Project project = getDummyProjectWithSnapshot();
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
@@ -944,7 +944,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testCustomClassPathValueWithSnapshotForcingBaseVersion() throws Exception {
+    void customClassPathValueWithSnapshotForcingBaseVersion() throws Exception {
         Project project = getDummyProjectWithSnapshot();
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
@@ -980,7 +980,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testDefaultPomProperties() throws Exception {
+    void defaultPomProperties() throws Exception {
         Project project = getDummyProject();
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
@@ -1013,7 +1013,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testCustomPomProperties() throws Exception {
+    void customPomProperties() throws Exception {
         Project project = getDummyProject();
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
@@ -1235,7 +1235,7 @@ class MavenArchiverTest {
     }
 
     @Test
-    void testParseOutputTimestamp() {
+    void parseOutputTimestamp() {
         assertThat(MavenArchiver.parseBuildOutputTimestamp(null)).isEmpty();
         assertThat(MavenArchiver.parseBuildOutputTimestamp("")).isEmpty();
         assertThat(MavenArchiver.parseBuildOutputTimestamp(".")).isEmpty();
@@ -1275,7 +1275,7 @@ class MavenArchiverTest {
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {".", " ", "_", "-", "T", "/", "!", "!", "*", "ñ"})
-    void testEmptyParseOutputTimestampInstant(String value) {
+    void emptyParseOutputTimestampInstant(String value) {
         // Empty optional if null or 1 char
         assertThat(MavenArchiver.parseBuildOutputTimestamp(value)).isEmpty();
     }
@@ -1292,7 +1292,7 @@ class MavenArchiverTest {
         "1980-01-01T00:00:02Z,315532802",
         "2099-12-31T23:59:59Z,4102444799"
     })
-    void testParseOutputTimestampInstant(String value, long expected) {
+    void parseOutputTimestampInstant(String value, long expected) {
         assertThat(MavenArchiver.parseBuildOutputTimestamp(value)).contains(Instant.ofEpochSecond(expected));
     }
 
@@ -1307,7 +1307,7 @@ class MavenArchiverTest {
                 "Tue, 3 Jun 2008 11:05:30 GMT",
                 "2011-12-03T10:15:30+01:00[Europe/Paris]"
             })
-    void testThrownParseOutputTimestampInstant(String outputTimestamp) {
+    void thrownParseOutputTimestampInstant(String outputTimestamp) {
         // Invalid parsing
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> MavenArchiver.parseBuildOutputTimestamp(outputTimestamp))
@@ -1322,7 +1322,7 @@ class MavenArchiverTest {
         "1988-02-22T20:37:42+06,572539062"
     })
     @EnabledForJreRange(min = JRE.JAVA_9)
-    void testShortOffset(String value, long expected) {
+    void shortOffset(String value, long expected) {
         assertThat(MavenArchiver.parseBuildOutputTimestamp(value)).contains(Instant.ofEpochSecond(expected));
     }
 
@@ -1411,7 +1411,7 @@ class MavenArchiverTest {
      * @throws Exception
      */
     @Test
-    void testReproducibleJar19700101() throws Exception {
+    void reproducibleJar19700101() throws Exception {
         long entryTime = testReproducibleJarEntryTime("1970", "10");
         assertThat(entryTime).isGreaterThanOrEqualTo(0);
     }
