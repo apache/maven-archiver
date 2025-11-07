@@ -18,7 +18,6 @@
  */
 package org.apache.maven.shared.archiver;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -41,7 +40,7 @@ class PomPropertiesUtilTest {
     Path tempDirectory;
 
     @Test
-    void testCreatePomProperties() throws IOException {
+    void createPomProperties() throws Exception {
         Path pomPropertiesFile = tempDirectory.resolve("bar.properties");
         util.createPomProperties("org.foo", "bar", "2.1.5", new JarArchiver(), null, pomPropertiesFile);
 
@@ -61,7 +60,7 @@ class PomPropertiesUtilTest {
     }
 
     @Test
-    void testUnicodeEscape() throws IOException {
+    void unicodeEscape() throws Exception {
         Path pomPropertiesFile = tempDirectory.resolve("bar.properties");
         util.createPomProperties("org.foo", "こんにちは", "2.1.5", new JarArchiver(), null, pomPropertiesFile);
 
@@ -81,7 +80,7 @@ class PomPropertiesUtilTest {
     }
 
     @Test
-    void testWhitespaceEscape() throws IOException {
+    void whitespaceEscape() throws Exception {
         Path pomPropertiesFile = tempDirectory.resolve("bar.properties");
         Path customPomPropertiesFile = tempDirectory.resolve("custom.properties");
         try (Writer out = Files.newBufferedWriter(customPomPropertiesFile, StandardCharsets.ISO_8859_1)) {
