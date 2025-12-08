@@ -97,7 +97,7 @@ public class BuildHelper {
      * @param plugin can be null
      * @param parameter the parameter name when configured in plugin's configuration
      * @param defaultValueProperty the property name when default value is used for the plugin parameter
-     * @return the value, or null if not configured at all, but using internal default from plugin.
+     * @return the value, or null if not configured at all, but using internal default from plugin
      */
     public static String getPluginParameter(Model model, Plugin plugin, String parameter, String defaultValueProperty) {
         String value = getPluginParameter(plugin, parameter);
