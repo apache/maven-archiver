@@ -25,3 +25,8 @@ jobs:
   build:
     name: Verify
     uses: apache/maven-gh-actions-shared/.github/workflows/maven-verify.yml@v4
+    with:
+      maven4-enabled: true
+      # default -Prun-its fails with mvn4 - profile not found
+      ff-goal: 'verify'
+      verify-goal: 'verify'

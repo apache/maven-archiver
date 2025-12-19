@@ -55,8 +55,10 @@
   </distributionManagement>
 
   <properties>
-    <mavenVersion>3.2.5</mavenVersion>
+    <mavenVersion>3.9.12</mavenVersion>
     <javaVersion>8</javaVersion>
+    <version.plexus-utils>3.6.0</version.plexus-utils>
+    <version.plexus-xml>3.0.2</version.plexus-xml>
     <project.build.outputTimestamp>2025-10-05T14:24:12Z</project.build.outputTimestamp>
   </properties>
 
@@ -67,6 +69,18 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
+      <version>${mavenVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact</artifactId>
+      <version>${mavenVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-model</artifactId>
       <version>${mavenVersion}</version>
       <scope>provided</scope>
     </dependency>
@@ -86,7 +100,6 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-xml</artifactId>
-      <version>3.0.2</version>
     </dependency>
     <!--
       Test dependencies
