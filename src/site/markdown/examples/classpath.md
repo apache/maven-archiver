@@ -304,7 +304,7 @@ Class-Path: WEB-INF/lib/org/codehaus/plexus/plexus-utils-1.1.jar WEB-INF/lib/com
 
 _(Since 2.4)_
 
-Depending on how you construct your archive, you may have the ability to specify whether snapshot dependency archives are included with the version suffix `'-SNAPSHOT'`, or whether the unique timestamp and build-number for that archive is used. For instance, the [Assembly Plugin](/plugins/maven-assembly-plugin) allows you to make this decision in the `<outputFileNameMapping>` element of its `<dependencySet`&gt; descriptor section.
+Depending on how you construct your archive, you may have the ability to specify whether snapshot dependency archives are included with the version suffix `'-SNAPSHOT'`, or whether the unique timestamp and build-number for that archive is used. For instance, the [Assembly Plugin](/plugins/maven-assembly-plugin) allows you to make this decision in the `<outputFileNameMapping>` element of its `<dependencySet>` descriptor section.
 
 ### Forcing the use of -SNAPSHOT versions when using the simple (default) or repository classpath layout
 
