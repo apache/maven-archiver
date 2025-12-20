@@ -1,0 +1,81 @@
+---
+title: Manifest Sections
+author: 
+  - Olivier Lamy
+  - Dennis Lundberg
+date: 2008-01-01
+---
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+# Manifest Sections
+
+The `<manifestSections>` element provides a way to add custom manifest sections. It contains a list of [`<manifestSection>`](../index.html#class_manifestSection) elements.
+
+**Note:** As with all the examples here, this configuration can be used in all plugins that use Maven Archiver, not just maven-jar-plugin as in this example.
+
+Given this configuration:
+
+```xml
+<project>
+  ...
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        ...
+        <configuration>
+          <archive>
+            <manifestSections>
+              <manifestSection>
+                <name>foo</name>
+                <manifestEntries>
+                  <id>nice foo</id>
+                </manifestEntries>
+              </manifestSection>
+              <manifestSection>
+                <name>bar</name>
+                <manifestEntries>
+                  <id>nice bar</id>
+                </manifestEntries>
+              </manifestSection>
+            </manifestSections>
+          </archive>
+        </configuration>
+        ...
+      </plugin>
+    </plugins>
+  </build>
+  ...
+</project>
+```
+
+The following content will end up in the manifest:
+
+```
+Manifest-Version: 1.0
+Created-By: Apache Maven ${maven.version}
+Build-Jdk: ${java.version}
+
+Name: foo
+id: nice foo
+
+Name: bar
+id: nice bar
+```
