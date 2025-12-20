@@ -1,42 +1,36 @@
- ------
- Manifest Entries
- ------
- Dennis Lundberg
- ------
- 2008-01-01
- ------
+---
+title: Manifest Entries
+author: 
+  - Dennis Lundberg
+date: 2008-01-01
+---
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
- ~~ Licensed to the Apache Software Foundation (ASF) under one
- ~~ or more contributor license agreements.  See the NOTICE file
- ~~ distributed with this work for additional information
- ~~ regarding copyright ownership.  The ASF licenses this file
- ~~ to you under the Apache License, Version 2.0 (the
- ~~ "License"); you may not use this file except in compliance
- ~~ with the License.  You may obtain a copy of the License at
- ~~
- ~~   http://www.apache.org/licenses/LICENSE-2.0
- ~~
- ~~ Unless required by applicable law or agreed to in writing,
- ~~ software distributed under the License is distributed on an
- ~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- ~~ KIND, either express or implied.  See the License for the
- ~~ specific language governing permissions and limitations
- ~~ under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
 
-Manifest Entries
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+# Manifest Entries
 
- If you find that the other configuration options for Maven Archiver are not
- enough for manipulating the manifest, you can add your own entries to it.
- This is done with the <<<\<manifestEntries\>>>> configuration element.
+If you find that the other configuration options for Maven Archiver are not enough for manipulating the manifest, you can add your own entries to it. This is done with the `<manifestEntries>` configuration element.
 
- In this example we'll add some entries to the manifest by specifying what we'd
- like in the <<<\<configuration\>>>>/<<<\<archive\>>>> element of
- maven-jar-plugin.
+In this example we'll add some entries to the manifest by specifying what we'd like in the `<configuration>`/`<archive>` element of maven-jar-plugin.
 
- <<Note:>> As with all the examples here, this configuration can be used in all
- plugins that use Maven Archiver, not just maven-jar-plugin as in this example.
+**Note:** As with all the examples here, this configuration can be used in all plugins that use Maven Archiver, not just maven-jar-plugin as in this example.
 
-+-----+
+```xml
 <project>
   <url>http://some.url.org/</url>
   ...
@@ -60,20 +54,17 @@ Manifest Entries
   </build>
   ...
 </project>
-+-----+
+```
 
- As you see above you can use literal values or you can have values from the
- POM interpolated into literals or simply use straight POM expressions. So this
- is what your resultant manifest will look like inside the created jar:
+As you see above you can use literal values or you can have values from the POM interpolated into literals or simply use straight POM expressions. So this is what your resultant manifest will look like inside the created jar:
 
-+-----+
+```properties
 Manifest-Version: 1.0
 Created-By: Apache Maven ${maven.version}
 Build-Jdk: ${java.version}
 mode: development
 url: http://some.url.org/
-+-----+
+```
 
- <<Note:>> If your pom.xml does not have the <<<\<url\>>>> element, referenced
- through interpolation, then the entry <<<url>>> will <<not>> be in the
- manifest.
+**Note:** If your pom.xml does not have the `<url>` element, referenced through interpolation, then the entry `url` will **not** be in the manifest.
+

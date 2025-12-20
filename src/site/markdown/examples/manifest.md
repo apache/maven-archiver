@@ -1,56 +1,48 @@
- ------
- Manifest
- ------
- Dennis Lundberg
- ------
- 2008-01-01
- ------
+---
+title: Manifest
+author: 
+  - Dennis Lundberg
+date: 2008-01-01
+---
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
- ~~ Licensed to the Apache Software Foundation (ASF) under one
- ~~ or more contributor license agreements.  See the NOTICE file
- ~~ distributed with this work for additional information
- ~~ regarding copyright ownership.  The ASF licenses this file
- ~~ to you under the Apache License, Version 2.0 (the
- ~~ "License"); you may not use this file except in compliance
- ~~ with the License.  You may obtain a copy of the License at
- ~~
- ~~   http://www.apache.org/licenses/LICENSE-2.0
- ~~
- ~~ Unless required by applicable law or agreed to in writing,
- ~~ software distributed under the License is distributed on an
- ~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- ~~ KIND, either express or implied.  See the License for the
- ~~ specific language governing permissions and limitations
- ~~ under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
 
-Manifest
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+# Manifest
 
-* Default Manifest
+## Default Manifest
 
- The default manifest created by Maven Archiver will contain the following
- bits of information:
+The default manifest created by Maven Archiver will contain the following bits of information:
 
-+-----+
+```
 Manifest-Version: 1.0
 Created-By: Apache Maven ${maven.version}
 Build-Jdk: ${java.version}
-+-----+
+```
 
- <<Note:>> The <<<Build-Jdk>>> does not take toolchains configuration into account. It is the same
- JDK version as running the Maven instance.
+**Note:** The `Build-Jdk` does not take toolchains configuration into account. It is the same JDK version as running the Maven instance.
 
-* Adding Implementation And Specification Details
+## Adding Implementation And Specification Details
 
- Starting with version 2.1, Maven Archiver no longer creates the
- Implementation and Specification details in the manifest by default.
- If you want them in your manifest you have to say so explicitly in your configuration.
+Starting with version 2.1, Maven Archiver no longer creates the Implementation and Specification details in the manifest by default. If you want them in your manifest you have to say so explicitly in your configuration.
 
- <<Note:>> Because this is a recent change in Maven Archiver, different plugins
- may or may not have started using it yet. Please check the documentation for
- the plugin you want to use. In this example we use maven-jar-plugin 2.1 which
- was the first version of that plugin to use this new feature.
+**Note:** Because this is a recent change in Maven Archiver, different plugins may or may not have started using it yet. Please check the documentation for the plugin you want to use. In this example we use maven-jar-plugin 2.1 which was the first version of that plugin to use this new feature.
 
-+-----+
+```xml
 <project>
   ...
   <build>
@@ -74,11 +66,11 @@ Build-Jdk: ${java.version}
   </build>
   ...
 </project>
-+-----+
+```
 
- The resulting manifest would contain these pieces of information:
+The resulting manifest would contain these pieces of information:
 
-+-----+
+```properties
 Manifest-Version: 1.0
 Created-By: Apache Maven ${maven.version}
 Build-Jdk: ${java.version}
@@ -88,8 +80,6 @@ Specification-Vendor: ${project.organization.name}
 Implementation-Title: ${project.name}
 Implementation-Version: ${project.version}
 Implementation-Vendor: ${project.organization.name}
-+-----+
+```
 
- <<Note:>> If your pom.xml does not have an <<<\<organization\>>>>/<<<\<name\>>>>
- element, then the <<<Specification-Vendor>>> and <<<Implementation-Vendor>>>
- entries will <<not>> be in the manifest.
+**Note:** If your pom.xml does not have an `<organization>`/`<name>` element, then the `Specification-Vendor` and `Implementation-Vendor` entries will **not** be in the manifest.
