@@ -218,13 +218,16 @@ version=\${project.version}</source>
             <td>
               If the manifest will contain these entries:
               <source>Created-By: Maven Archiver ${project.version}
-Build-Jdk-Spec: ${java.specification.version}
+Build-Tool-Jre-Spec: ${java.specification.version}
+Build-Jdk-Spec: ${java.specification.version} of compiler
 Java-Version: &#36;{project maven.compiler.release/target}</source>
               Since 3.5.0, the default value of <code>Created-By</code> entry can be overridden (usually by plugin code) using
               <a href="./apidocs/org/apache/maven/archiver/MavenArchiver.html">MavenArchiver.setCreatedBy(...)</a> API.<br />
               Since 3.6.5, <code>Java-Version</code> entry is discovered by
               <a href="./apidocs/org/apache/maven/archiver/BuildHelper.html">BuildHelper.discoverJavaRelease(...)</a> API.<br />
-              The default value is <code>true</code>.
+              The default value is <code>true</code>.<br />
+              Since 3.6.7, <code>Build-Tool-Jre-Spec</code> entry is added with Maven runtime info, while
+              <code>Build-Jdk-Spec</code> follows eventual toolchain.
             </td>
           </tr>
           <tr>
@@ -258,7 +261,8 @@ Specification-Vendor: \${project.organization.name}</source>
             <td>
               If the manifest will contain these entries:
               <source>Build-Tool: ${maven.build.version}
-Build-Jdk: ${java.version} (${java.vendor})
+Build-Tool-Jre: ${java.version} (${java.vendor})
+Build-Jdk: ${java.version} (${java.vendor}) of compiler
 Build-Os:  ${os.name} (${os.version}; (${os.arch})</source>
               The default value is <code>false</code>.
             </td>
