@@ -45,6 +45,7 @@ import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.toolchain.Toolchain;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
 import org.codehaus.plexus.archiver.jar.Manifest;
 import org.codehaus.plexus.archiver.jar.ManifestException;
@@ -117,6 +118,8 @@ public class MavenArchiver {
     private String createdBy;
 
     private boolean buildJdkSpecDefaultEntry = true;
+
+    private Toolchain toolchain;
 
     /**
      * <p>getManifest.</p>
@@ -615,7 +618,17 @@ public class MavenArchiver {
             addManifestAttribute(m, entries, "Java-Version", javaVersion);
         }
         if (buildJdkSpecDefaultEntry) {
-            addManifestAttribute(m, entries, "Build-Jdk-Spec", System.getProperty("java.specification.version"));
+            String runtimeSpec = System.getProperty("java.specification.version");
+            String buildSpec;
+            if (toolchain == null) {
+                buildSpec = runtimeSpec;
+            } else {
+                // TODO extract JDK Spec from toolchain
+                buildSpec = "TODO";
+            }
+
+            addManifestAttribute(m, entries, "Build-Tool-Jre-Spec", runtimeSpec);
+            addManifestAttribute(m, entries, "Build-Jdk-Spec", buildSpec);
         }
     }
 
@@ -626,11 +639,19 @@ public class MavenArchiver {
                 entries,
                 "Build-Tool",
                 session != null ? session.getSystemProperties().getProperty("maven.build.version") : "Apache Maven");
-        addManifestAttribute(
-                m,
-                entries,
-                "Build-Jdk",
-                String.format("%s (%s)", System.getProperty("java.version"), System.getProperty("java.vendor")));
+
+        String runtimeJvm =
+                String.format("%s (%s)", System.getProperty("java.version"), System.getProperty("java.vendor"));
+        String buildJvm;
+        if (toolchain == null) {
+            buildJvm = runtimeJvm;
+        } else {
+            // TODO extract JDK from toolchain
+            buildJvm = "TODO";
+        }
+        addManifestAttribute(m, entries, "Build-Tool-Jre", runtimeJvm);
+        addManifestAttribute(m, entries, "Build-Jdk", buildJvm);
+
         addManifestAttribute(
                 m,
                 entries,
@@ -809,5 +830,19 @@ public class MavenArchiver {
     public void configureReproducibleBuild(String outputTimestamp) {
         parseBuildOutputTimestamp(outputTimestamp).map(FileTime::from).ifPresent(modifiedTime -> getArchiver()
                 .configureReproducibleBuild(modifiedTime));
+    }
+
+    /**
+     * Configure Toolchain used for creating the archive.
+     *
+     * @param toolchain the toolchain (may be {@code null})
+     * @since 3.6.7
+     */
+    public void setToolchain(Toolchain toolchain) {
+        this.toolchain = toolchain;
+    }
+
+    public Toolchain getToolchain() {
+        return toolchain;
     }
 }
