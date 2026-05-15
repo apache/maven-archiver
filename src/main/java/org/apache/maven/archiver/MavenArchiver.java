@@ -807,7 +807,8 @@ public class MavenArchiver {
      * @see #parseBuildOutputTimestamp(String)
      */
     public void configureReproducibleBuild(String outputTimestamp) {
-        parseBuildOutputTimestamp(outputTimestamp).map(FileTime::from).ifPresent(modifiedTime -> getArchiver()
-                .configureReproducibleBuild(modifiedTime));
+        parseBuildOutputTimestamp(outputTimestamp)
+                .map(FileTime::from)
+                .ifPresent(modifiedTime -> getArchiver().configureReproducibleBuild(modifiedTime));
     }
 }
