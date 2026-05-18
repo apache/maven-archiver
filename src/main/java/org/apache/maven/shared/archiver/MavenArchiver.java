@@ -733,7 +733,8 @@ public class MavenArchiver {
      * @since 3.6.0
      */
     public void configureReproducibleBuild(String outputTimestamp) {
-        parseBuildOutputTimestamp(outputTimestamp).map(FileTime::from).ifPresent(modifiedTime -> getArchiver()
-                .configureReproducibleBuild(modifiedTime));
+        parseBuildOutputTimestamp(outputTimestamp)
+                .map(FileTime::from)
+                .ifPresent(modifiedTime -> getArchiver().configureReproducibleBuild(modifiedTime));
     }
 }
