@@ -55,7 +55,7 @@
 
   <properties>
     <javaVersion>17</javaVersion>
-    <mavenVersion>4.0.0-rc-4</mavenVersion>
+    <mavenVersion>4.0.0-rc-5</mavenVersion>
     <project.build.outputTimestamp>2025-10-05T14:26:08Z</project.build.outputTimestamp>
   </properties>
 

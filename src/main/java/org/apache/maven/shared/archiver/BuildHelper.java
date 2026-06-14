@@ -120,10 +120,10 @@ public class BuildHelper {
             XmlNode pluginConf = plugin.getConfiguration();
 
             if (pluginConf != null) {
-                XmlNode target = pluginConf.getChild(parameter);
+                XmlNode target = pluginConf.child(parameter);
 
                 if (target != null) {
-                    return target.getValue();
+                    return target.value();
                 }
             }
         }
