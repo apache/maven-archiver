@@ -55,7 +55,7 @@
   </distributionManagement>
 
   <properties>
-    <mavenVersion>3.9.15</mavenVersion>
+    <mavenVersion>3.9.16</mavenVersion>
     <javaVersion>8</javaVersion>
     <version.plexus-utils>3.6.0</version.plexus-utils>
     <version.plexus-xml>3.0.2</version.plexus-xml>
