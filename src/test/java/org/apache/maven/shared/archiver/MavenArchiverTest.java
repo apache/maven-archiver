@@ -316,8 +316,6 @@ class MavenArchiverTest {
         config.setForced(true);
         config.getManifest().setAddDefaultImplementationEntries(true);
         config.addManifestEntry("Description", project.getModel().getDescription());
-        // config.addManifestEntry( "EntryWithTab", " foo tab " + ( '\u0009' ) + ( '\u0009' ) // + " bar tab" + ( //
-        // '\u0009' // ) );
         archiver.createArchive(session, project, config);
         assertThat(jarFile).exists();
 
@@ -328,6 +326,46 @@ class MavenArchiverTest {
         String value = attributes.getValue(description);
         assertThat(value).isNotNull();
         assertThat(value.indexOf(ls)).isLessThanOrEqualTo(0);
+    }
+
+    @Test
+    void newlinesInManifestEntryGetReplacedWithSpaces() throws Exception {
+        ProjectStub project = getDummyProject();
+
+        MavenArchiveConfiguration config = new MavenArchiveConfiguration();
+        config.addManifestEntry("MultiLine", "line1\nline2\nline3");
+        config.addManifestEntry("WithCRLF", "line1\r\nline2");
+        config.addManifestEntry("WithTrailingNewline", "trailing\n");
+
+        MavenArchiver archiver = new MavenArchiver();
+        Manifest manifest = archiver.getManifest(session, project, config);
+        Attributes attributes = manifest.getMainAttributes();
+
+        assertThat(attributes.getValue("MultiLine")).isEqualTo("line1 line2 line3");
+        assertThat(attributes.getValue("WithCRLF")).isEqualTo("line1 line2");
+        assertThat(attributes.getValue("WithTrailingNewline")).doesNotContain("\n");
+    }
+
+    @Test
+    void manifestEntryWithEmptyLinesDoesNotCorruptManifest() throws Exception {
+        File jarFile = new File("target/test/dummy.jar");
+        JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
+
+        MavenArchiver archiver = getMavenArchiver(jarArchiver);
+
+        ProjectStub project = getDummyProject();
+        MavenArchiveConfiguration config = new MavenArchiveConfiguration();
+        config.setForced(true);
+        config.addManifestEntry("WithEmptyLine", "para1\n\npara3");
+        config.addManifestEntry("Normal", "value");
+
+        archiver.createArchive(session, project, config);
+        assertThat(jarFile).exists();
+
+        Manifest manifest = getJarFileManifest(jarFile);
+        Attributes attributes = manifest.getMainAttributes();
+        assertThat(attributes.getValue("WithEmptyLine")).isEqualTo("para1  para3");
+        assertThat(attributes.getValue("Normal")).isEqualTo("value");
     }
 
     @Test
