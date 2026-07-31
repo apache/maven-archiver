@@ -24,10 +24,12 @@ updates:
     ignore:
       # Ignore Maven Core updates
       - dependency-name: "org.apache.maven:*"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
+
   - package-ecosystem: "maven"
     directory: "/"
     target-branch: maven-archiver-3.x
@@ -36,3 +38,9 @@ updates:
     ignore:
       # Ignore Maven Core updates
       - dependency-name: "org.apache.maven:*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    target-branch: maven-archiver-3.x
+    schedule:
+      interval: "daily"
