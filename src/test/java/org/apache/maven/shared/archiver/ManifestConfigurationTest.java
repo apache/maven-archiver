@@ -55,4 +55,10 @@ class ManifestConfigurationTest {
         manifestConfiguration.setClasspathPrefix("const/");
         assertThat(manifestConfiguration.getClasspathPrefix()).isEqualTo("const/");
     }
+
+    @Test
+    void getClasspathPrefixShouldHandleNull() {
+        manifestConfiguration.setClasspathPrefix(null);
+        assertThat(manifestConfiguration.getClasspathPrefix()).isEmpty();
+    }
 }

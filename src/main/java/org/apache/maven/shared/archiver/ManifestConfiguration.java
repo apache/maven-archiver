@@ -218,7 +218,7 @@ public class ManifestConfiguration {
      * @param classpathPrefix the prefix
      */
     public void setClasspathPrefix(String classpathPrefix) {
-        this.classpathPrefix = classpathPrefix;
+        this.classpathPrefix = classpathPrefix != null ? classpathPrefix : "";
     }
 
     /**
