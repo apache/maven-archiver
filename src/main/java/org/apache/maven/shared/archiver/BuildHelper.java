@@ -18,8 +18,8 @@
  */
 package org.apache.maven.shared.archiver;
 
-import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.maven.api.model.Build;
 import org.apache.maven.api.model.Model;
@@ -57,17 +57,17 @@ public class BuildHelper {
         return normalizeJavaVersion(jdk);
     }
 
+    private static final Set<String> LEGACY_JDK_VERSIONS = Set.of("1.5", "1.6", "1.7", "1.8");
+
     /**
      * Normalize Java version, for versions 5 to 8 where there is a 1.x alias.
      *
      * @param jdk can be null
-     * @return normalized version if an alias was used
+     * @return normalized version if a known alias is used
      */
     public static String normalizeJavaVersion(String jdk) {
-        if (jdk != null
-                && jdk.length() == 3
-                && Arrays.asList("1.5", "1.6", "1.7", "1.8").contains(jdk)) {
-            jdk = jdk.substring(2);
+        if (jdk != null && LEGACY_JDK_VERSIONS.contains(jdk)) {
+            return jdk.substring(2); // alternatively, just return the exact string you want, e.g., "5"
         }
         return jdk;
     }
