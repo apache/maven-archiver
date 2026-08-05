@@ -99,6 +99,8 @@ public class MavenArchiver {
 
     private static final List<String> ARTIFACT_EXPRESSION_PREFIXES;
 
+    private static final Pattern SPECIFICATION_VERSION_PATTERN = Pattern.compile("([0-9]+\\.[0-9]+)(.*?)");
+
     static {
         List<String> artifactExpressionPrefixes = new ArrayList<>();
         artifactExpressionPrefixes.add("artifact.");
@@ -414,7 +416,7 @@ public class MavenArchiver {
                 m, entries, "Specification-Title", project.getModel().getName());
 
         String version = project.getPomArtifact().getVersion().toString();
-        Matcher matcher = Pattern.compile("([0-9]+\\.[0-9]+)(.*?)").matcher(version);
+        Matcher matcher = SPECIFICATION_VERSION_PATTERN.matcher(version);
         if (matcher.matches()) {
             String specVersion = matcher.group(1);
             addManifestAttribute(m, entries, "Specification-Version", specVersion);
