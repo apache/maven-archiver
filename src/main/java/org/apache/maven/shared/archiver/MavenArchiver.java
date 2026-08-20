@@ -257,6 +257,10 @@ public class MavenArchiver {
 
         DependencyResolverResult result;
         if (config.isAddClasspath()) {
+            if (session == null) {
+                throw new NullPointerException("Session is required when addClasspath is enabled. "
+                        + "Use getManifest(Session, Project, ManifestConfiguration) instead.");
+            }
             result = session.getService(DependencyResolver.class).resolve(session, project, PathScope.MAIN_RUNTIME);
         } else {
             result = null;

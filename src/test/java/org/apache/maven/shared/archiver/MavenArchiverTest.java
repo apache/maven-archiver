@@ -98,6 +98,18 @@ class MavenArchiverTest {
         when(dependencyResolverResult.getDependencies()).thenReturn(dependencies);
     }
 
+    @Test
+    void getManifestWithoutSessionWhenAddClasspath() {
+        MavenArchiver archiver = new MavenArchiver();
+        Project project = getDummyProject();
+        ManifestConfiguration config = new ManifestConfiguration();
+        config.setAddClasspath(true);
+
+        assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(() -> archiver.getManifest(project, config))
+                .withMessageContaining("Session");
+    }
+
     @ParameterizedTest
     @EmptySource
     @ValueSource(
