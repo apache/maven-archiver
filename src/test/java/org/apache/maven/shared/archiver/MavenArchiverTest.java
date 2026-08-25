@@ -381,6 +381,50 @@ class MavenArchiverTest {
     }
 
     @Test
+    void manifestEntryWithMultipleEmptyLinesDoesNotCorruptSubsequentEntries() throws Exception {
+        File jarFile = new File("target/test/dummy.jar");
+        JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
+
+        MavenArchiver archiver = getMavenArchiver(jarArchiver);
+
+        ProjectStub project = getDummyProject();
+        MavenArchiveConfiguration config = new MavenArchiveConfiguration();
+        config.setForced(true);
+        config.addManifestEntry("Description", "first paragraph\n\nsecond paragraph\n\nthird paragraph");
+        config.addManifestEntry("After-Empty-Lines", "should-be-readable");
+
+        archiver.createArchive(session, project, config);
+        assertThat(jarFile).exists();
+
+        Manifest manifest = getJarFileManifest(jarFile);
+        Attributes attributes = manifest.getMainAttributes();
+        assertThat(attributes.getValue("Description")).isEqualTo("first paragraph  second paragraph  third paragraph");
+        assertThat(attributes.getValue("After-Empty-Lines")).isEqualTo("should-be-readable");
+    }
+
+    @Test
+    void manifestEntryWithCRLFEmptyLinesDoesNotCorruptManifest() throws Exception {
+        File jarFile = new File("target/test/dummy.jar");
+        JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
+
+        MavenArchiver archiver = getMavenArchiver(jarArchiver);
+
+        ProjectStub project = getDummyProject();
+        MavenArchiveConfiguration config = new MavenArchiveConfiguration();
+        config.setForced(true);
+        config.addManifestEntry("WithCRLF", "line1\r\n\r\nline3");
+        config.addManifestEntry("WithBareCR", "line1\r\rline3");
+
+        archiver.createArchive(session, project, config);
+        assertThat(jarFile).exists();
+
+        Manifest manifest = getJarFileManifest(jarFile);
+        Attributes attributes = manifest.getMainAttributes();
+        assertThat(attributes.getValue("WithCRLF")).isEqualTo("line1  line3");
+        assertThat(attributes.getValue("WithBareCR")).isEqualTo("line1  line3");
+    }
+
+    @Test
     void deprecatedCreateArchiveAPI() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
