@@ -59,6 +59,8 @@ import org.codehaus.plexus.interpolation.PrefixedPropertiesValueSource;
 import org.codehaus.plexus.interpolation.RecursionInterceptor;
 import org.codehaus.plexus.interpolation.StringSearchInterpolator;
 import org.codehaus.plexus.interpolation.ValueSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.apache.maven.shared.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_CUSTOM;
 import static org.apache.maven.shared.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_REPOSITORY;
@@ -68,6 +70,8 @@ import static org.apache.maven.shared.archiver.ManifestConfiguration.CLASSPATH_L
  * MavenArchiver class.
  */
 public class MavenArchiver {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MavenArchiver.class);
 
     private static final String CREATED_BY = "Maven Archiver";
 
@@ -111,6 +115,28 @@ public class MavenArchiver {
     static boolean isValidModuleName(String name) {
         return SourceVersion.isName(name);
     }
+
+    /**
+     * Sanitizes a candidate module name by applying the same algorithm the JDK uses to derive
+     * an automatic module name from a JAR file name (see {@code ModulePath.cleanModuleName()}):
+     * replaces non-alphanumeric characters with {@code '.'}, collapses repeated dots, and strips
+     * leading/trailing dots.
+     *
+     * @param name the raw module name
+     * @return a sanitized module name, or an empty string if nothing remains after sanitization
+     */
+    static String cleanModuleName(String name) {
+        // Replace non-alphanumeric (including hyphens) with dots — mirrors JDK ModulePath.cleanModuleName()
+        name = NON_ALPHANUM.matcher(name).replaceAll(".");
+        // Collapse repeated dots
+        name = REPEATING_DOTS.matcher(name).replaceAll(".");
+        // Strip leading/trailing dots
+        name = name.replaceAll("^\\.+|\\.+$", "");
+        return name;
+    }
+
+    private static final Pattern NON_ALPHANUM = Pattern.compile("[^A-Za-z0-9]");
+    private static final Pattern REPEATING_DOTS = Pattern.compile("\\.{2,}");
 
     private JarArchiver archiver;
 
@@ -572,7 +598,27 @@ public class MavenArchiver {
             if (automaticModuleName.isEmpty()) {
                 manifest.getMainSection().removeAttribute("Automatic-Module-Name");
             } else if (!isValidModuleName(automaticModuleName)) {
-                throw new ManifestException("Invalid automatic module name: '" + automaticModuleName + "'");
+                String sanitized = cleanModuleName(automaticModuleName);
+                if (sanitized.isEmpty() || !isValidModuleName(sanitized)) {
+                    LOGGER.warn(
+                            "The Automatic-Module-Name '{}' is not a valid Java module name"
+                                    + " and cannot be sanitized. The attribute will be omitted."
+                                    + " Consider configuring a valid name explicitly"
+                                    + " in <archive><manifestEntries><Automatic-Module-Name>.",
+                            automaticModuleName);
+                    manifest.getMainSection().removeAttribute("Automatic-Module-Name");
+                } else {
+                    LOGGER.warn(
+                            "The Automatic-Module-Name '{}' is not a valid Java module name."
+                                    + " It has been sanitized to '{}' using the same algorithm the JDK uses"
+                                    + " to derive automatic module names from JAR file names."
+                                    + " Consider configuring a valid name explicitly"
+                                    + " in <archive><manifestEntries><Automatic-Module-Name>.",
+                            automaticModuleName,
+                            sanitized);
+                    manifest.getMainSection()
+                            .addConfiguredAttribute(new Manifest.Attribute("Automatic-Module-Name", sanitized));
+                }
             }
         }
 
