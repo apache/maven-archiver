@@ -59,6 +59,8 @@ import org.codehaus.plexus.interpolation.PrefixedPropertiesValueSource;
 import org.codehaus.plexus.interpolation.RecursionInterceptor;
 import org.codehaus.plexus.interpolation.StringSearchInterpolator;
 import org.codehaus.plexus.interpolation.ValueSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.apache.maven.shared.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_CUSTOM;
 import static org.apache.maven.shared.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_REPOSITORY;
@@ -69,7 +71,17 @@ import static org.apache.maven.shared.archiver.ManifestConfiguration.CLASSPATH_L
  */
 public class MavenArchiver {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MavenArchiver.class);
+
     private static final String CREATED_BY = "Maven Archiver";
+
+    /**
+     * Minimum timestamp value for ZIP/JAR entries (1980-01-01T00:00:02Z).
+     * Timestamps before this value are clamped to it with a warning.
+     *
+     * @since 3.7.1
+     */
+    public static final Instant DATE_MIN = Instant.parse("1980-01-01T00:00:02Z");
 
     /**
      * The simple layout.
@@ -701,16 +713,32 @@ public class MavenArchiver {
 
         // Number representing seconds since the epoch
         if (isNumeric(outputTimestamp)) {
-            final Instant date = Instant.ofEpochSecond(Long.parseLong(outputTimestamp));
+            Instant date = Instant.ofEpochSecond(Long.parseLong(outputTimestamp));
+            if (date.isBefore(DATE_MIN)) {
+                LOGGER.warn(
+                        "Timestamp '{}' is before the minimum date for ZIP/JAR entries."
+                                + " Clamping to DATE_MIN ({}). See https://github.com/apache/maven-jar-plugin/issues/595",
+                        date,
+                        DATE_MIN);
+                date = DATE_MIN;
+            }
             return Optional.of(date);
         }
 
         try {
             // Parse the date in UTC such as '2011-12-03T10:15:30Z' or with an offset '2019-10-05T20:37:42+06:00'.
-            final Instant date = OffsetDateTime.parse(outputTimestamp)
+            Instant date = OffsetDateTime.parse(outputTimestamp)
                     .withOffsetSameInstant(ZoneOffset.UTC)
                     .truncatedTo(ChronoUnit.SECONDS)
                     .toInstant();
+            if (date.isBefore(DATE_MIN)) {
+                LOGGER.warn(
+                        "Timestamp '{}' is before the minimum date for ZIP/JAR entries."
+                                + " Clamping to DATE_MIN ({}). See https://github.com/apache/maven-jar-plugin/issues/595",
+                        date,
+                        DATE_MIN);
+                date = DATE_MIN;
+            }
             return Optional.of(date);
         } catch (DateTimeParseException pe) {
             throw new IllegalArgumentException(
