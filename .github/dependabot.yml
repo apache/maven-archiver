@@ -41,3 +41,4 @@ updates:
     target-branch: maven-archiver-3.x
     schedule:
       interval: "daily"
+# trigger rescan: 2026-09-25
