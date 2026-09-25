@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
@@ -1366,6 +1367,15 @@ class MavenArchiverTest {
                 .isThrownBy(() -> MavenArchiver.parseBuildOutputTimestamp("2019-10-05T20:37:42+0200"));
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> MavenArchiver.parseBuildOutputTimestamp("2019-10-05T20:37:42-0200"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"0", "1", "315532801", "1970-01-01T00:00:00Z", "1979-12-31T23:59:59Z"})
+    void parseOutputTimestampClampsToDateMin(String value) {
+        // Timestamps before DATE_MIN must be clamped rather than rejected (MJAR-595)
+        Optional<Instant> result = MavenArchiver.parseBuildOutputTimestamp(value);
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(MavenArchiver.DATE_MIN);
     }
 
     @ParameterizedTest
