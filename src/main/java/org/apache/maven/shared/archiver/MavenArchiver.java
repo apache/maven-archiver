@@ -723,7 +723,16 @@ public class MavenArchiver {
             return false;
         }
 
-        for (char c : str.toCharArray()) {
+        int start = 0;
+        if (str.charAt(0) == '-') {
+            if (str.length() == 1) {
+                return false; // lone "-" is not numeric (used as disable sentinel in POM inheritance)
+            }
+            start = 1;
+        }
+
+        for (int i = start; i < str.length(); i++) {
+            char c = str.charAt(i);
             if (c < '0' || c > '9') {
                 return false;
             }
