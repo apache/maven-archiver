@@ -137,7 +137,7 @@ public class BuildHelper {
      * The extension plugins are checked first. If neither is present, the standard deploy plugin is
      * checked. A module with none of these plugins configured is considered deployable by default.
      *
-     * @param model not null
+     * @param model the effective (fully-resolved) project model, not null
      * @return {@code true} if the module will be deployed to a remote repository, {@code false} otherwise
      * @since 4.0.0-beta-6
      */
