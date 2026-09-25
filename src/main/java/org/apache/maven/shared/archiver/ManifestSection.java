@@ -31,17 +31,25 @@ public class ManifestSection {
     private final Map<String, String> manifestEntries = new LinkedHashMap<>();
 
     /**
-     * <p>addManifestEntry.</p>
+     * Adds a single manifest entry.
      *
-     * @param key the key of the manifest entry
-     * @param value the appropriate value
+     * <p>A {@code null} value is accepted and will produce an empty-string attribute in the manifest.
+     * This is intentional: it allows callers to explicitly request an empty manifest entry.
+     * Be careful not to pass {@code null} unintentionally (e.g., from an unguarded map lookup),
+     * as the resulting empty attribute will not indicate any error.</p>
+     *
+     * @param key the manifest attribute name
+     * @param value the manifest attribute value; {@code null} is treated as an empty string
      */
     public void addManifestEntry(String key, String value) {
         manifestEntries.put(key, value);
     }
 
     /**
-     * <p>Getter for the field <code>manifestEntries</code>.</p>
+     * Returns the manifest entries map.
+     *
+     * <p>Values in the returned map may be {@code null}; such entries are treated as empty strings
+     * when written to the manifest.</p>
      *
      * @return the entries
      */
@@ -68,9 +76,14 @@ public class ManifestSection {
     }
 
     /**
-     * <p>addManifestEntries.</p>
+     * Adds all entries from the given map as manifest attributes.
      *
-     * @param map the map to add
+     * <p>A {@code null} value in the map is accepted and will produce an empty-string attribute
+     * in the manifest. This is intentional: it allows callers to explicitly request an empty
+     * manifest entry. Be careful not to pass {@code null} values unintentionally, as they will
+     * not indicate any error.</p>
+     *
+     * @param map the manifest entries to add; map values may be {@code null}, which are treated as empty strings
      */
     public void addManifestEntries(Map<String, String> map) {
         manifestEntries.putAll(map);
