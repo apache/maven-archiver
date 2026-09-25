@@ -214,6 +214,19 @@ public class MavenArchiver {
         manifest.addConfiguredAttribute(attr);
     }
 
+    /**
+     * Sanitizes a manifest attribute value for safe inclusion in the manifest.
+     *
+     * <ul>
+     *   <li>A {@code null} value is converted to an empty string. This is intentional and allows
+     *       callers to produce empty manifest attributes explicitly.</li>
+     *   <li>Embedded CR+LF, CR, or LF characters are replaced with spaces, as multi-line values
+     *       are not valid in a manifest attribute.</li>
+     * </ul>
+     *
+     * @param value the raw attribute value; may be {@code null}
+     * @return the sanitized value, never {@code null}
+     */
     private static String sanitizeManifestValue(String value) {
         if (value == null) {
             return "";
