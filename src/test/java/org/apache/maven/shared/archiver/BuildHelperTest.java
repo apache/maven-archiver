@@ -18,8 +18,11 @@
  */
 package org.apache.maven.shared.archiver;
 
+import java.util.Map;
+
 import org.apache.maven.api.model.Build;
 import org.apache.maven.api.model.Model;
+import org.apache.maven.api.model.PluginManagement;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,12 +30,30 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class BuildHelperTest {
+
+    // Mocking is necessary here because the standard Maven model implementation
+    // always returns a non-null map from getPluginsAsMap(). These tests exercise
+    // the defensive null check against non-standard PluginContainer implementations.
+
     @Test
     void getPluginHandlesNullPluginMap() {
         Model model = mock(Model.class);
         Build build = mock(Build.class);
         when(model.getBuild()).thenReturn(build);
         when(build.getPluginsAsMap()).thenReturn(null);
+
+        assertThat(BuildHelper.getPlugin(model, "org.example:example-plugin")).isNull();
+    }
+
+    @Test
+    void getPluginHandlesNullPluginMapInPluginManagement() {
+        Model model = mock(Model.class);
+        Build build = mock(Build.class);
+        PluginManagement mgmt = mock(PluginManagement.class);
+        when(model.getBuild()).thenReturn(build);
+        when(build.getPluginsAsMap()).thenReturn(Map.of());
+        when(build.getPluginManagement()).thenReturn(mgmt);
+        when(mgmt.getPluginsAsMap()).thenReturn(null);
 
         assertThat(BuildHelper.getPlugin(model, "org.example:example-plugin")).isNull();
     }
