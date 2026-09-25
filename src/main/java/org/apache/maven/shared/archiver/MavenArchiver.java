@@ -105,6 +105,10 @@ public class MavenArchiver {
 
     private static final Pattern SPECIFICATION_VERSION_PATTERN = Pattern.compile("([0-9]+\\.[0-9]+)(.*?)");
 
+    private static final Pattern NON_ALPHANUM = Pattern.compile("[^A-Za-z0-9]");
+
+    private static final Pattern REPEATING_DOTS = Pattern.compile("\\.{2,}");
+
     static {
         List<String> artifactExpressionPrefixes = new ArrayList<>();
         artifactExpressionPrefixes.add("artifact.");
@@ -134,9 +138,6 @@ public class MavenArchiver {
         name = name.replaceAll("^\\.+|\\.+$", "");
         return name;
     }
-
-    private static final Pattern NON_ALPHANUM = Pattern.compile("[^A-Za-z0-9]");
-    private static final Pattern REPEATING_DOTS = Pattern.compile("\\.{2,}");
 
     private JarArchiver archiver;
 
