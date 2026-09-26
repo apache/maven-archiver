@@ -632,7 +632,7 @@ public class MavenArchiver {
             try (InputStream in = inputStream) {
                 properties.load(in);
             } catch (IllegalArgumentException | IOException ex) {
-                // ignore and return empty properties
+                throw new IllegalStateException("Unable to read Maven Archiver properties", ex);
             }
         }
         return properties;

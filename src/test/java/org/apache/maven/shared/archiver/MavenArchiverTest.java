@@ -18,11 +18,15 @@
  */
 package org.apache.maven.shared.archiver;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -96,6 +100,17 @@ class MavenArchiverTest {
         when(dependencyResolver.resolve(eq(session), any(Project.class), eq(PathScope.MAIN_RUNTIME)))
                 .thenReturn(dependencyResolverResult);
         when(dependencyResolverResult.getDependencies()).thenReturn(dependencies);
+    }
+
+    @Test
+    void malformedPomPropertiesAreReported() throws Exception {
+        Method method = MavenArchiver.class.getDeclaredMethod("loadOptionalProperties", InputStream.class);
+        method.setAccessible(true);
+
+        assertThatExceptionOfType(InvocationTargetException.class)
+                .isThrownBy(() -> method.invoke(null, new ByteArrayInputStream(
+                        "version=\\uZZZZ".getBytes(StandardCharsets.ISO_8859_1))))
+                .withCauseInstanceOf(IllegalStateException.class);
     }
 
     @Test
