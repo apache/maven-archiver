@@ -59,6 +59,8 @@ import org.codehaus.plexus.interpolation.PrefixedPropertiesValueSource;
 import org.codehaus.plexus.interpolation.RecursionInterceptor;
 import org.codehaus.plexus.interpolation.StringSearchInterpolator;
 import org.codehaus.plexus.interpolation.ValueSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.apache.maven.shared.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_CUSTOM;
 import static org.apache.maven.shared.archiver.ManifestConfiguration.CLASSPATH_LAYOUT_TYPE_REPOSITORY;
@@ -70,6 +72,8 @@ import static org.apache.maven.shared.archiver.ManifestConfiguration.CLASSPATH_L
 public class MavenArchiver {
 
     private static final String CREATED_BY = "Maven Archiver";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MavenArchiver.class);
 
     /**
      * The simple layout.
@@ -632,7 +636,7 @@ public class MavenArchiver {
             try (InputStream in = inputStream) {
                 properties.load(in);
             } catch (IllegalArgumentException | IOException ex) {
-                throw new IllegalStateException("Unable to read Maven Archiver properties", ex);
+                LOGGER.warn("Unable to read Maven Archiver properties; continuing without the version", ex);
             }
         }
         return properties;

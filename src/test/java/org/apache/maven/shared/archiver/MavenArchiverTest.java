@@ -22,7 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
@@ -103,14 +102,12 @@ class MavenArchiverTest {
     }
 
     @Test
-    void malformedPomPropertiesAreReported() throws Exception {
+    void malformedPomPropertiesFallBackToEmptyProperties() throws Exception {
         Method method = MavenArchiver.class.getDeclaredMethod("loadOptionalProperties", InputStream.class);
         method.setAccessible(true);
 
-        assertThatExceptionOfType(InvocationTargetException.class)
-                .isThrownBy(() -> method.invoke(null, new ByteArrayInputStream(
-                        "version=\\uZZZZ".getBytes(StandardCharsets.ISO_8859_1))))
-                .withCauseInstanceOf(IllegalStateException.class);
+        assertThat(method.invoke(null, new ByteArrayInputStream("version=\\uZZZZ".getBytes(StandardCharsets.ISO_8859_1))))
+                .isEqualTo(new Properties());
     }
 
     @Test
