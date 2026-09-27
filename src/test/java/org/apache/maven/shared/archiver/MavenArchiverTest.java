@@ -106,7 +106,8 @@ class MavenArchiverTest {
         Method method = MavenArchiver.class.getDeclaredMethod("loadOptionalProperties", InputStream.class);
         method.setAccessible(true);
 
-        assertThat(method.invoke(null, new ByteArrayInputStream("version=\\uZZZZ".getBytes(StandardCharsets.ISO_8859_1))))
+        assertThat(method.invoke(
+                        null, new ByteArrayInputStream("version=\\uZZZZ".getBytes(StandardCharsets.ISO_8859_1))))
                 .isEqualTo(new Properties());
     }
 
