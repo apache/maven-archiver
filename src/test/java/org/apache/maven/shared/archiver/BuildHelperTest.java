@@ -30,7 +30,8 @@ import org.apache.maven.api.xml.XmlNode;
 import org.apache.maven.api.xml.XmlService;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BuildHelperTest {
 
@@ -41,7 +42,7 @@ class BuildHelperTest {
     @Test
     void isDeployableWithNoPluginsReturnsTrue() {
         Model model = Model.newBuilder().build();
-        assertThat(BuildHelper.isDeployable(model)).isTrue();
+        assertTrue(BuildHelper.isDeployable(model));
     }
 
     // -------------------------------------------------------------------------
@@ -55,7 +56,7 @@ class BuildHelperTest {
                 .artifactId("maven-deploy-plugin")
                 .build();
         Model model = modelWithPlugin(deployPlugin);
-        assertThat(BuildHelper.isDeployable(model)).isTrue();
+        assertTrue(BuildHelper.isDeployable(model));
     }
 
     @Test
@@ -66,7 +67,7 @@ class BuildHelperTest {
                 .configuration(xml("<configuration><skip>true</skip></configuration>"))
                 .build();
         Model model = modelWithPlugin(deployPlugin);
-        assertThat(BuildHelper.isDeployable(model)).isFalse();
+        assertFalse(BuildHelper.isDeployable(model));
     }
 
     @Test
@@ -76,7 +77,7 @@ class BuildHelperTest {
                 .artifactId("maven-deploy-plugin")
                 .build();
         Model model = modelWithPluginAndProperty(deployPlugin, "maven.deploy.skip", "true");
-        assertThat(BuildHelper.isDeployable(model)).isFalse();
+        assertFalse(BuildHelper.isDeployable(model));
     }
 
     @Test
@@ -91,7 +92,7 @@ class BuildHelperTest {
                 .executions(List.of(exec))
                 .build();
         Model model = modelWithPlugin(deployPlugin);
-        assertThat(BuildHelper.isDeployable(model)).isTrue();
+        assertTrue(BuildHelper.isDeployable(model));
     }
 
     @Test
@@ -107,7 +108,7 @@ class BuildHelperTest {
                 .executions(List.of(exec))
                 .build();
         Model model = modelWithPlugin(deployPlugin);
-        assertThat(BuildHelper.isDeployable(model)).isFalse();
+        assertFalse(BuildHelper.isDeployable(model));
     }
 
     @Test
@@ -122,7 +123,7 @@ class BuildHelperTest {
                 .executions(List.of(exec))
                 .build();
         Model model = modelWithPluginAndProperty(deployPlugin, "maven.deploy.skip", "true");
-        assertThat(BuildHelper.isDeployable(model)).isFalse();
+        assertFalse(BuildHelper.isDeployable(model));
     }
 
     @Test
@@ -139,7 +140,7 @@ class BuildHelperTest {
                 .executions(List.of(exec))
                 .build();
         Model model = modelWithPluginAndProperty(deployPlugin, "maven.deploy.skip", "true");
-        assertThat(BuildHelper.isDeployable(model)).isTrue();
+        assertTrue(BuildHelper.isDeployable(model));
     }
 
     @Test
@@ -153,7 +154,7 @@ class BuildHelperTest {
                 .executions(List.of(exec))
                 .build();
         Model model = modelWithPluginAndProperty(deployPlugin, "maven.deploy.skip", "true");
-        assertThat(BuildHelper.isDeployable(model)).isFalse();
+        assertFalse(BuildHelper.isDeployable(model));
     }
 
     // -------------------------------------------------------------------------
@@ -172,7 +173,7 @@ class BuildHelperTest {
                 .executions(List.of(exec))
                 .build();
         Model model = modelWithPlugin(central);
-        assertThat(BuildHelper.isDeployable(model)).isTrue();
+        assertTrue(BuildHelper.isDeployable(model));
     }
 
     @Test
@@ -188,7 +189,7 @@ class BuildHelperTest {
                 .executions(List.of(exec))
                 .build();
         Model model = modelWithPlugin(central);
-        assertThat(BuildHelper.isDeployable(model)).isFalse();
+        assertFalse(BuildHelper.isDeployable(model));
     }
 
     @Test
@@ -203,7 +204,7 @@ class BuildHelperTest {
                 .executions(List.of(exec))
                 .build();
         Model model = modelWithPluginAndProperty(central, "skipPublishing", "true");
-        assertThat(BuildHelper.isDeployable(model)).isFalse();
+        assertFalse(BuildHelper.isDeployable(model));
     }
 
     @Test
@@ -213,7 +214,7 @@ class BuildHelperTest {
                 .artifactId("central-publishing-maven-plugin")
                 .build();
         Model model = modelWithPlugin(central);
-        assertThat(BuildHelper.isDeployable(model)).isTrue();
+        assertTrue(BuildHelper.isDeployable(model));
     }
 
     @Test
@@ -234,7 +235,7 @@ class BuildHelperTest {
                 .configuration(xml("<configuration><skip>true</skip></configuration>"))
                 .build();
         Model model = modelWithPlugins(List.of(central, deployPlugin));
-        assertThat(BuildHelper.isDeployable(model)).isTrue();
+        assertTrue(BuildHelper.isDeployable(model));
     }
 
     // -------------------------------------------------------------------------
@@ -253,7 +254,7 @@ class BuildHelperTest {
                 .executions(List.of(exec))
                 .build();
         Model model = modelWithPlugin(nexus);
-        assertThat(BuildHelper.isDeployable(model)).isTrue();
+        assertTrue(BuildHelper.isDeployable(model));
     }
 
     @Test
@@ -268,7 +269,7 @@ class BuildHelperTest {
                 .executions(List.of(exec))
                 .build();
         Model model = modelWithPluginAndProperty(nexus, "skipNexusStagingDeployMojo", "true");
-        assertThat(BuildHelper.isDeployable(model)).isFalse();
+        assertFalse(BuildHelper.isDeployable(model));
     }
 
     // -------------------------------------------------------------------------

@@ -119,27 +119,32 @@ public class BuildHelper {
     /**
      * Determines whether a Maven module will be deployed to a remote repository.
      * <p>
-     * This method analyses the model's plugin configuration to detect if deployment will be skipped,
-     * taking into account the three known deployment mechanisms:
+     * This method analyses the model's plugin configuration to detect if deployment will be skipped.
+     * It checks the three known deployment mechanisms in priority order:
      * <ol>
-     * <li>{@code central-publishing-maven-plugin} — the new Sonatype Central Portal publisher; when
-     *     present it replaces {@code maven-deploy-plugin}. The module is considered deployable if the
-     *     plugin has at least one execution of the {@code publish} goal that is not skipped (via the
-     *     {@code skipPublishing} parameter or property).</li>
-     * <li>{@code nexus-staging-maven-plugin} — the legacy Sonatype OSS publisher; when present it
-     *     replaces standard deploy. The module is considered deployable if it has at least one execution
-     *     of the {@code deploy} goal that is not skipped (via the {@code skipNexusStagingDeployMojo}
-     *     parameter or property).</li>
-     * <li>{@code maven-deploy-plugin} — the standard deploy plugin. The module is deployable if it has
-     *     at least one execution of the {@code deploy} goal that is not skipped (via the {@code skip}
-     *     parameter or the {@code maven.deploy.skip} property).</li>
+     * <li>{@code central-publishing-maven-plugin} — the new Sonatype Central Portal publisher.
+     *     When present, it replaces {@code maven-deploy-plugin}.
+     *     The module is considered deployable if the plugin has at least one execution of the
+     *     {@code publish} goal that is not skipped
+     *     (via the {@code skipPublishing} parameter or property).</li>
+     * <li>{@code nexus-staging-maven-plugin} — the legacy Sonatype OSS publisher.
+     *     When present, it replaces standard deploy.
+     *     The module is considered deployable if it has at least one execution of the {@code deploy}
+     *     goal that is not skipped
+     *     (via the {@code skipNexusStagingDeployMojo} parameter or property).</li>
+     * <li>{@code maven-deploy-plugin} — the standard deploy plugin.
+     *     The module is deployable if it has at least one execution of the {@code deploy} goal
+     *     that is not skipped
+     *     (via the {@code skip} parameter or the {@code maven.deploy.skip} property).</li>
      * </ol>
-     * The extension plugins are checked first. If neither is present, the standard deploy plugin is
-     * checked. A module with none of these plugins configured is considered deployable by default.
+     * Only the first matching plugin is evaluated: if {@code central-publishing-maven-plugin} is
+     * present, the other two are ignored regardless of their configuration. If neither extension
+     * plugin is present, the standard deploy plugin is checked. A module with none of these plugins
+     * configured is considered deployable by default.
      *
      * @param model the effective (fully-resolved) project model, not null
      * @return {@code true} if the module will be deployed to a remote repository, {@code false} otherwise
-     * @since 4.0.0-beta-6
+     * @since 4.0.0
      */
     public static boolean isDeployable(Model model) {
         Plugin centralPublishing = getPlugin(model, CENTRAL_PUBLISHING_PLUGIN);
