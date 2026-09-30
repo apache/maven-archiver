@@ -103,11 +103,15 @@ class MavenArchiverTest {
 
     @Test
     void malformedPomPropertiesFallBackToEmptyProperties() throws Exception {
-        Method method = MavenArchiver.class.getDeclaredMethod("loadOptionalProperties", InputStream.class);
+        Method method =
+                MavenArchiver.class.getDeclaredMethod("loadOptionalProperties", InputStream.class, String.class);
         method.setAccessible(true);
 
+        String resourcePath = "/META-INF/maven/org.apache.maven.shared/maven-archiver/pom.properties";
         assertThat(method.invoke(
-                        null, new ByteArrayInputStream("version=\\uZZZZ".getBytes(StandardCharsets.ISO_8859_1))))
+                        null,
+                        new ByteArrayInputStream("version=\\uZZZZ".getBytes(StandardCharsets.ISO_8859_1)),
+                        resourcePath))
                 .isEqualTo(new Properties());
     }
 
