@@ -114,7 +114,7 @@ public class BuildHelper {
             return null;
         }
         Map<String, Plugin> pluginsAsMap = container.getPluginsAsMap();
-        return pluginsAsMap.get(pluginGa);
+        return pluginsAsMap == null ? null : pluginsAsMap.get(pluginGa);
     }
 
     private static String getPluginParameter(Plugin plugin, String parameter) {
