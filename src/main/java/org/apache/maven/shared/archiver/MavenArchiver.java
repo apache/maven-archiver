@@ -75,8 +75,6 @@ public class MavenArchiver {
 
     private static final String CREATED_BY = "Maven Archiver";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MavenArchiver.class);
-
     /**
      * Minimum timestamp value for ZIP/JAR entries (1980-01-01T00:00:02Z).
      * Timestamps before this value are clamped to it with a warning.
