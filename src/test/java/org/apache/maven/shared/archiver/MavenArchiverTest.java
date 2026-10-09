@@ -132,6 +132,20 @@ class MavenArchiverTest {
         assertThat(MavenArchiver.isValidModuleName(value)).isTrue();
     }
 
+    @ParameterizedTest
+    @CsvSource({
+        "dash-is-invalid,          dash.is.invalid",
+        "integration-test,         integration.test",
+        "org.apache.foo-bar,       org.apache.foo.bar",
+        "a--b,                     a.b",
+        "-leading,                 leading",
+        "trailing-,                trailing",
+        "a+b:c,                    a.b.c"
+    })
+    void cleanModuleNames(String input, String expected) {
+        assertThat(MavenArchiver.cleanModuleName(input.trim())).isEqualTo(expected.trim());
+    }
+
     @Test
     void multiClassPath() throws Exception {
         final File tempFile = File.createTempFile("maven-archiver-test-", ".jar");
@@ -549,8 +563,13 @@ class MavenArchiverTest {
         assertThat(manifest).containsEntry(new Attributes.Name("key"), "value");
     }
 
+    /*
+     * Test to make sure that an Automatic-Module-Name that cannot be sanitized to a valid module name
+     * (e.g. starts with a digit segment, or contains Java keywords) is warned about and omitted,
+     * rather than failing the build.
+     */
     @Test
-    void manifestWithInvalidAutomaticModuleNameThrowsOnCreateArchive() throws Exception {
+    void manifestWithUnsanitizableAutomaticModuleNameWarnsAndOmits() throws Exception {
         File jarFile = new File("target/test/dummy.jar");
         JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
 
@@ -560,14 +579,20 @@ class MavenArchiverTest {
         MavenArchiveConfiguration config = new MavenArchiveConfiguration();
 
         Map<String, String> manifestEntries = new HashMap<>();
+        // "123.in-valid.new.name" sanitizes to "123.in.valid.new.name" which is still invalid
+        // (digit-leading segment + "new" is a keyword)
         manifestEntries.put("Automatic-Module-Name", "123.in-valid.new.name");
         config.setManifestEntries(manifestEntries);
 
-        try {
-            archiver.createArchive(session, project, config);
-        } catch (MavenArchiverException e) {
-            assertThat(e.getMessage()).contains("Invalid automatic module name: '123.in-valid.new.name'");
-        }
+        // Should not throw — invalid module names that cannot be sanitized are warned about and omitted
+        archiver.createArchive(session, project, config);
+        assertThat(jarFile).exists();
+
+        final Manifest jarFileManifest = getJarFileManifest(jarFile);
+        Attributes manifest = jarFileManifest.getMainAttributes();
+
+        // Attribute must be absent — it could not be sanitized to a valid name
+        assertThat(manifest).doesNotContainKey(new Attributes.Name("Automatic-Module-Name"));
     }
 
     /*
@@ -595,6 +620,37 @@ class MavenArchiverTest {
         Attributes manifest = jarFileManifest.getMainAttributes();
 
         assertThat(manifest).doesNotContainKey(new Attributes.Name("Automatic-Module-Name"));
+    }
+
+    /*
+     * Test to make sure that a hyphenated Automatic-Module-Name (e.g. derived from
+     * an artifactId like "integration-test") is sanitized to a valid name by replacing
+     * non-alphanumeric characters with dots — mirroring the JDK's own algorithm for deriving
+     * automatic module names from JAR file names. Reproduces the scenario from
+     * https://github.com/apache/maven-jar-plugin/issues/596
+     */
+    @Test
+    void manifestWithHyphenatedAutomaticModuleNameIsSanitized() throws Exception {
+        File jarFile = new File("target/test/dummy.jar");
+        JarArchiver jarArchiver = getCleanJarArchiver(jarFile);
+
+        MavenArchiver archiver = getMavenArchiver(jarArchiver);
+
+        Project project = getDummyProject();
+        MavenArchiveConfiguration config = new MavenArchiveConfiguration();
+
+        Map<String, String> manifestEntries = new HashMap<>();
+        manifestEntries.put("Automatic-Module-Name", "org.apache.geronimo.arthur.integration-test");
+        config.setManifestEntries(manifestEntries);
+
+        archiver.createArchive(session, project, config);
+        assertThat(jarFile).exists();
+
+        final Manifest jarFileManifest = getJarFileManifest(jarFile);
+        Attributes manifest = jarFileManifest.getMainAttributes();
+
+        // Hyphen replaced with dot — "integration-test" becomes "integration.test"
+        assertThat(manifest.getValue("Automatic-Module-Name")).isEqualTo("org.apache.geronimo.arthur.integration.test");
     }
 
     //
