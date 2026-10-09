@@ -75,6 +75,8 @@ public class MavenArchiver {
 
     private static final String CREATED_BY = "Maven Archiver";
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MavenArchiver.class);
+
     /**
      * The simple layout.
      */
@@ -680,19 +682,27 @@ public class MavenArchiver {
     }
 
     private static String getCreatedByVersion(String groupId, String artifactId) {
-        final Properties properties = loadOptionalProperties(MavenArchiver.class.getResourceAsStream(
-                "/META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties"));
+        String resourcePath = "/META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties";
+        final Properties properties =
+                loadOptionalProperties(MavenArchiver.class.getResourceAsStream(resourcePath), resourcePath);
 
         return properties.getProperty("version");
     }
 
-    private static Properties loadOptionalProperties(final InputStream inputStream) {
+    private static Properties loadOptionalProperties(final InputStream inputStream, String resourcePath) {
         Properties properties = new Properties();
         if (inputStream != null) {
             try (InputStream in = inputStream) {
                 properties.load(in);
             } catch (IllegalArgumentException | IOException ex) {
-                // ignore and return empty properties
+                LOGGER.warn(
+                        "Unable to read Maven Archiver properties from '{}': {}. "
+                                + "The 'Created-By' manifest entry will not include the version. "
+                                + "This may indicate a corrupt artifact in your local repository; "
+                                + "try running 'mvn dependency:purge-local-repository' to re-download it.",
+                        resourcePath,
+                        ex.getMessage(),
+                        ex);
             }
         }
         return properties;
