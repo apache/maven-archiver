@@ -1443,9 +1443,10 @@ class MavenArchiverTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"0", "1", "315532801", "1970-01-01T00:00:00Z", "1979-12-31T23:59:59Z"})
+    @CsvSource({"0", "1", "315532801", "1970-01-01T00:00:00Z", "1979-12-31T23:59:59Z", "-1", "-315532802"})
     void parseOutputTimestampClampsToDateMin(String value) {
-        // Timestamps before DATE_MIN must be clamped rather than rejected (MJAR-595)
+        // Timestamps before DATE_MIN -- including negative epochs (#366) -- must be
+        // clamped rather than rejected with a misleading error (MJAR-595)
         Optional<Instant> result = MavenArchiver.parseBuildOutputTimestamp(value);
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(MavenArchiver.DATE_MIN);
@@ -1469,10 +1470,7 @@ class MavenArchiverTest {
         "1988-02-22T15:23:47.76598Z,572541827",
         "2011-12-03T10:15:30+01:00,1322903730",
         "1980-01-01T00:00:02Z,315532802",
-        "2099-12-31T23:59:59Z,4102444799",
-        // Negative epoch timestamps (seconds before 1970-01-01) must be accepted
-        "-1,-1",
-        "-315532802,-315532802"
+        "2099-12-31T23:59:59Z,4102444799"
     })
     void parseOutputTimestampInstant(String value, long expected) {
         assertThat(MavenArchiver.parseBuildOutputTimestamp(value)).contains(Instant.ofEpochSecond(expected));
