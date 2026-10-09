@@ -818,7 +818,7 @@ public class MavenArchiver {
     }
 
     private static Instant clampToDateMin(Instant date, String originalInput) {
-        if (date.isBefore(DATE_MIN)) {
+        if (!date.isBefore(Instant.EPOCH) && date.isBefore(DATE_MIN)) {
             LOGGER.warn(
                     "Timestamp '{}' (parsed from '{}') is before the minimum date for ZIP/JAR entries."
                             + " Clamping to DATE_MIN ({}). See https://github.com/apache/maven-jar-plugin/issues/595",
