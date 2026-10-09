@@ -1470,9 +1470,12 @@ class MavenArchiverTest {
         "2011-12-03T10:15:30+01:00,1322903730",
         "1980-01-01T00:00:02Z,315532802",
         "2099-12-31T23:59:59Z,4102444799",
-        // Negative epoch timestamps (seconds before 1970-01-01) must be accepted
+        // Negative epoch timestamps (seconds before 1970-01-01) must be accepted (numeric)
         "-1,-1",
-        "-315532802,-315532802"
+        "-315532802,-315532802",
+        // ISO 8601 pre-epoch dates must also pass through without clamping
+        "1969-12-31T23:59:59Z,-1",
+        "1960-01-01T00:00:00Z,-315619200"
     })
     void parseOutputTimestampInstant(String value, long expected) {
         assertThat(MavenArchiver.parseBuildOutputTimestamp(value)).contains(Instant.ofEpochSecond(expected));
