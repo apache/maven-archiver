@@ -47,13 +47,12 @@ project:
     committee: maven
     name: Apache Maven Archiver
     description: The Archiver is a shared component for creating archives such as JARs.
-    short_description: The Archiver is a shared component for creating archives such as JARs.
     homepage: https://maven.apache.org/shared/maven-archiver/
     download_page: https://maven.apache.org/shared/maven-archiver/download.cgi
     bug_database: https://maven.apache.org/shared/maven-archiver/issue-management.html
     mailing_lists: https://maven.apache.org/shared/maven-archiver/mailing-lists.html
     repositories:
-      - https://github.com/apache/maven-archiver.git
+      - https://github.com/apache/maven-archiver
     categories:
       - build-management
     programming_languages:
