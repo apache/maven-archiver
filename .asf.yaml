@@ -67,7 +67,7 @@ project:
     vote_recipients:
       to: dev@maven.apache.org
     announce_recipients:
-      to: announce@apache.org
+      to: announce@maven.apache.org
       cc:
         - dev@maven.apache.org
         - users@maven.apache.org
