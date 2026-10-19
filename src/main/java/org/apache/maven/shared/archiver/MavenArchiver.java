@@ -20,25 +20,21 @@ package org.apache.maven.shared.archiver;
 
 import javax.lang.model.SourceVersion;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.FileTime;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,17 +44,7 @@ import org.apache.maven.api.Project;
 import org.apache.maven.api.Session;
 import org.apache.maven.api.services.DependencyResolver;
 import org.apache.maven.api.services.DependencyResolverResult;
-import org.codehaus.plexus.archiver.jar.JarArchiver;
-import org.codehaus.plexus.archiver.jar.Manifest;
-import org.codehaus.plexus.archiver.jar.ManifestException;
-import org.codehaus.plexus.interpolation.InterpolationException;
-import org.codehaus.plexus.interpolation.Interpolator;
-import org.codehaus.plexus.interpolation.PrefixAwareRecursionInterceptor;
-import org.codehaus.plexus.interpolation.PrefixedObjectValueSource;
-import org.codehaus.plexus.interpolation.PrefixedPropertiesValueSource;
-import org.codehaus.plexus.interpolation.RecursionInterceptor;
-import org.codehaus.plexus.interpolation.StringSearchInterpolator;
-import org.codehaus.plexus.interpolation.ValueSource;
+import org.apache.maven.api.services.Interpolator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,20 +95,11 @@ public class MavenArchiver {
             "${artifact.groupIdPath}/${artifact.artifactId}/" + "${artifact.baseVersion}/${artifact.artifactId}-"
                     + "${artifact.baseVersion}${dashClassifier?}.${artifact.extension}";
 
-    private static final List<String> ARTIFACT_EXPRESSION_PREFIXES;
-
     private static final Pattern SPECIFICATION_VERSION_PATTERN = Pattern.compile("([0-9]+\\.[0-9]+)(.*?)");
 
     private static final Pattern NON_ALPHANUM = Pattern.compile("[^A-Za-z0-9]");
 
     private static final Pattern REPEATING_DOTS = Pattern.compile("\\.{2,}");
-
-    static {
-        List<String> artifactExpressionPrefixes = new ArrayList<>();
-        artifactExpressionPrefixes.add("artifact.");
-
-        ARTIFACT_EXPRESSION_PREFIXES = artifactExpressionPrefixes;
-    }
 
     static boolean isValidModuleName(String name) {
         return SourceVersion.isName(name);
@@ -147,10 +124,6 @@ public class MavenArchiver {
         return name;
     }
 
-    private JarArchiver archiver;
-
-    private File archiveFile;
-
     private String createdBy;
 
     private boolean buildJdkSpecDefaultEntry = true;
@@ -161,7 +134,7 @@ public class MavenArchiver {
      * @param session the Maven Session
      * @param project the Maven Project
      * @param config  the MavenArchiveConfiguration
-     * @return the {@link org.codehaus.plexus.archiver.jar.Manifest}
+     * @return the {@link java.util.jar.Manifest}
      * @throws MavenArchiverException in case of a failure
      */
     public Manifest getManifest(Session session, Project project, MavenArchiveConfiguration config)
@@ -171,47 +144,40 @@ public class MavenArchiver {
 
         Manifest manifest = getManifest(session, project, config.getManifest(), entries);
 
-        try {
-            // any custom manifest entries in the archive configuration manifest?
-            if (hasManifestEntries) {
-
-                for (Map.Entry<String, String> entry : entries.entrySet()) {
-                    String key = entry.getKey();
-                    String value = entry.getValue();
-                    Manifest.Attribute attr = manifest.getMainSection().getAttribute(key);
-                    if (key.equals(Attributes.Name.CLASS_PATH.toString()) && attr != null) {
-                        // Merge the user-supplied Class-Path value with the programmatically
-                        // created Class-Path. Note that the user-supplied value goes first
-                        // so that resources there will override any in the standard Class-Path.
-                        attr.setValue(value + " " + attr.getValue());
-                    } else {
-                        addManifestAttribute(manifest, key, value);
-                    }
+        // any custom manifest entries in the archive configuration manifest?
+        if (hasManifestEntries) {
+            for (Map.Entry<String, String> entry : entries.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                String existing = manifest.getMainAttributes().getValue(key);
+                if (key.equals(Attributes.Name.CLASS_PATH.toString()) && existing != null) {
+                    // Merge the user-supplied Class-Path value with the programmatically
+                    // created Class-Path. Note that the user-supplied value goes first
+                    // so that resources there will override any in the standard Class-Path.
+                    manifest.getMainAttributes().putValue(key, value + " " + existing);
+                } else {
+                    addManifestAttribute(manifest, key, value);
                 }
             }
+        }
 
-            // any custom manifest sections in the archive configuration manifest?
-            if (!config.isManifestSectionsEmpty()) {
-                for (ManifestSection section : config.getManifestSections()) {
-                    Manifest.Section theSection = new Manifest.Section();
-                    theSection.setName(section.getName());
+        // any custom manifest sections in the archive configuration manifest?
+        if (!config.isManifestSectionsEmpty()) {
+            for (ManifestSection section : config.getManifestSections()) {
+                Attributes attrs = new Attributes();
 
-                    if (!section.isManifestEntriesEmpty()) {
-                        Map<String, String> sectionEntries = section.getManifestEntries();
+                if (!section.isManifestEntriesEmpty()) {
+                    Map<String, String> sectionEntries = section.getManifestEntries();
 
-                        for (Map.Entry<String, String> entry : sectionEntries.entrySet()) {
-                            String key = entry.getKey();
-                            String value = sanitizeManifestValue(entry.getValue());
-                            Manifest.Attribute attr = new Manifest.Attribute(key, value);
-                            theSection.addConfiguredAttribute(attr);
-                        }
+                    for (Map.Entry<String, String> entry : sectionEntries.entrySet()) {
+                        String key = entry.getKey();
+                        String value = sanitizeManifestValue(entry.getValue());
+                        attrs.putValue(key, value);
                     }
-
-                    manifest.addConfiguredSection(theSection);
                 }
+
+                manifest.getEntries().put(section.getName(), attrs);
             }
-        } catch (ManifestException e) {
-            throw new MavenArchiverException("Unable to create manifest", e);
         }
 
         return manifest;
@@ -222,7 +188,7 @@ public class MavenArchiver {
      *
      * @param project {@link org.apache.maven.api.Project}
      * @param config  {@link ManifestConfiguration}
-     * @return {@link org.codehaus.plexus.archiver.jar.Manifest}
+     * @return {@link java.util.jar.Manifest}
      * @throws MavenArchiverException exception
      */
     // TODO Add user attributes list and user groups list
@@ -235,18 +201,16 @@ public class MavenArchiver {
         return getManifest(session, project, config, Collections.emptyMap());
     }
 
-    private void addManifestAttribute(Manifest manifest, Map<String, String> map, String key, String value)
-            throws ManifestException {
+    private void addManifestAttribute(Manifest manifest, Map<String, String> map, String key, String value) {
         if (map.containsKey(key)) {
             return; // The map value will be added later
         }
         addManifestAttribute(manifest, key, value);
     }
 
-    private void addManifestAttribute(Manifest manifest, String key, String value) throws ManifestException {
+    private void addManifestAttribute(Manifest manifest, String key, String value) {
         String sanitized = sanitizeManifestValue(value);
-        Manifest.Attribute attr = new Manifest.Attribute(key, sanitized);
-        manifest.addConfiguredAttribute(attr);
+        manifest.getMainAttributes().putValue(key, sanitized);
     }
 
     /**
@@ -276,24 +240,20 @@ public class MavenArchiver {
      * @param project {@link org.apache.maven.api.Project}
      * @param config  {@link ManifestConfiguration}
      * @param entries the entries
-     * @return {@link org.codehaus.plexus.archiver.jar.Manifest}
+     * @return {@link java.util.jar.Manifest}
      * @throws MavenArchiverException exception
      */
     protected Manifest getManifest(
             Session session, Project project, ManifestConfiguration config, Map<String, String> entries)
             throws MavenArchiverException {
-        try {
-            return doGetManifest(session, project, config, entries);
-        } catch (ManifestException e) {
-            throw new MavenArchiverException("Unable to create manifest", e);
-        }
+        return doGetManifest(session, project, config, entries);
     }
 
     protected Manifest doGetManifest(
-            Session session, Project project, ManifestConfiguration config, Map<String, String> entries)
-            throws ManifestException {
+            Session session, Project project, ManifestConfiguration config, Map<String, String> entries) {
         // TODO: Should we replace "map" with a copy? Note, that we modify it!
         Manifest m = new Manifest();
+        m.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
 
         if (config.isAddDefaultEntries()) {
             handleDefaultEntries(project, m, entries);
@@ -321,7 +281,7 @@ public class MavenArchiver {
             String layoutType = config.getClasspathLayoutType();
             String layout = config.getCustomClasspathLayout();
 
-            Interpolator interpolator = new StringSearchInterpolator();
+            Interpolator interpolator = session.getService(Interpolator.class);
 
             for (Map.Entry<Dependency, Path> entry : result.getDependencies().entrySet()) {
                 Path artifactFile = entry.getValue();
@@ -337,64 +297,32 @@ public class MavenArchiver {
                     if (dependency == null || layoutType == null) {
                         classpath.append(artifactFile.getFileName().toString());
                     } else {
-                        List<ValueSource> valueSources = new ArrayList<>();
-
-                        handleExtraExpression(dependency, valueSources);
-
-                        for (ValueSource vs : valueSources) {
-                            interpolator.addValueSource(vs);
+                        String selectedLayout;
+                        switch (layoutType) {
+                            case CLASSPATH_LAYOUT_TYPE_SIMPLE:
+                                selectedLayout = config.isUseUniqueVersions() ? SIMPLE_LAYOUT : SIMPLE_LAYOUT_NONUNIQUE;
+                                break;
+                            case CLASSPATH_LAYOUT_TYPE_REPOSITORY:
+                                selectedLayout =
+                                        config.isUseUniqueVersions() ? REPOSITORY_LAYOUT : REPOSITORY_LAYOUT_NONUNIQUE;
+                                break;
+                            case CLASSPATH_LAYOUT_TYPE_CUSTOM:
+                                if (layout == null) {
+                                    throw new MavenArchiverException(CLASSPATH_LAYOUT_TYPE_CUSTOM
+                                            + " layout type was declared, but custom layout expression was not"
+                                            + " specified. Check your <archive><manifest><customLayout/>"
+                                            + " element.");
+                                }
+                                selectedLayout = layout;
+                                break;
+                            default:
+                                throw new MavenArchiverException("Unknown classpath layout type: '" + layoutType
+                                        + "'. Check your <archive><manifest><layoutType/> element.");
                         }
 
-                        RecursionInterceptor recursionInterceptor =
-                                new PrefixAwareRecursionInterceptor(ARTIFACT_EXPRESSION_PREFIXES);
-
-                        try {
-                            switch (layoutType) {
-                                case CLASSPATH_LAYOUT_TYPE_SIMPLE:
-                                    if (config.isUseUniqueVersions()) {
-                                        classpath.append(interpolator.interpolate(SIMPLE_LAYOUT, recursionInterceptor));
-                                    } else {
-                                        classpath.append(interpolator.interpolate(
-                                                SIMPLE_LAYOUT_NONUNIQUE, recursionInterceptor));
-                                    }
-                                    break;
-                                case CLASSPATH_LAYOUT_TYPE_REPOSITORY:
-                                    // we use layout /$groupId[0]/../${groupId[n]/$artifactId/$version/{fileName}
-                                    // here we must find the Artifact in the project Artifacts
-                                    // to create the maven layout
-                                    if (config.isUseUniqueVersions()) {
-                                        classpath.append(
-                                                interpolator.interpolate(REPOSITORY_LAYOUT, recursionInterceptor));
-                                    } else {
-                                        classpath.append(interpolator.interpolate(
-                                                REPOSITORY_LAYOUT_NONUNIQUE, recursionInterceptor));
-                                    }
-                                    break;
-                                case CLASSPATH_LAYOUT_TYPE_CUSTOM:
-                                    if (layout == null) {
-                                        throw new ManifestException(CLASSPATH_LAYOUT_TYPE_CUSTOM
-                                                + " layout type was declared, but custom layout expression was not"
-                                                + " specified. Check your <archive><manifest><customLayout/>"
-                                                + " element.");
-                                    }
-
-                                    classpath.append(interpolator.interpolate(layout, recursionInterceptor));
-                                    break;
-                                default:
-                                    throw new ManifestException("Unknown classpath layout type: '" + layoutType
-                                            + "'. Check your <archive><manifest><layoutType/> element.");
-                            }
-                        } catch (InterpolationException e) {
-                            ManifestException error = new ManifestException(
-                                    "Error interpolating artifact path for classpath entry: " + e.getMessage());
-
-                            error.initCause(e);
-                            throw error;
-                        } finally {
-                            for (ValueSource vs : valueSources) {
-                                interpolator.removeValuesSource(vs);
-                            }
-                        }
+                        String interpolated = interpolator.interpolate(
+                                selectedLayout, key -> resolveArtifactExpression(dependency, key));
+                        classpath.append(interpolated);
                     }
                 }
             }
@@ -424,31 +352,34 @@ public class MavenArchiver {
         return m;
     }
 
-    private void handleExtraExpression(Dependency dependency, List<ValueSource> valueSources) {
-        valueSources.add(new PrefixedObjectValueSource(ARTIFACT_EXPRESSION_PREFIXES, dependency, true));
-        valueSources.add(new PrefixedObjectValueSource(ARTIFACT_EXPRESSION_PREFIXES, dependency.getType(), true));
-
-        Properties extraExpressions = new Properties();
-        // FIXME: This query method SHOULD NOT affect the internal
-        // state of the artifact version, but it does.
-        if (!dependency.isSnapshot()) {
-            extraExpressions.setProperty("baseVersion", dependency.getVersion().toString());
-        }
-
-        extraExpressions.setProperty("groupIdPath", dependency.getGroupId().replace('.', '/'));
-        String classifier = dependency.getClassifier();
-        if (classifier != null && !classifier.isEmpty()) {
-            extraExpressions.setProperty("dashClassifier", "-" + classifier);
-            extraExpressions.setProperty("dashClassifier?", "-" + classifier);
-        } else {
-            extraExpressions.setProperty("dashClassifier", "");
-            extraExpressions.setProperty("dashClassifier?", "");
-        }
-        valueSources.add(new PrefixedPropertiesValueSource(ARTIFACT_EXPRESSION_PREFIXES, extraExpressions, true));
+    /**
+     * Resolves an artifact expression key to a value from the given dependency.
+     * Keys may optionally be prefixed with {@code "artifact."}.
+     *
+     * @param dep the dependency to extract values from
+     * @param key the expression key (e.g. "artifact.artifactId" or "artifactId")
+     * @return the resolved value, or {@code null} if the key is unknown
+     */
+    private static String resolveArtifactExpression(Dependency dep, String key) {
+        String k = key.startsWith("artifact.") ? key.substring(9) : key;
+        return switch (k) {
+            case "artifactId" -> dep.getArtifactId();
+            case "groupId" -> dep.getGroupId();
+            case "groupIdPath" -> dep.getGroupId().replace('.', '/');
+            case "version" -> dep.getVersion().toString();
+            case "baseVersion" -> dep.getBaseVersion().toString();
+            case "extension" -> dep.getExtension();
+            case "classifier" -> dep.getClassifier() != null ? dep.getClassifier() : "";
+            case "dashClassifier", "dashClassifier?" -> {
+                String c = dep.getClassifier();
+                yield (c != null && !c.isEmpty()) ? "-" + c : "";
+            }
+            case "type" -> dep.getType() != null ? dep.getType().id() : dep.getExtension();
+            default -> null;
+        };
     }
 
-    private void handleImplementationEntries(Project project, Map<String, String> entries, Manifest m)
-            throws ManifestException {
+    private void handleImplementationEntries(Project project, Map<String, String> entries, Manifest m) {
         addManifestAttribute(
                 m, entries, "Implementation-Title", project.getModel().getName());
         addManifestAttribute(m, entries, "Implementation-Version", project.getVersion());
@@ -462,8 +393,7 @@ public class MavenArchiver {
         }
     }
 
-    private void handleSpecificationEntries(Project project, Map<String, String> entries, Manifest m)
-            throws ManifestException {
+    private void handleSpecificationEntries(Project project, Map<String, String> entries, Manifest m) {
         addManifestAttribute(
                 m, entries, "Specification-Title", project.getModel().getName());
 
@@ -473,17 +403,6 @@ public class MavenArchiver {
             String specVersion = matcher.group(1);
             addManifestAttribute(m, entries, "Specification-Version", specVersion);
         }
-        /*
-        TODO: v4: overconstrained
-        try {
-            Version version = project.getArtifact().getVersion();
-            String specVersion = String.format("%s.%s", version.getMajorVersion(), version.getMinorVersion());
-            addManifestAttribute(m, entries, "Specification-Version", specVersion);
-        } catch (OverConstrainedVersionException e) {
-            throw new ManifestException("Failed to get selected artifact version to calculate"
-                + " the specification version: " + e.getMessage());
-        }
-        */
 
         if (project.getModel().getOrganization() != null) {
             addManifestAttribute(
@@ -494,224 +413,10 @@ public class MavenArchiver {
         }
     }
 
-    private void addCustomEntries(Manifest m, Map<String, String> entries, ManifestConfiguration config)
-            throws ManifestException {
-        /*
-         * TODO: rethink this, it wasn't working Artifact projectArtifact = project.getArtifact(); if (
-         * projectArtifact.isSnapshot() ) { Manifest.Attribute buildNumberAttr = new Manifest.Attribute( "Build-Number",
-         * "" + project.getSnapshotDeploymentBuildNumber() ); m.addConfiguredAttribute( buildNumberAttr ); }
-         */
+    private void addCustomEntries(Manifest m, Map<String, String> entries, ManifestConfiguration config) {
         if (config.getPackageName() != null) {
             addManifestAttribute(m, entries, "Package", config.getPackageName());
         }
-    }
-
-    /**
-     * <p>Getter for the field <code>archiver</code>.</p>
-     *
-     * @return {@link org.codehaus.plexus.archiver.jar.JarArchiver}
-     */
-    public JarArchiver getArchiver() {
-        return archiver;
-    }
-
-    /**
-     * <p>Setter for the field <code>archiver</code>.</p>
-     *
-     * @param archiver {@link org.codehaus.plexus.archiver.jar.JarArchiver}
-     */
-    public void setArchiver(JarArchiver archiver) {
-        this.archiver = archiver;
-    }
-
-    /**
-     * <p>setOutputFile.</p>
-     *
-     * @param outputFile set output file
-     */
-    public void setOutputFile(File outputFile) {
-        archiveFile = outputFile;
-    }
-
-    /**
-     * <p>createArchive.</p>
-     *
-     * @param session              {@link org.apache.maven.api.Session}
-     * @param project              {@link org.apache.maven.api.Project}
-     * @param archiveConfiguration {@link MavenArchiveConfiguration}
-     * @throws MavenArchiverException archiver Exception
-     */
-    public void createArchive(Session session, Project project, MavenArchiveConfiguration archiveConfiguration)
-            throws MavenArchiverException {
-        try {
-            doCreateArchive(session, project, archiveConfiguration);
-        } catch (ManifestException | IOException e) {
-            throw new MavenArchiverException(e);
-        }
-    }
-
-    public void doCreateArchive(Session session, Project project, MavenArchiveConfiguration archiveConfiguration)
-            throws ManifestException, IOException {
-        // we have to clone the project instance so we can write out the pom with the deployment version,
-        // without impacting the main project instance...
-        boolean forced = archiveConfiguration.isForced();
-        if (archiveConfiguration.isAddMavenDescriptor()) {
-            // ----------------------------------------------------------------------
-            // We want to add the metadata for the project to the JAR in two forms:
-            //
-            // The first form is that of the POM itself. Applications that wish to
-            // access the POM for an artifact using maven tools they can.
-            //
-            // The second form is that of a properties file containing the basic
-            // top-level POM elements so that applications that wish to access
-            // POM information without the use of maven tools can do so.
-            // ----------------------------------------------------------------------
-
-            String groupId = project.getGroupId();
-
-            String artifactId = project.getArtifactId();
-
-            String version;
-            if (project.getPomArtifact().isSnapshot()) {
-                version = project.getPomArtifact().getVersion().toString();
-            } else {
-                version = project.getVersion();
-            }
-
-            archiver.addFile(
-                    project.getPomPath().toFile(), "META-INF/maven/" + groupId + "/" + artifactId + "/pom.xml");
-
-            // ----------------------------------------------------------------------
-            // Create pom.properties file
-            // ----------------------------------------------------------------------
-
-            Path customPomPropertiesFile = archiveConfiguration.getPomPropertiesFile();
-            Path dir = Paths.get(project.getBuild().getDirectory(), "maven-archiver");
-            Path pomPropertiesFile = dir.resolve("pom.properties");
-
-            new PomPropertiesUtil()
-                    .createPomProperties(
-                            groupId, artifactId, version, archiver, customPomPropertiesFile, pomPropertiesFile);
-        }
-
-        // ----------------------------------------------------------------------
-        // Create the manifest
-        // ----------------------------------------------------------------------
-
-        archiver.setMinimalDefaultManifest(true);
-        Path manifestFile = archiveConfiguration.getManifestFile();
-        if (manifestFile != null) {
-            archiver.setManifest(manifestFile.toFile());
-        }
-        Manifest manifest = getManifest(session, project, archiveConfiguration);
-        // Configure the jar
-        archiver.addConfiguredManifest(manifest);
-        archiver.setCompress(archiveConfiguration.isCompress());
-        archiver.setRecompressAddedZips(archiveConfiguration.isRecompressAddedZips());
-        archiver.setDestFile(archiveFile);
-        archiver.setForced(forced);
-        if (!archiveConfiguration.isForced() && archiver.isSupportingForced()) {
-            // TODO Should issue a warning here, but how do we get a logger?
-            // TODO getLog().warn(
-            // "Forced build is disabled, but disabling the forced mode isn't supported by the archiver." );
-        }
-        String automaticModuleName = manifest.getMainSection().getAttributeValue("Automatic-Module-Name");
-        if (automaticModuleName != null) {
-            if (automaticModuleName.isEmpty()) {
-                manifest.getMainSection().removeAttribute("Automatic-Module-Name");
-            } else if (!isValidModuleName(automaticModuleName)) {
-                String sanitized = cleanModuleName(automaticModuleName);
-                if (sanitized.isEmpty() || !isValidModuleName(sanitized)) {
-                    LOGGER.warn(
-                            "The Automatic-Module-Name '{}' is not a valid Java module name"
-                                    + " and cannot be sanitized. The attribute will be omitted."
-                                    + " Consider configuring a valid name explicitly"
-                                    + " in <archive><manifestEntries><Automatic-Module-Name>.",
-                            automaticModuleName);
-                    manifest.getMainSection().removeAttribute("Automatic-Module-Name");
-                } else {
-                    LOGGER.warn(
-                            "The Automatic-Module-Name '{}' is not a valid Java module name."
-                                    + " It has been sanitized to '{}' using the same algorithm the JDK uses"
-                                    + " to derive automatic module names from JAR file names."
-                                    + " Consider configuring a valid name explicitly"
-                                    + " in <archive><manifestEntries><Automatic-Module-Name>.",
-                            automaticModuleName,
-                            sanitized);
-                    manifest.getMainSection()
-                            .addConfiguredAttribute(new Manifest.Attribute("Automatic-Module-Name", sanitized));
-                }
-            }
-        }
-
-        // create archive
-        archiver.createArchive();
-    }
-
-    private void handleDefaultEntries(Project project, Manifest m, Map<String, String> entries)
-            throws ManifestException {
-        String createdBy = this.createdBy;
-        if (createdBy == null) {
-            createdBy = createdBy(CREATED_BY, "org.apache.maven", "maven-archiver");
-        }
-        addManifestAttribute(m, entries, "Created-By", createdBy);
-        String javaVersion = BuildHelper.discoverJavaRelease(project.getModel());
-        if (javaVersion != null) {
-            addManifestAttribute(m, entries, "Java-Version", javaVersion);
-        }
-        if (buildJdkSpecDefaultEntry) {
-            addManifestAttribute(m, entries, "Build-Jdk-Spec", System.getProperty("java.specification.version"));
-        }
-    }
-
-    private void handleBuildEnvironmentEntries(Session session, Manifest m, Map<String, String> entries)
-            throws ManifestException {
-        addManifestAttribute(
-                m,
-                entries,
-                "Build-Tool",
-                session != null ? session.getSystemProperties().get("maven.build.version") : "Apache Maven");
-        addManifestAttribute(
-                m,
-                entries,
-                "Build-Jdk",
-                String.format("%s (%s)", System.getProperty("java.version"), System.getProperty("java.vendor")));
-        addManifestAttribute(
-                m,
-                entries,
-                "Build-Os",
-                String.format(
-                        "%s (%s; %s)",
-                        System.getProperty("os.name"),
-                        System.getProperty("os.version"),
-                        System.getProperty("os.arch")));
-    }
-
-    private static String getCreatedByVersion(String groupId, String artifactId) {
-        String resourcePath = "/META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties";
-        final Properties properties =
-                loadOptionalProperties(MavenArchiver.class.getResourceAsStream(resourcePath), resourcePath);
-
-        return properties.getProperty("version");
-    }
-
-    private static Properties loadOptionalProperties(final InputStream inputStream, String resourcePath) {
-        Properties properties = new Properties();
-        if (inputStream != null) {
-            try (InputStream in = inputStream) {
-                properties.load(in);
-            } catch (IllegalArgumentException | IOException ex) {
-                LOGGER.warn(
-                        "Unable to read Maven Archiver properties from '{}': {}. "
-                                + "The 'Created-By' manifest entry will not include the version. "
-                                + "This may indicate a corrupt artifact in your local repository; "
-                                + "try running 'mvn dependency:purge-local-repository' to re-download it.",
-                        resourcePath,
-                        ex.getMessage(),
-                        ex);
-            }
-        }
-        return properties;
     }
 
     /**
@@ -830,16 +535,67 @@ public class MavenArchiver {
         return date;
     }
 
-    /**
-     * Configure Reproducible Builds archive creation if a timestamp is provided.
-     *
-     * @param outputTimestamp the value of {@code project.build.outputTimestamp} (may be {@code null})
-     * @see #parseBuildOutputTimestamp(String)
-     * @since 3.6.0
-     */
-    public void configureReproducibleBuild(String outputTimestamp) {
-        parseBuildOutputTimestamp(outputTimestamp)
-                .map(FileTime::from)
-                .ifPresent(modifiedTime -> getArchiver().configureReproducibleBuild(modifiedTime));
+    private void handleDefaultEntries(Project project, Manifest m, Map<String, String> entries) {
+        String createdBy = this.createdBy;
+        if (createdBy == null) {
+            createdBy = createdBy(CREATED_BY, "org.apache.maven", "maven-archiver");
+        }
+        addManifestAttribute(m, entries, "Created-By", createdBy);
+        String javaVersion = BuildHelper.discoverJavaRelease(project.getModel());
+        if (javaVersion != null) {
+            addManifestAttribute(m, entries, "Java-Version", javaVersion);
+        }
+        if (buildJdkSpecDefaultEntry) {
+            addManifestAttribute(m, entries, "Build-Jdk-Spec", System.getProperty("java.specification.version"));
+        }
+    }
+
+    private void handleBuildEnvironmentEntries(Session session, Manifest m, Map<String, String> entries) {
+        addManifestAttribute(
+                m,
+                entries,
+                "Build-Tool",
+                session != null ? session.getSystemProperties().get("maven.build.version") : "Apache Maven");
+        addManifestAttribute(
+                m,
+                entries,
+                "Build-Jdk",
+                String.format("%s (%s)", System.getProperty("java.version"), System.getProperty("java.vendor")));
+        addManifestAttribute(
+                m,
+                entries,
+                "Build-Os",
+                String.format(
+                        "%s (%s; %s)",
+                        System.getProperty("os.name"),
+                        System.getProperty("os.version"),
+                        System.getProperty("os.arch")));
+    }
+
+    private static String getCreatedByVersion(String groupId, String artifactId) {
+        String resourcePath = "/META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties";
+        final Properties properties =
+                loadOptionalProperties(MavenArchiver.class.getResourceAsStream(resourcePath), resourcePath);
+
+        return properties.getProperty("version");
+    }
+
+    private static Properties loadOptionalProperties(final InputStream inputStream, String resourcePath) {
+        Properties properties = new Properties();
+        if (inputStream != null) {
+            try (InputStream in = inputStream) {
+                properties.load(in);
+            } catch (IllegalArgumentException | IOException ex) {
+                LOGGER.warn(
+                        "Unable to read Maven Archiver properties from '{}': {}. "
+                                + "The 'Created-By' manifest entry will not include the version. "
+                                + "This may indicate a corrupt artifact in your local repository; "
+                                + "try running 'mvn dependency:purge-local-repository' to re-download it.",
+                        resourcePath,
+                        ex.getMessage(),
+                        ex);
+            }
+        }
+        return properties;
     }
 }
