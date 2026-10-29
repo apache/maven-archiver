@@ -44,8 +44,8 @@
     <url>https://github.com/apache/maven-archiver/issues</url>
   </issueManagement>
   <ciManagement>
-    <system>Jenkins</system>
-    <url>https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archiver/</url>
+    <system>GitHub</system>
+    <url>https://github.com/apache/maven-archiver/actions</url>
   </ciManagement>
   <distributionManagement>
     <site>
