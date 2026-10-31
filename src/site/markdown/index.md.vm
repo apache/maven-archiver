@@ -32,6 +32,10 @@ version of the Maven Archiver component - not for any specific plugin.
 To see which version of Maven Archiver a plugin uses, go to the site
 for that plugin.
 
+For examples of manifest configuration, such as adding the classpath, entries
+and sections, see the
+[Guide to Working with Manifests](https://maven.apache.org/guides/mini/guide-manifest.html).
+
 <pre class="prettyprint linenums"><code>&lt;<a href="#class_archive">archive</a>&gt;
   &lt;addMavenDescriptor/&gt;
   &lt;compress/&gt;
