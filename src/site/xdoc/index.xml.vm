@@ -33,6 +33,12 @@
         for that plugin.
       </p>
 
+      <p>
+        For examples of manifest configuration, such as adding the classpath, entries
+        and sections, see the
+        <a href="https://maven.apache.org/guides/mini/guide-manifest.html">Guide to Working with Manifests</a>.
+      </p>
+
       <source>&lt;<a href="#class_archive">archive</a>&gt;
   &lt;addMavenDescriptor/&gt;
   &lt;compress/&gt;
