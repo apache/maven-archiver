@@ -130,8 +130,7 @@ public class MavenArchiver {
         // Collapse repeated dots
         name = REPEATING_DOTS.matcher(name).replaceAll(".");
         // Strip leading/trailing dots
-        name = name.replaceAll("^\\.+|\\.+$", "");
-        return name;
+        return name.replaceAll("^\\.+|\\.+$", "");
     }
 
     private static final Pattern NON_ALPHANUM = Pattern.compile("[^A-Za-z0-9]");
