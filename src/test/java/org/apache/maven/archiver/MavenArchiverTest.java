@@ -79,6 +79,7 @@ import static org.mockito.Mockito.when;
 
 class MavenArchiverTest {
     static class ArtifactComparator implements Comparator<Artifact> {
+        @Override
         public int compare(Artifact o1, Artifact o2) {
             return o1.getArtifactId().compareTo(o2.getArtifactId());
         }
@@ -136,6 +137,7 @@ class MavenArchiverTest {
 
         // there should be a mock or a setter for this field.
         ManifestConfiguration config = new ManifestConfiguration() {
+            @Override
             public boolean isAddExtensions() {
                 return true;
             }
@@ -213,6 +215,7 @@ class MavenArchiverTest {
             model.setArtifactId("dummy");
 
             MavenProject project = new MavenProject(model) {
+                @Override
                 public List<String> getRuntimeClasspathElements() {
                     return Collections.singletonList(tempFile.getAbsolutePath());
                 }
@@ -220,6 +223,7 @@ class MavenArchiverTest {
 
             // there should be a mock or a setter for this field.
             ManifestConfiguration manifestConfig = new ManifestConfiguration() {
+                @Override
                 public boolean isAddClasspath() {
                     return true;
                 }
@@ -315,7 +319,7 @@ class MavenArchiverTest {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProject();
 
-        String ls = System.getProperty("line.separator");
+        String ls = System.lineSeparator();
         project.setDescription("foo " + ls + " bar ");
         MavenArchiveConfiguration config = new MavenArchiveConfiguration();
         config.setForced(true);
@@ -408,7 +412,7 @@ class MavenArchiverTest {
         MavenSession session = getDummySession();
         MavenProject project = getDummyProject();
 
-        String ls = System.getProperty("line.separator");
+        String ls = System.lineSeparator();
         project.setDescription("foo " + ls + " bar ");
         MavenArchiveConfiguration config = new MavenArchiveConfiguration();
         config.setForced(true);
