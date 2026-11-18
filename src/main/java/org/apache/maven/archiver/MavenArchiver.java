@@ -500,11 +500,6 @@ public class MavenArchiver {
 
     private void addCustomEntries(Manifest m, Map<String, String> entries, ManifestConfiguration config)
             throws ManifestException {
-        /*
-         * TODO: rethink this, it wasn't working Artifact projectArtifact = project.getArtifact(); if (
-         * projectArtifact.isSnapshot() ) { Manifest.Attribute buildNumberAttr = new Manifest.Attribute( "Build-Number",
-         * "" + project.getSnapshotDeploymentBuildNumber() ); m.addConfiguredAttribute( buildNumberAttr ); }
-         */
         if (config.getPackageName() != null) {
             addManifestAttribute(m, entries, "Package", config.getPackageName());
         }
@@ -611,11 +606,6 @@ public class MavenArchiver {
         archiver.setDestFile(archiveFile);
 
         archiver.setForced(forced);
-        if (!archiveConfiguration.isForced() && archiver.isSupportingForced()) {
-            // TODO Should issue a warning here, but how do we get a logger?
-            // TODO getLog().warn(
-            // "Forced build is disabled, but disabling the forced mode isn't supported by the archiver." );
-        }
 
         String automaticModuleName = manifest.getMainSection().getAttributeValue("Automatic-Module-Name");
         if (automaticModuleName != null) {
