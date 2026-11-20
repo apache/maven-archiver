@@ -37,7 +37,7 @@ public class BuildHelper {
      * Tries to determine the target Java release from the following sources (until one is found)
      * <ol>
      * <li>use {@code release} configuration of {@code org.apache.maven.plugins:maven-compiler-plugin}</li>
-     * <li>use {@code maven.compiler.release<} property</li>
+     * <li>use {@code maven.compiler.release} property</li>
      * <li>use {@code target} configuration of {@code org.apache.maven.plugins:maven-compiler-plugin}</li>
      * <li>use {@code maven.compiler.target} property</li>
      * </ol>
